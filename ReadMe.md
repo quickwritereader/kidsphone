@@ -35,21 +35,21 @@ Day	|Task	|Time Required
 
 ####Daily Schedule:####
 
-* Morning: __________
-* Day: __________
-* Afternoon: __________
-* Night: __________
-* Total hours working per day: __________
-* Total days working per week: __________
-* Total hours working per week: __________
+* Morning:  
+* Day:  
+* Afternoon:  
+* Night:  
+* Total hours working per day: 
+* Total days working per week:  
+* Total hours working per week:  
  
 
 ##Development Costs:##
 
-* Total wages of developers: __________
-* Shelter: __________
-* Food: __________
-* Software licenses: __________
-* Marketing costs: __________
-* Play testing costs: __________
-* Total estimated development costs: __________
+* Total wages of developers:  
+* Shelter: 
+* Food:  
+* Software licenses:  
+* Marketing costs:  
+* Play testing costs: 
+* Total estimated development costs:  
