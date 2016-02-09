@@ -31,7 +31,10 @@ Day	|Task	|Time Required
 :------|:-----|:------
 1	| Sounds and Pictures	| 1-2 week 
 7-14    | User Interface | 1 week
-
+7-14	| Rounded Buttons	| 1 week 
+7-21    | Light Visualization based on Media Player | 2 week
+7-21    | Ask Questions based on Mode Button | 2 week
+7-21    | Telephone based on Call Button | 2 week
 
 ####Daily Schedule:####
 
@@ -39,19 +42,17 @@ Day	|Task	|Time Required
 * Day:  
 * Afternoon:  
 * Night:  
-* Total hours working per day: 
-* Total days working per week:  
-* Total hours working per week:  
+* Total hours working per day: 1-3 hours
+* Total days working per week:  3-4 days
+* Total hours working per week:  3-12 hours
  
 
 ##Development Costs:##
 
-* Total wages of developers:  
-* Shelter: 
-* Food:  
-* Software licenses:  
-* Marketing costs:  
-* Play testing costs: 
+* Total wages of developers:  free
+* Shelter: home  
+* Marketing costs:  ---
+* Play testing costs: ---
 * Total estimated development costs:
 
 #Building and Installing ReadMe
