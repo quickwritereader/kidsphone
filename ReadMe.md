@@ -52,4 +52,6 @@ Day	|Task	|Time Required
 * Software licenses:  
 * Marketing costs:  
 * Play testing costs: 
-* Total estimated development costs:  
+* Total estimated development costs:
+
+#Building and Installing ReadMe
