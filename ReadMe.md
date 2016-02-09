@@ -5,9 +5,9 @@
 ##by OverFlowZeroTeam ##
 
 
-Game Look:
+Picture of the toy Program:
 
-![gameLook.png](https://bitbucket.org/repo/XynXAk/images/2437684712-gameLook.png)
+![gameLook.png](https://bytebucket.org/overflowzero/kidsprogram/raw/700a0412b15798caf878af09f3a6ce2a3062003f/%5E6196131DE0DC80C3F58ED0EA5B5C34C7D5579EB39DD580CFF1%5Epimgo_distr.jpg?token=d7673656acc49efe502411ff7aa367e297af2a7f)
 
 ##Development##
 
