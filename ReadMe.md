@@ -1,6 +1,6 @@
 #Funny telephone for kids#
 
-##Design Document## 
+##Design Document  
 
 
 Picture of the toy Program:
