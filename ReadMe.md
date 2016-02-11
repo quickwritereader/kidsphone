@@ -1,8 +1,6 @@
 #Funny telephone for kids#
 
-##Design Document##
-
-##by OverFlowZeroTeam ##
+##Design Document## 
 
 
 Picture of the toy Program:
