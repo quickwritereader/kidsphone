@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="InnerShapeProperty" format="enum">
+        <enum name="None" value="0"/>
+        <enum name="Square" value="1"/>
+        <enum name="Circle" value="2"/>
+        <enum name="Triangle" value="3"/>
+        <enum name="Pentagon" value="4"/>
+        <enum name="Star" value="5"/>
+        <enum name="Trapes" value="6"/>
+        <enum name="Heart" value="7"/>
+        <enum name="YesPhone" value="8"/>
+        <enum name="NoPhone" value="9"/>
+        <enum name="Sound" value="10"/>
+        <enum name="Picture" value="11"/>
+    </attr>
+
+    <attr name="OuterShapeProperty" format="enum">
+        <enum name="None" value="0"/>
+        <enum name="Rounded" value="1"/>
+        <enum name="BottomRounded" value="2"/>
+        <enum name="YesButton" value="3"/>
+        <enum name="NoButton" value="4"/>
+        <enum name="Picture" value="5"/>
+    </attr>
+
+    <declare-styleable name="FunnyButton">
+        <attr name ="InnerShapeProperty" />
+        <attr name="OuterShapeProperty" />
+        <attr name="centerText" format="string" />
+        <attr name="belowText" format="string" />
+        <attr name="centerTextSize" format="float"/>
+        <attr name="belowTextSize" format="float" />
+        <attr name="centerTextColor" format="reference|color"/>
+        <attr name="belowTextColor" format="reference|color" />
+        <attr name="innerShapeColor" format="reference|color" />
+        <attr name="outterShapeColor" format="reference|color" />
+    </declare-styleable>
+</resources>
