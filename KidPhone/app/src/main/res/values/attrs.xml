@@ -29,11 +29,11 @@
         <attr name="OuterShapeProperty" />
         <attr name="centerText" format="string" />
         <attr name="belowText" format="string" />
-        <attr name="centerTextSize" format="float"/>
-        <attr name="belowTextSize" format="float" />
+        <attr name="centerTextSize" format="dimension"/>
+        <attr name="belowTextSize" format="dimension" />
         <attr name="centerTextColor" format="reference|color"/>
         <attr name="belowTextColor" format="reference|color" />
         <attr name="innerShapeColor" format="reference|color" />
-        <attr name="outterShapeColor" format="reference|color" />
+        <attr name="outerShapeColor" format="reference|color" />
     </declare-styleable>
 </resources>
