@@ -1,4 +1,4 @@
-#Funny telephone for kids#
+#Funny telephone for kids version 1.0#
 
 ##Design Document  
 
