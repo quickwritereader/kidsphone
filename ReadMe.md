@@ -14,7 +14,7 @@ Picture of the toy Program:
 * Distribution Methods: Google PLay 
 * Planned Total Development Time: 1-3 monthes
 * Planned Total Development Costs: 25$ +
-* Number of developers: 2 ( @quickwritereader,   )
+* Number of developers: 3 ( @quickwritereader, @ramil2319, @toghrul1985  )
 * Audience: Kids
  
 
