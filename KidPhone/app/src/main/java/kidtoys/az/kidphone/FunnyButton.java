@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
@@ -181,6 +182,31 @@ public class FunnyButton extends View {
     public void draw() {
     }
 
+    //yes button
+    static public Path YesButtonPath(float left,float top,float width,float height){
+
+        /*
+        xPos=0;yPos=0;
+        ctx.moveTo(xPos + 186 * scale, yPos + 108 * scale);
+    ctx.bezierCurveTo(xPos + 111 * scale, yPos + 121 * scale, xPos + 50 * scale, yPos + 130 * scale, xPos + 19 * scale, yPos + 103 * scale);
+    ctx.bezierCurveTo(xPos + -7 * scale, yPos + 74 * scale, xPos + 4.1 * scale, yPos + 32.58 * scale, xPos + 10.7 * scale, yPos + 25.98 * scale);
+    ctx.bezierCurveTo(xPos + 47 * scale, yPos + -26 * scale, xPos + 120.92 * scale, yPos + 25.32 * scale, xPos + 335 * scale, yPos + 28 * scale);
+    ctx.bezierCurveTo(xPos + 354 * scale, yPos + 29 * scale, xPos + 360 * scale, yPos + 91 * scale, xPos + 322 * scale, yPos + 90 * scale);
+    ctx.bezierCurveTo(xPos + 200 * scale, yPos + 103 * scale, xPos + 235 * scale, yPos + 100 * scale, xPos + 210 * scale, yPos + 104 * scale);
+
+    ctx.stroke(); */
+        Path path=new Path();
+        float scaleX= width/360.f;
+        float scale = height/130.f;
+        path.moveTo(left + 186 * scaleX, top + 108 * scale);
+        path.cubicTo(left + 111 * scaleX, top + 121 * scale, left + 50 * scaleX, top + 130 * scale, left + 19 * scaleX, top + 103 * scale);
+        path.cubicTo(left - 7 * scaleX, top + 74 * scale, left + 4.1f * scaleX, top + 32.58f * scale, left + 10.7f * scaleX, top + 25.98f * scale);
+        path.cubicTo(left + 47 * scaleX, top - 26 * scale, left + 120.92f * scaleX, top + 25.32f * scale, left + 335 * scaleX, top + 28 * scale);
+        path.cubicTo(left + 354 * scaleX, top + 29 * scale, left + 360 * scaleX, top + 91 * scale, left + 322 * scaleX, top + 90 * scale);
+        path.cubicTo(left + 200 * scaleX, top + 103 * scale, left + 235 * scaleX, top + 100 * scale, left + 210 * scaleX, top + 104 * scale);
+        path.close();
+        return path;
+    }
 
     static public Path BottomRounded(float left, float top, float right, float bottom, float brx, float bry, float rx, float ry) {
         Path path = new Path();
@@ -210,6 +236,15 @@ public class FunnyButton extends View {
         path.rQuadTo(rx, 0, rx, -(2 * bry + ry)); //bottom-right corner
         path.close();//Given close, last lineto can be removed.
 
+        return path;
+    }
+
+    static public Path NoButtonPath(float left,float top,float width,float height){
+        Path path=YesButtonPath(left,top,width,height);
+        Matrix matrix = new Matrix();
+        matrix.preScale(-1, 1);
+        matrix.postTranslate(width+2*left,0);
+        path.transform(matrix);
         return path;
     }
 
@@ -246,6 +281,7 @@ public class FunnyButton extends View {
         pAdd.setColor(getNewColor(color,-50));
         pAdd.setAntiAlias(true);
         p.setAntiAlias(true);
+        p.setStrokeCap(Paint.Cap.ROUND);
         RectF rectF = new RectF();
         rectF.set(0, 0, width, height);
         switch (type) {
@@ -271,13 +307,27 @@ public class FunnyButton extends View {
                 canvas.drawPath(BottomRounded(rectF.left, rectF.top, rectF.right, rectF.bottom, rectF.width() / 8, rectF.height() / 8, rectF.width() / 2, rectF.height() / 2), p );
             }
             break;
-            case YesButton:
-
+            case YesButton:{
+                canvas.drawPath(YesButtonPath(rectF.left, rectF.top, rectF.width(), rectF.height()), pAdd);
+                rectF.left=rectF.right/scaleDiv;
+                rectF.top=rectF.bottom/scaleDivb;
+                rectF.right-=rectF.right/scaleDiv;
+                rectF.bottom-= rectF.bottom/scaleDiv;
+                canvas.drawPath(YesButtonPath(rectF.left, rectF.top, rectF.width(), rectF.height()), p);
+            }break;
+            case NoButton:{
+                canvas.drawPath(NoButtonPath(rectF.left, rectF.top, rectF.width(), rectF.height()), pAdd);
+                rectF.left=rectF.right/scaleDiv;
+                rectF.top=rectF.bottom/scaleDivb;
+                rectF.right-=rectF.right/scaleDiv;
+                rectF.bottom-= rectF.bottom/scaleDiv;
+                canvas.drawPath(NoButtonPath(rectF.left, rectF.top, rectF.width(), rectF.height()), p);
+        }break;
         }
 
     }
 
-    public void drawText(Canvas canvas,String text,int width ,int height, float size,int color,boolean center){
+      public void drawText(Canvas canvas,String text,int width ,int height, float size,int color,boolean center){
         Paint p=new Paint();
         p.setColor(color);
         p.setTextSize(size);
