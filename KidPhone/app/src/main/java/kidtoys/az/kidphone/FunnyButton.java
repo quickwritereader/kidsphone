@@ -10,6 +10,7 @@ import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 
@@ -21,23 +22,29 @@ public class FunnyButton extends View {
 
     private String centerText;
     private String belowText;
-    private int centerTextSize;
-    private int belowTextSize;
-    private int centerTextColor;
-    private int belowTextColor;
 
 
-    private int innerShapeColor;
+    private Paint innerP1;
     private int outerShapeColor;
+    private Paint outerP1;
+    private Paint outerP2;
+    private Paint centerTxtP;
+    private Paint belowTxtP;
+    private RectF rectF;
+
+
+
 
     public enum InnerShapeType {
         None,
         Square,
+        Rectangle,
         Circle,
         Triangle,
         Pentagon,
         Star,
         Trapes,
+        Ellipse,
         Heart,
         YesPhone,
         NoPhone,
@@ -77,38 +84,38 @@ public class FunnyButton extends View {
     }
 
     public int getInnerShapeColor() {
-        return innerShapeColor;
+        return innerP1.getColor();
     }
 
     public void setInnerShapeColor(int innerShapeColor) {
-        this.innerShapeColor = innerShapeColor;
+        this.innerP1.setColor( innerShapeColor);
         invalidate();
     }
 
     public int getOuterShapeColor() {
-        return outerShapeColor;
+        return this.outerShapeColor;
     }
 
     public void setOuterShapeColor(int outerShapeColor) {
-        this.outerShapeColor = outerShapeColor;
+        this.outerShapeColor=outerShapeColor ;
         invalidate();
     }
 
     public int getBelowTextColor() {
-        return belowTextColor;
+        return belowTxtP.getColor();
     }
 
     public void setBelowTextColor(int belowTextColor) {
-        this.belowTextColor = belowTextColor;
+        belowTxtP.setColor(belowTextColor);
         invalidate();
     }
 
     public int getCenterTextColor() {
-        return centerTextColor;
+        return centerTxtP.getColor();
     }
 
     public void setCenterTextColor(int centerTextColor) {
-        this.centerTextColor = centerTextColor;
+        this.centerTxtP.setColor(centerTextColor);
         invalidate();
     }
 
@@ -121,21 +128,21 @@ public class FunnyButton extends View {
         invalidate();
     }
 
-    public int getCenterTextSize() {
-        return centerTextSize;
+    public float getCenterTextSize() {
+        return centerTxtP.getTextSize();
     }
 
-    public void setCenterTextSize(int centerTextSize) {
-        this.centerTextSize = centerTextSize;
+    public void setCenterTextSize(float centerTextSize) {
+        this.centerTxtP.setTextSize(centerTextSize);
         invalidate();
     }
 
-    public int getBelowTextSize() {
-        return belowTextSize;
+    public float getBelowTextSize() {
+        return this.belowTxtP.getTextSize();
     }
 
-    public void setBelowTextSize(int belowTextSize) {
-        this.belowTextSize = belowTextSize;
+    public void setBelowTextSize(float belowTextSize) {
+        this.belowTxtP.setTextSize(belowTextSize);
         invalidate();
     }
 
@@ -155,6 +162,8 @@ public class FunnyButton extends View {
         TypedArray typedArray = context.getTheme().obtainStyledAttributes(attrs,
                 R.styleable.FunnyButton, 0, 0);
         this.setClickable(true);
+        float belowTextSize, centerTextSize;
+        int belowTextColor, centerTextColor,  innerShapeColor;
         try {
             centerText = typedArray.getString(R.styleable.FunnyButton_centerText);
             belowText = typedArray.getString(R.styleable.FunnyButton_belowText);
@@ -176,14 +185,35 @@ public class FunnyButton extends View {
         } finally {
             typedArray.recycle();
         }
-
+        innerP1=new Paint();
+        innerP1.setAntiAlias(true);
+        innerP1.setColor(innerShapeColor);
+        outerP1 = new Paint();
+        outerP1.setColor(outerShapeColor);
+        outerP1.setAntiAlias(true);
+        outerP2 = new Paint();
+        outerP2.setAntiAlias(true);
+        centerTxtP = new Paint();
+        centerTxtP.setColor(centerTextColor);
+        centerTxtP.setTextSize(centerTextSize);
+        centerTxtP.setAntiAlias(true);
+        centerTxtP.setTextAlign(Paint.Align.CENTER);
+        belowTxtP = new Paint();
+        belowTxtP.setColor(belowTextColor);
+        belowTxtP.setTextSize(belowTextSize);
+        belowTxtP.setAntiAlias(true);
+        belowTxtP.setTextAlign(Paint.Align.CENTER);
+        rectF = new RectF();
+        rectF.set(getPaddingLeft(), getPaddingTop(), getWidth() - getPaddingRight(), getHeight() - getPaddingBottom());
     }
 
     public void draw() {
     }
 
+
+
     //yes button
-    static public Path YesButtonPath(float left,float top,float width,float height){
+    static public Path YesButtonPath(float left, float top, float width, float height) {
 
         /*
         xPos=0;yPos=0;
@@ -195,9 +225,9 @@ public class FunnyButton extends View {
     ctx.bezierCurveTo(xPos + 200 * scale, yPos + 103 * scale, xPos + 235 * scale, yPos + 100 * scale, xPos + 210 * scale, yPos + 104 * scale);
 
     ctx.stroke(); */
-        Path path=new Path();
-        float scaleX= width/360.f;
-        float scale = height/130.f;
+        Path path = new Path();
+        float scaleX = width / 360.f;
+        float scale = height / 130.f;
         path.moveTo(left + 186 * scaleX, top + 108 * scale);
         path.cubicTo(left + 111 * scaleX, top + 121 * scale, left + 50 * scaleX, top + 130 * scale, left + 19 * scaleX, top + 103 * scale);
         path.cubicTo(left - 7 * scaleX, top + 74 * scale, left + 4.1f * scaleX, top + 32.58f * scale, left + 10.7f * scaleX, top + 25.98f * scale);
@@ -225,7 +255,7 @@ public class FunnyButton extends View {
         float widthMinusCorners = (width - (2 * rx));
         float heightMinusCorners = (height - (2 * ry));
         //r is releative
-        path.moveTo(right, top+ bry + bry);
+        path.moveTo(right, top + bry + bry);
         path.rLineTo(0, -bry);
         path.rQuadTo(0, -bry, -brx, -bry);//top-right corner
         path.rLineTo(-bwidthMinusCorners, 0);
@@ -239,25 +269,25 @@ public class FunnyButton extends View {
         return path;
     }
 
-    static public Path NoButtonPath(float left,float top,float width,float height){
-        Path path=YesButtonPath(left,top,width,height);
+    static public Path NoButtonPath(float left, float top, float width, float height) {
+        Path path = YesButtonPath(left, top, width, height);
         Matrix matrix = new Matrix();
         matrix.preScale(-1, 1);
-        matrix.postTranslate(width+2*left,0);
+        matrix.postTranslate(width + 2 * left, 0);
         path.transform(matrix);
         return path;
     }
 
-    public static int getNewColor(int color, int add){
+    public static int getNewColor(int color, int add) {
         int red = Color.red(color);
         int green = Color.green(color);
         int blue = Color.blue(color);
         red = red + add;
         green += add;
         blue += add;
-        if(red<0)red=0;
-        if(green<0)green=0;
-        if(blue<0)blue=0;
+        if (red < 0) red = 0;
+        if (green < 0) green = 0;
+        if (blue < 0) blue = 0;
         if (red > 255) red = 255;
         if (green > 255) green = 255;
         if (blue > 255) blue = 255;
@@ -265,89 +295,195 @@ public class FunnyButton extends View {
         color = Color.argb(Color.alpha(color), red, green, blue);
         return color;
     }
-    public void drawOuter(Canvas canvas, OuterShapeType type, int width, int height, int color, boolean pressed) {
-        Paint p = new Paint();
-        Paint pAdd=new Paint();
-        float scaleDiv=24;
-        float scaleDivb=36;
+
+    public void drawOuter(Canvas canvas, boolean pressed) {
+
+        float scaleDiv = 30*1.5f;
+        float scaleDivb = 36*1.5f;
+        int color = getOuterShapeColor();
         if (pressed) {
             //darken our color
             //outercolor
-            color=getNewColor(color,-10);
-            scaleDivb=scaleDivb*1.5f;
-            scaleDiv=scaleDiv*1.5f;
+            color = getNewColor(color, -20);
+            outerP1.setColor(color);
+            scaleDivb = 30;
+            scaleDiv = 36 ;
+        }else{
+            outerP1.setColor(color);
         }
-        p.setColor(color);
-        pAdd.setColor(getNewColor(color,-50));
-        pAdd.setAntiAlias(true);
-        p.setAntiAlias(true);
-        p.setStrokeCap(Paint.Cap.ROUND);
-        RectF rectF = new RectF();
-        rectF.set(0, 0, width, height);
-        switch (type) {
+        outerP2.setColor(getNewColor(color, -70));
+        RectF rectF2 = new RectF();
+        rectF2.left = rectF.right / scaleDiv;
+        rectF2.top = rectF.bottom / scaleDivb;
+        rectF2.right  = rectF.right-rectF.right / scaleDiv;
+        rectF2.bottom  =rectF.bottom- rectF.bottom / scaleDiv;
+
+        switch (outerShape) {
             case None: {
                 canvas.drawColor(color);
             }
             break;
             case Rounded: {
-                canvas.drawRoundRect(rectF, rectF.right / 4, rectF.bottom / 2, pAdd);
-                rectF.left=rectF.right/scaleDiv;
-                rectF.top=rectF.bottom/scaleDivb;
-                rectF.right-=rectF.right/scaleDiv;
-                rectF.bottom-= rectF.bottom/scaleDiv;
-                canvas.drawRoundRect(rectF, rectF.width() / 4, rectF.height() / 2, p );
+                canvas.drawRoundRect(rectF, rectF.right / 4, rectF.bottom / 2, outerP2);
+                canvas.drawRoundRect(rectF2, rectF2.width() / 4, rectF2.height() / 2, outerP1);
             }
             break;
             case BottomRounded: {
-                canvas.drawPath(BottomRounded(rectF.left, rectF.top, rectF.right, rectF.bottom, rectF.width() / 8, rectF.height() / 8, rectF.width() / 2, rectF.height() / 2), pAdd);
-                rectF.left=rectF.right/scaleDiv;
-                rectF.top=rectF.bottom/scaleDivb;
-                rectF.right-=rectF.right/scaleDiv;
-                rectF.bottom-= rectF.bottom/scaleDiv;
-                canvas.drawPath(BottomRounded(rectF.left, rectF.top, rectF.right, rectF.bottom, rectF.width() / 8, rectF.height() / 8, rectF.width() / 2, rectF.height() / 2), p );
+                canvas.drawPath(BottomRounded(rectF.left, rectF.top, rectF.right, rectF.bottom, rectF.width() / 8, rectF.height() / 8, rectF.width() / 2, rectF.height() / 2), outerP2);
+                canvas.drawPath(BottomRounded(rectF2.left, rectF2.top, rectF2.right, rectF2.bottom, rectF2.width() / 8, rectF2.height() / 8, rectF2.width() / 2, rectF2.height() / 2), outerP1);
             }
             break;
-            case YesButton:{
-                canvas.drawPath(YesButtonPath(rectF.left, rectF.top, rectF.width(), rectF.height()), pAdd);
-                rectF.left=rectF.right/scaleDiv;
-                rectF.top=rectF.bottom/scaleDivb;
-                rectF.right-=rectF.right/scaleDiv;
-                rectF.bottom-= rectF.bottom/scaleDiv;
-                canvas.drawPath(YesButtonPath(rectF.left, rectF.top, rectF.width(), rectF.height()), p);
-            }break;
-            case NoButton:{
-                canvas.drawPath(NoButtonPath(rectF.left, rectF.top, rectF.width(), rectF.height()), pAdd);
-                rectF.left=rectF.right/scaleDiv;
-                rectF.top=rectF.bottom/scaleDivb;
-                rectF.right-=rectF.right/scaleDiv;
-                rectF.bottom-= rectF.bottom/scaleDiv;
-                canvas.drawPath(NoButtonPath(rectF.left, rectF.top, rectF.width(), rectF.height()), p);
-        }break;
+            case YesButton: {
+                canvas.drawPath(YesButtonPath(rectF.left, rectF.top, rectF.width(), rectF.height()), outerP2);
+                canvas.drawPath(YesButtonPath(rectF2.left, rectF2.top, rectF2.width(), rectF2.height()), outerP1);
+            }
+            break;
+            case NoButton: {
+                canvas.drawPath(NoButtonPath(rectF.left, rectF.top, rectF.width(), rectF.height()), outerP2);
+                canvas.drawPath(NoButtonPath(rectF2.left, rectF2.top, rectF2.width(), rectF2.height()), outerP1);
+            }
+            break;
         }
 
     }
 
-      public void drawText(Canvas canvas,String text,int width ,int height, float size,int color,boolean center){
-        Paint p=new Paint();
-        p.setColor(color);
-        p.setTextSize(size);
-        p.setAntiAlias(true);
-        p.setTextAlign(Paint.Align.CENTER);
+    public static Path StarPath(float cx,float cy,int spikes,float outerRadius,float innerRadius){
+        Path path = new Path();
+        float rot=(float)Math.PI/2*3;
+        float x=cx;
+        float y=cy;
+        float step=(float)Math.PI/spikes;
+        path.moveTo(cx,cy-outerRadius);
+            for(int i=0;i<spikes;i++){
+                x=cx+(float)Math.cos(rot)*outerRadius;
+                y=cy+(float)Math.sin(rot)*outerRadius;
+                path.lineTo(x,y);
+                rot+=step;
+                x=cx+(float)Math.cos(rot)*innerRadius;
+                y=cy+(float)Math.sin(rot)*innerRadius;
+                path.lineTo(x,y);
+                rot+=step;
+            }
+            path.lineTo(cx,cy-outerRadius);
+
+            path.close();
+        return path;
+    }
+    public static Path TrapesPath(float left,float top,float right,float bottom)
+    {
+        Path path=new Path();
+        path.moveTo(left,top);
+        path.lineTo(right - (right-left) / 4.f, top);
+        path.lineTo(right, bottom);
+        path.lineTo(left,bottom);
+        path.close();
+        return path;
+    }
+
+    public Path StandardPolyPath( float cx,float cy,float radius, int sides  ) {
+        if (sides < 3) return new Path();
+        Path path=new Path();
+        float start=-(float)(Math.PI / 2);
+        float a = (float)(Math.PI * 2)/(float)sides;
+
+        path.moveTo(cx, cy + radius * (float) Math.sin(start));
+        //Log.d("p: ", " " + sides + "p: " + cx  + " : " + cy  +" ;" +radius*(float)Math.sin(start));
+
+        for (int i = 1; i < sides; i++) {
+           // Log.d("p: ", " "+sides+"p: " + cx +" : " + (float) radius * (float) Math.cos(a * i + start) + " : " + cy + " : " + (float) radius * (float) Math.sin(a * i + start));
+            path.lineTo(cx + (float) radius * (float) Math.cos(a * i + start), cy + (float) radius * (float) Math.sin(a * i + start));
+        }
+        path.close() ;
+        return path;
+    }
+
+    public static Path HeartPath(float left,float top,float right,float bottom){
+        Path path=new Path();
+        float d = Math.min(right-left, bottom-top);
+        float k = left;
+        path.moveTo(k, k + d / 4);
+        path.quadTo(k, k, k + d / 4, k);
+        path.quadTo(k + d / 2, k, k + d / 2, k + d / 4);
+        path.quadTo(k + d / 2, k, k + d * 3 / 4, k);
+        path.quadTo(k + d, k, k + d, k + d / 4);
+        path.quadTo(k + d, k + d / 2, k + d * 3 / 4, k + d * 3 / 4);
+        path.lineTo(k + d / 2, k + d);
+        path.lineTo(k + d / 4, k + d * 3 / 4);
+        path.quadTo(k, k + d / 2, k, k + d / 4);
+        path.close();
+        return path;
+    }
+
+    public void drawInner(Canvas canvas){
+        float squareWidth= rectF.height()> rectF.width()?rectF.width()-rectF.width()/2:rectF.height()-rectF.height()/2;
+        switch (innerShape){
+            case Circle:
+                 canvas.drawCircle(rectF.width()/2,rectF.height()/2,squareWidth/2.f,innerP1);
+                break;
+            case Square:
+                canvas.drawRect((rectF.width() - squareWidth) / 2.f, (rectF.height() - squareWidth) / 2.f,
+                        (rectF.width() + squareWidth) / 2.f, (rectF.height() + squareWidth) / 2.f, innerP1);
+                break;
+            case Rectangle:
+                canvas.drawRect((rectF.width() - squareWidth-   squareWidth/3.f) / 2.f, (rectF.height() - squareWidth) / 2.f,
+                        (rectF.width() + squareWidth+  squareWidth/3.f) / 2.f, (rectF.height() + squareWidth) / 2.f, innerP1);
+                break;
+            case Trapes:
+                canvas.drawPath(TrapesPath((rectF.width() - squareWidth-  squareWidth / 3.f) / 2.f, (rectF.height() - squareWidth) / 2.f,
+                        (rectF.width() + squareWidth+  squareWidth/3.f) / 2.f, (rectF.height() + squareWidth) / 2.f), innerP1);
+                break;
+            case Ellipse:
+                RectF r=new RectF();
+                r.set((rectF.width() - squareWidth-  squareWidth / 3.f) / 2.f, (rectF.height() - squareWidth) / 2.f,
+                        (rectF.width() + squareWidth + squareWidth / 3.f) / 2.f, (rectF.height() + squareWidth) / 2.f);
+                canvas.drawRoundRect(r,r.width()/2.f,r.height()/2.f, innerP1);
+                break;
+            case Star:
+                canvas.drawPath(StarPath(rectF.width() / 2, rectF.height() / 2, 5, squareWidth / 2.f, squareWidth / 2.f-squareWidth/4.f),
+                        innerP1);
+                break;
+            case Pentagon:
+                canvas.drawPath(StandardPolyPath(rectF.width() / 2, rectF.height() / 2, squareWidth/2.f,5 ),
+                        innerP1);
+                break;
+            case Triangle:
+                canvas.drawPath(StandardPolyPath(rectF.width() / 2, rectF.height() / 2, squareWidth/2.f,3  ),
+                        innerP1);
+                break;
+            case Heart:
+                canvas.drawPath(HeartPath((rectF.width() - squareWidth) / 2.f, (rectF.height() - squareWidth) / 2.f,
+                        (rectF.width() + squareWidth) / 2.f, (rectF.height() + squareWidth) / 2.f), innerP1);
+                break;
+
+        }
+    }
+
+    public void drawText(Canvas canvas, String text, int width, int height, Paint p, boolean center) {
+
         Rect bounds = new Rect();
         p.getTextBounds(text, 0, text.length(), bounds);
-        if(center) {
-            int x = (canvas.getWidth() / 2) ;
-            int y = (canvas.getHeight() / 2) - (bounds.height() / 2);
+        if (center) {
+            int x = (width / 2);
+            int y = (height / 2) - (bounds.height() / 2);
             canvas.drawText(text, x, y, p);
-        }else{
-            int x = (canvas.getWidth() / 2)  ;
-            int y = (canvas.getHeight() / 2) + bounds.height();
+        } else {
+            int x = (width / 2);
+            int y = (height / 2) + bounds.height();
             canvas.drawText(text, x, y, p);
         }
     }
+
+    @Override
+    protected  void onSizeChanged(int w,int h, int oldw,int oldh){
+        super.onSizeChanged(w,h,oldw,oldh);
+        rectF.set(getPaddingLeft(), getPaddingTop(), getWidth() - getPaddingRight(), getHeight() - getPaddingBottom());
+        invalidate();
+    }
+
     @Override
     protected void dispatchSetPressed(boolean pressed) {
         super.dispatchSetPressed(pressed);
+
         invalidate();
     }
 
@@ -355,11 +491,10 @@ public class FunnyButton extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        int width = getWidth();
-        int height = getHeight();
-        drawOuter(canvas, this.outerShape, width, height, outerShapeColor,isPressed());
-        drawText(canvas,centerText,width,height,centerTextSize,centerTextColor,true);
-        drawText(canvas,belowText,width,height,belowTextSize,belowTextColor,false);
+        drawOuter(canvas, isPressed());
+        drawInner(canvas);
+        drawText(canvas, centerText, (int) rectF.width(), (int) rectF.height(), centerTxtP, true);
+        drawText(canvas, belowText, (int) rectF.width(), (int) rectF.height(), belowTxtP, false);
 
     }
 

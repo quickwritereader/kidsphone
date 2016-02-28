@@ -3,16 +3,18 @@
     <attr name="InnerShapeProperty" format="enum">
         <enum name="None" value="0"/>
         <enum name="Square" value="1"/>
-        <enum name="Circle" value="2"/>
-        <enum name="Triangle" value="3"/>
-        <enum name="Pentagon" value="4"/>
-        <enum name="Star" value="5"/>
-        <enum name="Trapes" value="6"/>
-        <enum name="Heart" value="7"/>
-        <enum name="YesPhone" value="8"/>
-        <enum name="NoPhone" value="9"/>
-        <enum name="Sound" value="10"/>
-        <enum name="Picture" value="11"/>
+        <enum name="Rectangle" value="2"/>
+        <enum name="Circle" value="3"/>
+        <enum name="Triangle" value="4"/>
+        <enum name="Pentagon" value="5"/>
+        <enum name="Star" value="6"/>
+        <enum name="Trapes" value="7"/>
+        <enum name="Ellipse" value="8"/>
+        <enum name="Heart" value="9"/>
+        <enum name="YesPhone" value="10"/>
+        <enum name="NoPhone" value="11"/>
+        <enum name="Sound" value="12"/>
+        <enum name="Picture" value="13"/>
     </attr>
 
     <attr name="OuterShapeProperty" format="enum">
