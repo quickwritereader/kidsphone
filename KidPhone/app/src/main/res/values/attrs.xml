@@ -26,15 +26,22 @@
         <enum name="Picture" value="5"/>
     </attr>
 
+    <attr name="BehaviorMode" format="enum">
+        <enum name="Normal" value="0"/>
+        <enum name="Figures" value="1"/>
+        <enum name="Numbers" value="2"/>
+        <enum name="Letters" value="3"/>
+        <enum name="System" value="4"/>
+    </attr>
+
     <declare-styleable name="FunnyButton">
         <attr name ="InnerShapeProperty" />
         <attr name="OuterShapeProperty" />
-        <attr name="centerText" format="string" />
-        <attr name="belowText" format="string" />
-        <attr name="centerTextSize" format="dimension"/>
-        <attr name="belowTextSize" format="dimension" />
-        <attr name="centerTextColor" format="reference|color"/>
-        <attr name="belowTextColor" format="reference|color" />
+        <attr name="BehaviorMode" />
+        <attr name="NumbersText" format="string" />
+        <attr name="LettersText" format="string" />
+        <attr name="TextSize" format="dimension"/>
+        <attr name="TextColor" format="reference|color"/>
         <attr name="innerShapeColor" format="reference|color" />
         <attr name="outerShapeColor" format="reference|color" />
     </declare-styleable>
