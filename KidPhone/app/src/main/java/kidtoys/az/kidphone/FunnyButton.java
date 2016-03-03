@@ -71,7 +71,8 @@ public class FunnyButton extends View {
         YesPhone,
         NoPhone,
         Sound,
-        Picture
+        Picture,
+        Hexagon
     }
 
     public enum OuterShapeType {
@@ -460,6 +461,10 @@ public class FunnyButton extends View {
                 break;
             case Star:
                 canvas.drawPath(StarPath(cx, cy, 5, radius, radius - radius / 2.f),
+                        innerP1);
+                break;
+            case Hexagon:
+                canvas.drawPath(StandardPolyPath(cx, cy, radius, 6),
                         innerP1);
                 break;
             case Pentagon:

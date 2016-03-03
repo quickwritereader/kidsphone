@@ -15,6 +15,7 @@
         <enum name="NoPhone" value="11"/>
         <enum name="Sound" value="12"/>
         <enum name="Picture" value="13"/>
+        <enum name="Hexagon" value="14"/>
     </attr>
 
     <attr name="OuterShapeProperty" format="enum">
