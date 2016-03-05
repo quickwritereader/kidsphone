@@ -10,10 +10,10 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="4dp"
     android:weightSum="1"
+    android:background="#0050FF"
     tools:context=".PhoneActivity">
     <kidtoys.az.kidphone.FunnyDisplay android:layout_height="240dp"
-        android:layout_width="336dp"
-        android:background="#000000"
+        android:layout_width="320dp"
         android:id="@+id/display"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="4dp"

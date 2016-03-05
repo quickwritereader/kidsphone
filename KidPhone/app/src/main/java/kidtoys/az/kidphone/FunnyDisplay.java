@@ -15,8 +15,8 @@ import android.view.View;
  */
 public class FunnyDisplay extends View {
 
-    int surfaceWidth=14;
-    int surfaceHeight=10;
+    int surfaceWidth=18;
+    int surfaceHeight=12;
     Paint realColors[] ;
 
     Path pathList[]=null;
@@ -115,7 +115,7 @@ public class FunnyDisplay extends View {
             case Triangle:
                 return CanvasUtils.StandardPolyPath(cx, cy, r,3 ) ;
             case Star:
-                return CanvasUtils.StarPath(cx, cy, 4, r,  r / 2.f) ;
+                return CanvasUtils.StarPath(cx, cy, 5, r,  r / 2.f) ;
             case Heart:
                 return CanvasUtils.HeartPath(cx - r, cy - r,
                         cx + r, cy + r);
@@ -143,14 +143,17 @@ public class FunnyDisplay extends View {
     }
 
     int diameter=0;
-
+    Paint pback=new Paint();
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         if(pathList==null){
-            diameter=getHeight()/mainSurface.getHeight();
+            diameter= (getWidth()-60)/mainSurface.getWidth();
            // initPath(diameter/2);
         }
+        pback.setColor(Color.BLACK);
+        pback.setAntiAlias(true);
+        canvas.drawPath(CanvasUtils.Rounded(0,0,(float)getWidth(),(float)getHeight(),30.f,30.f),pback);
 
         //blt surface
         for(int j=0;  j<mainSurface.getHeight();j++) {
@@ -160,7 +163,7 @@ public class FunnyDisplay extends View {
                 if(d!= FunnySurface.DotType.None) {
 
                     Path path;//=pathList[d.ordinal()];
-                    path=getDotPath(d,i*diameter+diameter/2,j*diameter+diameter/2,diameter/2,-5);
+                    path=getDotPath(d,30+i*diameter+diameter/2,30+j*diameter+diameter/2,diameter/2,0);
                     if(path!=null) {
                        // Matrix translateMatrix = new Matrix();
                        // translateMatrix.setTranslate(i * diameter, j * diameter);
@@ -172,7 +175,7 @@ public class FunnyDisplay extends View {
                         p.setStrokeCap(Paint.Cap.ROUND);
                        // path.transform(translateMatrix);
                         canvas.drawPath(path, p);
-                        path=getDotPath(d,i*diameter+diameter/2,j*diameter+diameter/2,diameter/2,-10);
+                        path=getDotPath(d,30+i*diameter+diameter/2,30+j*diameter+diameter/2,diameter/2,-6);
                          p.setStyle(Paint.Style.FILL);
  //                       path = fillPathList[d.ordinal()];
 //                        path.transform(translateMatrix);
