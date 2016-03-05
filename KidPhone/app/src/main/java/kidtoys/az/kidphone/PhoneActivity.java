@@ -17,6 +17,22 @@ public class PhoneActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_phone);
         FunnyButton keysMode = (FunnyButton) findViewById(R.id.KeysMode);
         keysMode.setOnClickListener(this);
+
+        FunnyDisplay display=(FunnyDisplay)findViewById(R.id.display);
+
+        //draw
+        FunnySurface mainSurface= display.getMainSurface();
+        FunnySurface RombRect=FunnySurface.createSurface(2, 2, FunnySurface.DotColor.Blue, FunnySurface.DotType.Romb);
+        FunnySurface HeartRect=FunnySurface.createSurface(5,5, FunnySurface.DotColor.Red, FunnySurface.DotType.Heart);
+        FunnySurface CircleRect=FunnySurface.createSurface(3, 3, FunnySurface.DotColor.Red, FunnySurface.DotType.Circle);
+        mainSurface.putDot(0,0, FunnySurface.DotColor.Yellow, FunnySurface.DotType.Star);
+        mainSurface.putSurface(RombRect,1,1 );
+        mainSurface.putSurface(HeartRect,3,3);
+        mainSurface.putSurface(CircleRect,9,3);
+        mainSurface.putDot(11, 9, FunnySurface.DotColor.Yellow, FunnySurface.DotType.Square);
+        mainSurface.putDot(12,9, FunnySurface.DotColor.Magenta, FunnySurface.DotType.Star);
+        mainSurface.putDot(13,9, FunnySurface.DotColor.Orange, FunnySurface.DotType.Hexagon);
+        display.Render();
     }
 
     @Override
