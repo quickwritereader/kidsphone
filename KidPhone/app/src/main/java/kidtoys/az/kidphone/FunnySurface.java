@@ -135,8 +135,8 @@ public class FunnySurface {
      */
     static public FunnySurface createSurface(int width,int height,DotColor color,DotType type){
         FunnySurface newS=new FunnySurface(width,height);
-        int cint=color.ordinal() | type.ordinal() <<4;
-        byte c= (byte) (cint);
+        int cInt=color.ordinal() | type.ordinal() <<4;
+        byte c= (byte) (cInt);
         for(int i=0;i<newS.mem.length;i++){
             newS.mem[i]=c;
         }
@@ -144,7 +144,7 @@ public class FunnySurface {
     }
 
     /**
-     * Blt surface
+     * Blt surface on the surface
     * @param surface
      * @param x
      * @param y
@@ -167,8 +167,101 @@ public class FunnySurface {
 
     }
 
+    /***
+     * Blt surface
+     * @param surface
+     * @param x
+     * @param y
+     * @param offsetx
+     * @param offsety
+     */
     public void putSurface(FunnySurface surface,int x,int y  ,int offsetx,int offsety){
        throw new UnsupportedOperationException();
     }
+
+    /**
+     * Draw line  {@see https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm}
+     * for Octants  Bresenham's algorithm
+     * http://rosettacode.org/wiki/Bitmap/Bresenham%27s_line_algorithm
+     * for vertical,horizontal and diagonal simple algorithm
+     * @param x1
+     * @param y1
+     * @param x2
+     * @param y2
+     * @param color
+     * @param type
+     */
+    public void drawLine(int x1,int y1,int x2,int y2,DotColor color,DotType type){
+
+        int deltaX=Math.abs(x2-x1);
+        int deltaY=Math.abs( y2-y1);
+        int y=y1;
+        int x=x1;
+        int cInt=color.ordinal() | type.ordinal() <<4;
+        byte c= (byte) (cInt);
+
+        if(deltaX==0){
+            //horizontal
+            int sign=y2>y1?1:-1;
+            for(;y<=y2;y+=sign){
+                mem[y*width+x]=c;
+            }
+
+        }else if(deltaY==0){
+            //vertical
+            int sign=x2>x1?1:-1;
+            for(;x<=x2;x+=sign){
+                mem[y*width+x]=c;
+            }
+        }else if(deltaX==deltaY){
+            //diagonal;
+            int signX=x2>x1?1:-1;
+            int signY=y2>y1?1:-1;
+            for(;y<=y2;y+=signY,x+=signX) {
+                mem[y*width+x]=c;
+            }
+        }else {
+            // delta of exact value and rounded value of the dependant variable
+            int d = 0;
+
+            int dy = deltaY;
+            int dx = deltaX;
+
+            int dy2 = (dy << 1); // slope scaling factors to avoid floating
+            int dx2 = (dx << 1); // point
+
+            int ix = x1 < x2 ? 1 : -1; // increment direction
+            int iy = y1 < y2 ? 1 : -1;
+
+            if (dy <= dx) {
+                for (;;) {
+                    mem[y1*width+x1]=c;
+                    if (x1 == x2)
+                        break;
+                    x1 += ix;
+                    d += dy2;
+                    if (d > dx) {
+                        y1 += iy;
+                        d -= dx2;
+                    }
+                }
+            } else {
+                for (;;) {
+                    //plot(g, x1, y1);
+                    mem[y1*width+x1]=c;
+                    if (y1 == y2)
+                        break;
+                    y1 += iy;
+                    d += dx2;
+                    if (d > dy) {
+                        x1 += ix;
+                        d -= dy2;
+                    }
+                }
+            }
+        }//end ifelse
+
+    }
+
 
 }

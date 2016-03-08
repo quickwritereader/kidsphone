@@ -148,7 +148,7 @@ public class FunnyDisplay extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         if(pathList==null){
-            diameter= (getWidth()-60)/mainSurface.getWidth();
+            diameter= (getWidth()-40)/mainSurface.getWidth();
            // initPath(diameter/2);
         }
         pback.setColor(Color.BLACK);
@@ -163,7 +163,7 @@ public class FunnyDisplay extends View {
                 if(d!= FunnySurface.DotType.None) {
 
                     Path path;//=pathList[d.ordinal()];
-                    path=getDotPath(d,30+i*diameter+diameter/2,30+j*diameter+diameter/2,diameter/2,0);
+                    path=getDotPath(d,20+i*diameter+diameter/2,20+j*diameter+diameter/2,diameter/2,0);
                     if(path!=null) {
                        // Matrix translateMatrix = new Matrix();
                        // translateMatrix.setTranslate(i * diameter, j * diameter);
@@ -175,7 +175,7 @@ public class FunnyDisplay extends View {
                         p.setStrokeCap(Paint.Cap.ROUND);
                        // path.transform(translateMatrix);
                         canvas.drawPath(path, p);
-                        path=getDotPath(d,30+i*diameter+diameter/2,30+j*diameter+diameter/2,diameter/2,-6);
+                        path=getDotPath(d,20+i*diameter+diameter/2,20+j*diameter+diameter/2,diameter/2,-8);
                          p.setStyle(Paint.Style.FILL);
  //                       path = fillPathList[d.ordinal()];
 //                        path.transform(translateMatrix);

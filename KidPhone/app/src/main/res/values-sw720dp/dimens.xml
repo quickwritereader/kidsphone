@@ -1,0 +1,10 @@
+<resources>
+
+    <dimen name="display_width">640dp</dimen>
+    <dimen name="display_height">480dp</dimen>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="smallSpace">6dp</dimen>
+    <dimen name="smallSpace2">8dp</dimen>
+    <dimen name="bigSpace">80dp</dimen>
+</resources>

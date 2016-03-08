@@ -233,25 +233,25 @@ public class FunnyButton extends View {
 
     public void drawOuter(Canvas canvas, boolean pressed) {
 
-        float scaleDiv = 30 * 1.5f;
-        float scaleDivb = 36 * 1.5f;
+        float scaleDivb = 32 * 1.6f;
         int color = getOuterShapeColor();
         if (pressed) {
             //darken our color
             //outercolor
-            color = getNewColor(color, -40);
+            color = getNewColor(color, -50);
             outerP1.setColor(color);
-            scaleDivb = 30;
-            scaleDiv = 36;
+            scaleDivb = 32;
         } else {
             outerP1.setColor(color);
         }
-        outerP2.setColor(getNewColor(color, -80));
+        outerP2.setColor(getNewColor(color, -90));
         RectF rectF2 = new RectF();
-        rectF2.left = rectF.left + rectF.width() / scaleDiv;
-        rectF2.top = rectF.top + rectF.height() / scaleDivb;
-        rectF2.right = rectF.right - rectF.width() / scaleDiv;
-        rectF2.bottom = rectF.bottom - rectF.height() / scaleDiv;
+        float pad=rectF.height() / scaleDivb;
+        if(pad>5)pad=5;
+        rectF2.left = rectF.left + pad;
+        rectF2.top = rectF.top + pad;
+        rectF2.right = rectF.right - pad;
+        rectF2.bottom = rectF.bottom - pad;
 
         switch (outerShape) {
             case None: {
