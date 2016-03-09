@@ -43,7 +43,8 @@ public class FunnySurfaceUtils {
     }
 
     public static void drawL(FunnySurface surface, int x, int y, int charWidth, int charHeight, FunnySurface.DotColor color, FunnySurface.DotType figure) {
-
+        surface.drawLine(x  , y, x, y + charHeight, color, figure);
+        surface.drawLine(x, y + charHeight, x + charWidth, y + charHeight, color, figure);
     }
 
     public static void drawH(FunnySurface surface, int x, int y, int charWidth, int charHeight, FunnySurface.DotColor color, FunnySurface.DotType figure) {
@@ -79,6 +80,15 @@ public class FunnySurfaceUtils {
     }
 
     public static void drawT(FunnySurface surface, int x, int y, int charWidth, int charHeight, FunnySurface.DotColor color, FunnySurface.DotType figure) {
+
+    }
+
+    public static void drawV(FunnySurface surface, int x, int y, int charWidth, int charHeight, FunnySurface.DotColor color, FunnySurface.DotType figure) {
+
+    }
+
+
+    public static void drawChar(FunnySurface surface, int x, int y, char Letter, FunnySurface.DotColor color, FunnySurface.DotType figure) {
 
     }
 

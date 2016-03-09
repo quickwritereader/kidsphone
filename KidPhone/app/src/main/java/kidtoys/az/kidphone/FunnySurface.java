@@ -204,21 +204,27 @@ public class FunnySurface {
             //horizontal
             int sign=y2>y1?1:-1;
             for(;y<=y2;y+=sign){
-                mem[y*width+x]=c;
+                if(x>=0 && x<width &&y>=0 && y< height) {
+                    mem[y * width + x] = c;
+                }
             }
 
         }else if(deltaY==0){
             //vertical
             int sign=x2>x1?1:-1;
             for(;x<=x2;x+=sign){
-                mem[y*width+x]=c;
+                if(x>=0 && x<width &&y>=0 && y< height) {
+                    mem[y * width + x] = c;
+                }
             }
         }else if(deltaX==deltaY){
             //diagonal;
             int signX=x2>x1?1:-1;
             int signY=y2>y1?1:-1;
             for(;y<=y2;y+=signY,x+=signX) {
-                mem[y*width+x]=c;
+                if(x>=0 && x<width &&y>=0 && y< height) {
+                    mem[y * width + x] = c;
+                }
             }
         }else {
             // delta of exact value and rounded value of the dependant variable
@@ -235,7 +241,9 @@ public class FunnySurface {
 
             if (dy <= dx) {
                 for (;;) {
-                    mem[y1*width+x1]=c;
+                    if(x1>=0 && x1<width &&y1>=0 && y1< height) {
+                        mem[y1 * width + x1] = c;
+                    }
                     if (x1 == x2)
                         break;
                     x1 += ix;
@@ -248,7 +256,9 @@ public class FunnySurface {
             } else {
                 for (;;) {
                     //plot(g, x1, y1);
-                    mem[y1*width+x1]=c;
+                    if(x1>=0 && x1<width &&y1>=0 && y1< height) {
+                        mem[y1 * width + x1] = c;
+                    }
                     if (y1 == y2)
                         break;
                     y1 += iy;

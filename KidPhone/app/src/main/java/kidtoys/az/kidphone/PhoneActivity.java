@@ -25,23 +25,16 @@ public class PhoneActivity extends AppCompatActivity implements View.OnClickList
 
         //draw
         FunnySurface mainSurface = display.getMainSurface();
-        FunnySurface RombRect = FunnySurface.createSurface(2, 2, FunnySurface.DotColor.Blue, FunnySurface.DotType.Romb);
-        FunnySurface HeartRect = FunnySurface.createSurface(2, 3, FunnySurface.DotColor.Red, FunnySurface.DotType.Heart);
-        FunnySurface CircleRect = FunnySurface.createSurface(3, 3, FunnySurface.DotColor.Red, FunnySurface.DotType.Circle);
-        CircleRect.putDot(1, 1, FunnySurface.DotColor.Magenta, FunnySurface.DotType.Square);
 
-        FunnySurface line = FunnySurface.createSurface(1, 3, FunnySurface.DotColor.Red, FunnySurface.DotType.Star);
-        mainSurface.putDot(0, 0, FunnySurface.DotColor.Yellow, FunnySurface.DotType.Star);
-        mainSurface.putSurface(RombRect, 1, 1);
-        mainSurface.putSurface(HeartRect, 3, 3);
-        mainSurface.putSurface(CircleRect, 9, 3);
 
         //draw A
-        int x = 5;
+        int x = 9;
         int y = 1;
-        int charHeight = 10;
-        int charWidth = 10;
-        FunnySurfaceUtils.drawA(mainSurface, x, y, charWidth, charHeight, FunnySurface.DotColor.White, FunnySurface.DotType.Star);
+        int charHeight =10;
+        int charWidth =14;
+        FunnySurfaceUtils.drawA(mainSurface, x, y, charWidth, charHeight, FunnySurface.DotColor.Red, FunnySurface.DotType.Circle);
+       // FunnySurfaceUtils.drawA(mainSurface, x + 1, y + 1, charWidth, charHeight, FunnySurface.DotColor.Red, FunnySurface.DotType.Square);
+        FunnySurfaceUtils.drawL(mainSurface, 1, y, 6, charHeight, FunnySurface.DotColor.Red, FunnySurface.DotType.Circle);
         display.Render();
     }
 

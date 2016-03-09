@@ -15,8 +15,8 @@ import android.view.View;
  */
 public class FunnyDisplay extends View {
 
-    int surfaceWidth=18;
-    int surfaceHeight=12;
+    int surfaceWidth=24;
+    int surfaceHeight=18;
     Paint realColors[] ;
 
     Path pathList[]=null;
@@ -163,7 +163,7 @@ public class FunnyDisplay extends View {
                 if(d!= FunnySurface.DotType.None) {
 
                     Path path;//=pathList[d.ordinal()];
-                    path=getDotPath(d,20+i*diameter+diameter/2,20+j*diameter+diameter/2,diameter/2,0);
+                    path=getDotPath(d,20+i*diameter+diameter/2,20+j*diameter+diameter/2,diameter/2,-1);
                     if(path!=null) {
                        // Matrix translateMatrix = new Matrix();
                        // translateMatrix.setTranslate(i * diameter, j * diameter);
@@ -175,7 +175,7 @@ public class FunnyDisplay extends View {
                         p.setStrokeCap(Paint.Cap.ROUND);
                        // path.transform(translateMatrix);
                         canvas.drawPath(path, p);
-                        path=getDotPath(d,20+i*diameter+diameter/2,20+j*diameter+diameter/2,diameter/2,-8);
+                        path=getDotPath(d,20+i*diameter+diameter/2,20+j*diameter+diameter/2,diameter/2,-4);
                          p.setStyle(Paint.Style.FILL);
  //                       path = fillPathList[d.ordinal()];
 //                        path.transform(translateMatrix);
