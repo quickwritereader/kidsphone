@@ -201,7 +201,7 @@ public class FunnySurface {
         if (deltaX == 0) {
             //horizontal
             int sign = y2 > y1 ? 1 : -1;
-            for (; y <= y2; y += sign) {
+            for (; y != y2+sign; y += sign) {
                 if (x >= 0 && x < width && y >= 0 && y < height) {
                     mem[y * width + x] = c;
                 }
@@ -210,7 +210,7 @@ public class FunnySurface {
         } else if (deltaY == 0) {
             //vertical
             int sign = x2 > x1 ? 1 : -1;
-            for (; x <= x2; x += sign) {
+            for (; x != x2+sign; x += sign) {
                 if (x >= 0 && x < width && y >= 0 && y < height) {
                     mem[y * width + x] = c;
                 }
@@ -219,7 +219,7 @@ public class FunnySurface {
             //diagonal;
             int signX = x2 > x1 ? 1 : -1;
             int signY = y2 > y1 ? 1 : -1;
-            for (; y <= y2; y += signY, x += signX) {
+            for (; y != y2+signY; y += signY, x += signX) {
                 if (x >= 0 && x < width && y >= 0 && y < height) {
                     mem[y * width + x] = c;
                 }

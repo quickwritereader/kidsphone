@@ -19,6 +19,7 @@ public class FunnyDisplay extends View {
 
     Path pathList[] = null;
     Path fillPathList[] = null;
+    public static double sqrt2=Math.sqrt(2);
 
     /**
      * returns Main Surface that you can use to draw
@@ -104,8 +105,11 @@ public class FunnyDisplay extends View {
                 return CanvasUtils.Rounded(cx - r, cy - r, cx + r, cy + r, r, r);
             case Romb:
                 return CanvasUtils.StandardPolyPath(cx, cy, r, 4);
-            case Square:
+            case Square: {
+                //increase radius
+                r= (int) (r*sqrt2);//r=r*sqrt(2)
                 return CanvasUtils.StandardPolyPath(cx, cy, r, 4, -((float) Math.PI * 3.f / 4.f));
+            }
             case Hexagon:
                 return CanvasUtils.StandardPolyPath(cx, cy, r, 6);
             case Pentagon:

@@ -8,7 +8,7 @@ public class FunnySurfaceUtils {
 
 
     private static int standardHeight=8;
-    private static int standardWidth=6;
+    private static int standardWidth=5;
 
     /**
      * Draw Letter A
@@ -22,9 +22,16 @@ public class FunnySurfaceUtils {
      * @param figure     figure
      */
     private static void drawA(FunnySurface surface, int x, int y, int charWidth, int charHeight, FunnySurface.DotColor color, FunnySurface.DotType figure) {
-        surface.drawLine(x + charWidth / 2, y, x, y + charHeight, color, figure);
-        surface.drawLine(x + charWidth / 2, y, x + charWidth, y + charHeight, color, figure);
-        surface.drawLine(x + 1, y + (charHeight / 2) + 1, x + charWidth - 1, y + (charHeight / 2) + 1, color, figure);
+        if(charWidth>charHeight) charWidth=charHeight-1;
+        int centerOffset= (int)Math.ceil(charWidth/2.0)-1 ;
+        int bottom=y+charHeight-1;
+        int right=x+charWidth-1;
+
+        surface.drawLine(x,bottom,x,y+centerOffset,color,figure);
+        surface.drawLine(x, y+centerOffset, x+centerOffset, y , color, figure);
+        surface.drawLine(right-centerOffset, y , right, y+centerOffset , color, figure);
+        surface.drawLine( right, y+centerOffset ,right,bottom,color,figure);
+        surface.drawLine( x, y+charHeight/2 ,right,y+charHeight/2,color,figure);
 
     }
 
@@ -48,8 +55,10 @@ public class FunnySurfaceUtils {
     }
 
     private static void drawL(FunnySurface surface, int x, int y, int charWidth, int charHeight, FunnySurface.DotColor color, FunnySurface.DotType figure) {
-        surface.drawLine(x, y, x, y + charHeight, color, figure);
-        surface.drawLine(x, y + charHeight, x + charWidth, y + charHeight, color, figure);
+
+        int bottom=y+charHeight-1;
+        surface.drawLine(x, y, x, bottom, color, figure);
+        surface.drawLine(x, bottom, x+charWidth-1, bottom, color, figure);
     }
 
     private static void drawH(FunnySurface surface, int x, int y, int charWidth, int charHeight, FunnySurface.DotColor color, FunnySurface.DotType figure) {
