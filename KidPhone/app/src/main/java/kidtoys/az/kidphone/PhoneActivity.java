@@ -73,8 +73,8 @@ public class PhoneActivity extends AppCompatActivity implements View.OnClickList
                     mainSurface.clear();
                     int figureRandom = (int) (Math.random() * (FunnySurface.DotType.values().length - 1)) + 1;
                     int colorRandom = (int) (Math.random() * (FunnySurface.DotColor.values().length - 1));
-                    FunnySurfaceUtils.drawLetter(mainSurface, mainSurface.getWidth() / 2 - 4, 4, l, FunnySurface.DotColor.values()[colorRandom],
-                            FunnySurface.DotType.values()[figureRandom]);
+                    FunnySurfaceUtils.drawLetter(mainSurface, mainSurface.getWidth() / 2  , 4, l, FunnySurface.DotColor.values()[colorRandom],
+                            FunnySurface.DotType.values()[figureRandom],true);
                     ;
                     display.Render();
                 }
