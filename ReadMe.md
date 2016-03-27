@@ -3,11 +3,10 @@
 ##Design Document  
 
 
-Picture of the toy Program:
+Picture of the toy Program: 
 
-![gameLook.png](https://bytebucket.org/overflowzero/kidsprogram/raw/700a0412b15798caf878af09f3a6ce2a3062003f/%5E6196131DE0DC80C3F58ED0EA5B5C34C7D5579EB39DD580CFF1%5Epimgo_distr.jpg?token=d7673656acc49efe502411ff7aa367e297af2a7f)
-
-Real ScreenShots 
+![screen1.jpg](https://bytebucket.org/overflowzero/kidsprogram/raw/9c648e1ffa73b756a86bb282e1fddfcdeea66d1b/screen1.jpeg?token=2a629e9169054d6efd2683f955b870bf979fd573)
+ 
 
 ##Development##
 
@@ -16,7 +15,7 @@ Real ScreenShots
 * Distribution Methods: Google PLay 
 * Planned Total Development Time: 1-3 monthes
 * Planned Total Development Costs: 25$ +
-* Number of developers: 3 ( @quickwritereader, @ramil2319, @toghrul1985  )
+* Number of developers: 2 ( @quickwritereader, @ramil2319   )
 * Audience: Kids
  
 
