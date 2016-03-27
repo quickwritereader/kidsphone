@@ -26,14 +26,18 @@ Picture of the toy Program:
 
 ###Project Schedule:###
 
-Day	|Task	|Time Required
-:------|:-----|:------
-1	| Sounds and Pictures	| 1-2 week 
-7-14    | User Interface | 1 week
-7-14	| Rounded Buttons	| 1 week 
-7-21    | Light Visualization based on Media Player | 2 week
-7-21    | Ask Questions based on Mode Button | 2 week
-7-21    | Telephone based on Call Button | 2 week
+Start Date	|Task	|Time Required| Current State
+:------|:-----|:------|:------
+2016-02-09	| Sounds and Pictures| 1-2 weeks | uploaded
+2016-02-15    | User Interface | 1 week | 75% (delaying)
+2016-02-15	| Funny Buttons	| 1 week | fully implemented (2016-03-03)
+2016-03-05	| Funny Display	| 3-4 week | 70-80% (delayed)  
+2016-03-09	| Letters,Figures	| 3-4 week | 10-20% (delaying)  
+---    | Light Visualization based on Media Player | 2 weeks | not started
+---    | Ask Questions based on Mode Button | 2 weeks | not started
+---    | Telephone based on Call Button | 2 weeks | not started
+---    | Implement funny game | 2 weeks | not started
+---    | Telephone based on Call Button | 2 weeks | not started
 
 ####Daily Schedule:####
 
