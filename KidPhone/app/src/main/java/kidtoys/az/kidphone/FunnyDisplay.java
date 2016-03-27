@@ -15,7 +15,10 @@ public class FunnyDisplay extends View {
 
     int surfaceWidth = 20;
     int surfaceHeight = 15;
+    Paint innerLight;
     Paint realColors[];
+    Paint centerColors[];
+    Paint outerColors[];
 
     Path pathList[] = null;
     Path fillPathList[] = null;
@@ -33,26 +36,41 @@ public class FunnyDisplay extends View {
 
     private FunnySurface mainSurface;
 
+
+    public static int blend(int color1,int color2 , float alpha){
+        float red1=Color.red(color1);
+        float blue1=Color.blue(color1);
+        float green1=Color.green(color1);
+        float red2=Color.red(color2);
+        float blue2=Color.blue(color2);
+        float green2=Color.green(color2);
+        int b_red= (int) (alpha*red1+(1.0f-alpha)*red2);
+        int b_green= (int) (alpha*green1+(1.0f-alpha)*green2);
+        int b_blue= (int) (alpha*blue1+(1.0f-alpha)*blue2);
+        return Color.argb(255,b_red,b_green,b_blue);
+
+    }
+
     public static int realColorFromDotColor(FunnySurface.DotColor color) {
         int res = 0;
         switch (color) {
             case Red:
-                res = Color.RED;
+                res = Color.argb(255,255,0x40,0);//Orange red FF2400
                 break;
             case Blue:
-                res = Color.BLUE;
+                res = Color.argb(255,0,0xbf,255); //
                 break;
             case White:
                 res = Color.WHITE;
                 break;
             case Green:
-                res = Color.GREEN;
+                res = Color.argb(255, 0, 255, 0);//
                 break;
             case Yellow:
                 res = Color.YELLOW;
                 break;
             case Pink:
-                res = Color.argb(255, 0xFF, 0xC0, 0xCB);
+                res = Color.argb(255, 0xFF, 0x6e, 0xC7);//Neon Pink (FF6EC7)
                 break;
             case Orange:
                 res = Color.argb(255, 0xFF, 0x45, 0);
@@ -85,11 +103,33 @@ public class FunnyDisplay extends View {
 
     private void init() {
         FunnySurface.DotColor dotColors[] = FunnySurface.DotColor.values();
+        innerLight=new Paint();
+        innerLight.setColor(Color.WHITE);
+        innerLight.setAntiAlias(true);
+        innerLight.setStyle(Paint.Style.FILL);
+        centerColors = new Paint[dotColors.length];
+        outerColors = new Paint[dotColors.length];
         realColors = new Paint[dotColors.length];
         for (int i = 0; i < dotColors.length; i++) {
-            realColors[i] = new Paint();
-            realColors[i].setColor(realColorFromDotColor(dotColors[i]));
+            centerColors[i] = new Paint();
+            outerColors[i]=new Paint();
+            realColors[i]=new Paint();
+            int real=realColorFromDotColor(dotColors[i]);
+            int blend1=blend(real, Color.WHITE, 0.375f);
+            int blend2=blend(blend1, Color.BLACK, 0.225f);
+
+            realColors[i].setColor(real);
             realColors[i].setAntiAlias(true);
+            realColors[i].setStyle(Paint.Style.STROKE);
+            realColors[i].setStrokeWidth(1);
+
+            centerColors[i].setColor(blend1);
+            centerColors[i].setAntiAlias(true);
+            centerColors[i].setStyle(Paint.Style.FILL);
+
+            outerColors[i].setColor(blend2);
+            outerColors[i].setStyle(Paint.Style.FILL);
+            outerColors[i].setAntiAlias(true);
         }
         mainSurface = new FunnySurface(surfaceWidth, surfaceHeight);
     }
@@ -164,25 +204,39 @@ public class FunnyDisplay extends View {
 
                 FunnySurface.DotType d = mainSurface.getDotType(i, j);
                 if (d != FunnySurface.DotType.None) {
+                    Path path;//=pathList[d.ordinal()];
+                    path = getDotPath(d, 20 + i * diameter + diameter / 2, 20 + j * diameter + diameter / 2, diameter / 2,11);
+                    if (path != null) {
+                        Paint p = outerColors[mainSurface.getDotColor(i, j).ordinal()];
+                        canvas.drawPath(path, p);
+                    }
+                }
+            }
+        }
+
+        for (int j = 0; j < mainSurface.getHeight(); j++) {
+            for (int i = 0; i < mainSurface.getWidth(); i++) {
+
+                FunnySurface.DotType d = mainSurface.getDotType(i, j);
+                if (d != FunnySurface.DotType.None) {
 
                     Path path;//=pathList[d.ordinal()];
-                    path = getDotPath(d, 20 + i * diameter + diameter / 2, 20 + j * diameter + diameter / 2, diameter / 2, -1);
+                    path = getDotPath(d, 20 + i * diameter + diameter / 2, 20 + j * diameter + diameter / 2, diameter / 2, 1);
                     if (path != null) {
-                        // Matrix translateMatrix = new Matrix();
-                        // translateMatrix.setTranslate(i * diameter, j * diameter);
+                        Paint p = centerColors[mainSurface.getDotColor(i, j).ordinal()];
+                        canvas.drawPath(path, p);
+                        if(diameter/2-5>3) {
 
-                        Paint p = realColors[mainSurface.getDotColor(i, j).ordinal()];
-                        p.setStyle(Paint.Style.STROKE);
-                        p.setStrokeWidth(3);
-                        p.setAntiAlias(true);
-                        p.setStrokeCap(Paint.Cap.ROUND);
-                        // path.transform(translateMatrix);
-                        canvas.drawPath(path, p);
-                        path = getDotPath(d, 20 + i * diameter + diameter / 2, 20 + j * diameter + diameter / 2, diameter / 2, -5);
-                        p.setStyle(Paint.Style.FILL);
-                        //                       path = fillPathList[d.ordinal()];
-//                        path.transform(translateMatrix);
-                        canvas.drawPath(path, p);
+                            path = getDotPath(d, 20 + i * diameter + diameter / 2, 20 + j * diameter + diameter / 2, diameter / 2, -5);
+
+                            p = innerLight;
+                            canvas.drawPath(path, p);
+
+                           // getDotPath(d, 20 + i * diameter + diameter / 2, 20 + j * diameter + diameter / 2, diameter / 2, -4);
+                            p = realColors[mainSurface.getDotColor(i, j).ordinal()];
+                            canvas.drawPath(path, p);
+
+                        }
                     }
                 }
 
