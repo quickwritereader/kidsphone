@@ -33,11 +33,11 @@ Start Date	|Task	|Time Required| Current State
 2016-02-15	| Funny Buttons	| 1 week | fully implemented (2016-03-03)
 2016-03-05	| Funny Display	| 3-4 week | 70-80% (delayed)  
 2016-03-09	| Letters,Figures	| 3-4 week | 10-20% (delaying)  
----    | Light Visualization based on Media Player | 2 weeks | not started
----    | Ask Questions based on Mode Button | 2 weeks | not started
----    | Telephone based on Call Button | 2 weeks | not started
----    | Implement funny game | 2 weeks | not started
----    | Telephone based on Call Button | 2 weeks | not started
+2016-04-19   | Implement Sounds | 2 weeks | started
+---    | Ask Questions  | 2 weeks | not started
+---    | Telephone Call mode | 2 weeks | not started
+---    | Implement funny game | 2 weeks | not started 
+---    | Light Visualizations And Animations | 2 weeks | not started
 
 ####Daily Schedule:####
 
