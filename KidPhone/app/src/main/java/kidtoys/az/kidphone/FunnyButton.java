@@ -166,7 +166,7 @@ public class FunnyButton extends View {
         this.setClickable(true);
         float centerTextSize;
         int centerTextColor, innerShapeColor;
-        bMode = BehaviorMode.Normal;
+        bMode = BehaviorMode.Letters;
 
         try {
             numbersText = typedArray.getString(R.styleable.FunnyButton_NumbersText);
