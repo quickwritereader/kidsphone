@@ -184,7 +184,7 @@ public class FunnyButton extends View {
             if (ordinal >= 0 && ordinal < InnerShapeType.values().length) {
                 outerShape = OuterShapeType.values()[ordinal];
             }
-            ordinal = typedArray.getInt(R.styleable.FunnyButton_BehaviorMode, 0);
+            ordinal = typedArray.getInt(R.styleable.FunnyButton_BehaviorMode, BehaviorMode.Letters.ordinal());
             if (ordinal >= 0 && ordinal < InnerShapeType.values().length) {
                 bMode = BehaviorMode.values()[ordinal];
             }

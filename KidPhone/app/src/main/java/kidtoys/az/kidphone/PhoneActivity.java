@@ -7,11 +7,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.Toast;
-
-import org.apache.http.client.protocol.ClientContextConfigurer;
-
-import java.io.IOException;
 
 public class PhoneActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -74,22 +69,36 @@ public class PhoneActivity extends AppCompatActivity implements View.OnClickList
                 }
                 if (l != '_') {
                     //Toast.makeText(this, "letter: " + l, Toast.LENGTH_SHORT).show();
-                    //drawLetter
-                    Log.d("letter", "letter: " + l);
-                    FunnySurface mainSurface = display.getMainSurface();
-                    mainSurface.clear();
-                    int figureRandom = (int) (Math.random() * (FunnySurface.DotType.values().length - 1)) + 1;
-                    int colorRandom =(int) (Math.random() * (FunnySurface.DotColor.values().length - 2))+1;//exclude white and black
-                    FunnySurfaceUtils.drawLetter(mainSurface, mainSurface.getWidth() / 2  , 4, l, FunnySurface.DotColor.values()[colorRandom],
-                            FunnySurface.DotType.values()[figureRandom],true);
-                    ;
-                    display.Render();
+                    //drawChar
+                    draw_play(l);
                 }
 
+            }
+        }else if   (funnyButton.getbMode() == FunnyButton.BehaviorMode.Numbers){
+            String number = funnyButton.getNumbersText();
+            if (number.length() > 0){
+                draw_play(number.charAt(0));
             }
         }
 
 
+    }
+
+    /**
+     * draw char and play at the same time
+     * @param l
+     */
+    public void draw_play(char l) {
+        Log.d("letter", "letter: " + l);
+        FunnySurface mainSurface = display.getMainSurface();
+        mainSurface.clear();
+        int figureRandom = (int) (Math.random() * (FunnySurface.DotType.values().length - 1)) + 1;
+        int colorRandom =(int) (Math.random() * (FunnySurface.DotColor.values().length - 2))+1;//exclude white and black
+        FunnySurfaceUtils.drawChar(mainSurface, mainSurface.getWidth() / 2, 4, l, FunnySurface.DotColor.values()[colorRandom],
+                FunnySurface.DotType.values()[figureRandom], true);
+        display.Render();
+        //play sound
+        soundPlayer.playChar(l);
     }
 
 
@@ -131,14 +140,7 @@ public class PhoneActivity extends AppCompatActivity implements View.OnClickList
             if (v instanceof FunnyButton) {
                 funnyButton = (FunnyButton) group.getChildAt(i);
                 if (funnyButton.getbMode() != FunnyButton.BehaviorMode.System) {
-                   // if (mode == FunnyButton.BehaviorMode.Normal) {
-                   //    defaultColor = funnyButton.getTextColor();
-                   // }
-                    //if (changeTextColor) {
-                        funnyButton.setTextColor(Color.WHITE);
-                    //} else {
-                    //    funnyButton.setTextColor(defaultColor);
-                   // }
+
                     //set mode after
                     funnyButton.setbMode(newMode);
                 }
@@ -146,5 +148,9 @@ public class PhoneActivity extends AppCompatActivity implements View.OnClickList
 
         }
         mode = newMode;
+        //clear screen
+        FunnySurface mainSurface = display.getMainSurface();
+        mainSurface.clear();
+        display.Render();
     }
 }

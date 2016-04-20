@@ -48,142 +48,137 @@ public class SoundPlayer {
         this.PlayMp3(R.raw.az_figures_mode);
     }
 
-    /*  Play Alphabet   */
-    public void play_A() {
-        this.PlayMp3(R.raw.az_a);
+
+    /*play*/
+    public  void playChar(char Letter){
+        switch (Letter) {
+            case 'A':
+                this.PlayMp3(R.raw.az_a);
+                break;
+            case 'B':
+                this.PlayMp3(R.raw.az_b);;
+                break;
+            case 'C':
+                this.PlayMp3(R.raw.az_c);
+                break;
+            case 'Ç':
+                this.PlayMp3(R.raw.az_ch);;
+                break;
+            case 'D':
+                this.PlayMp3(R.raw.az_d);
+                break;
+            case 'E':
+                this.PlayMp3(R.raw.az_e);
+                break;
+            case 'Ə':
+            case 'ə':
+                this.PlayMp3(R.raw.az_ee);;
+                break;
+            case 'F':
+                this.PlayMp3(R.raw.az_f);
+                break;
+            case 'G':
+                this.PlayMp3(R.raw.az_g);
+                break;
+            case 'Ğ':
+                this.PlayMp3(R.raw.az_gh);
+                break;
+            case 'H':
+                this.PlayMp3(R.raw.az_h);
+                break;
+            case 'I':
+                this.PlayMp3(R.raw.az_ii);
+                break;
+            case 'İ':
+                this.PlayMp3(R.raw.az_i);
+                break;
+            case 'J':
+                this.PlayMp3(R.raw.az_j);
+                break;
+            case 'K':
+                this.PlayMp3(R.raw.az_k);
+                break;
+            case 'Q':
+                this.PlayMp3(R.raw.az_q);
+                break;
+            case 'L':
+                this.PlayMp3(R.raw.az_l);
+                break;
+            case 'M':
+                this.PlayMp3(R.raw.az_m);
+                break;
+            case 'N':
+                this.PlayMp3(R.raw.az_n);
+                break;
+            case 'O':
+                this.PlayMp3(R.raw.az_o);
+                break;
+            case 'Ö':
+                this.PlayMp3(R.raw.az_oo);
+            case 'P':
+                this.PlayMp3(R.raw.az_p);
+                break;
+            case 'R':
+                this.PlayMp3(R.raw.az_r);
+                break;
+            case 'S':
+                this.PlayMp3(R.raw.az_s);
+                break;
+            case 'Ş':
+                this.PlayMp3(R.raw.az_sh);
+                break;
+            case 'T':
+                this.PlayMp3(R.raw.az_t);
+                break;
+            case 'U':
+                this.PlayMp3(R.raw.az_u);
+                break;
+            case 'Ü':
+                this.PlayMp3(R.raw.az_uu);;
+                break;
+            case 'V':
+                this.PlayMp3(R.raw.az_v);
+                break;
+            case 'Y':
+                this.PlayMp3(R.raw.az_y);
+                break;
+            case 'X':
+                this.PlayMp3(R.raw.az_x);
+                break;
+            case 'Z':
+                this.PlayMp3(R.raw.az_z);
+                break;
+            case '0':
+                this.PlayMp3(R.raw.az_0);
+                break;
+            case '1':
+                this.PlayMp3(R.raw.az_1);
+                break;
+            case '2':
+                this.PlayMp3(R.raw.az_2);
+                break;
+            case '3':
+                this.PlayMp3(R.raw.az_3);
+                break;
+            case '4':
+                this.PlayMp3(R.raw.az_4);
+                break;
+            case '5':
+                this.PlayMp3(R.raw.az_5);
+                break;
+            case '6':
+                this.PlayMp3(R.raw.az_6);
+                break;
+            case '7':
+                this.PlayMp3(R.raw.az_7);
+                break;
+            case '8':
+                this.PlayMp3(R.raw.az_8);
+                break;
+            case '9':
+                this.PlayMp3(R.raw.az_9);
+                break;
+            default:
+        }
     }
-
-    public void play_B() {
-        this.PlayMp3(R.raw.az_b);
-    }
-
-    public void play_C() {
-        this.PlayMp3(R.raw.az_c);
-    }
-
-    public void play_CH() {
-        this.PlayMp3(R.raw.az_ch);
-    }
-
-    public void play_D() {
-        this.PlayMp3(R.raw.az_d);
-    }
-
-    public void play_E() {
-        this.PlayMp3(R.raw.az_e);
-    }
-
-    public void play_EE() {
-        this.PlayMp3(R.raw.az_ee);
-    }
-
-    public void play_F() {
-        this.PlayMp3(R.raw.az_f);
-    }
-
-    public void play_G() {
-        this.PlayMp3(R.raw.az_g);
-    }
-
-    public void play_GH() {
-        this.PlayMp3(R.raw.az_gh);
-    }
-
-    public void play_H() {
-        this.PlayMp3(R.raw.az_h);
-    }
-
-    public void play_X() {
-        this.PlayMp3(R.raw.az_x);
-    }
-
-    public void play_II() {
-        this.PlayMp3(R.raw.az_ii);
-    }
-
-    public void play_I() {
-        this.PlayMp3(R.raw.az_i);
-    }
-
-    public void play_J() {
-        this.PlayMp3(R.raw.az_j);
-    }
-
-    public void play_K() {
-        this.PlayMp3(R.raw.az_k);
-    }
-
-    public void play_KK() {
-        this.PlayMp3(R.raw.az_kk);
-    }
-
-    public void play_Q() {
-        this.PlayMp3(R.raw.az_q);
-    }
-
-    public void play_L() {
-        this.PlayMp3(R.raw.az_l);
-    }
-
-    public void play_M() {
-        this.PlayMp3(R.raw.az_m);
-    }
-
-    public void play_N() {
-        this.PlayMp3(R.raw.az_n);
-    }
-
-    public void play_O() {
-        this.PlayMp3(R.raw.az_o);
-    }
-
-    public void play_OO() {
-        this.PlayMp3(R.raw.az_oo);
-    }
-
-    public void play_P() {
-        this.PlayMp3(R.raw.az_p);
-    }
-
-    public void play_R() {
-        this.PlayMp3(R.raw.az_r);
-    }
-
-    public void play_S() {
-        this.PlayMp3(R.raw.az_s);
-    }
-
-    public void play_SH() {
-        this.PlayMp3(R.raw.az_sh);
-    }
-
-    public void play_T() {
-        this.PlayMp3(R.raw.az_t);
-    }
-
-    public void play_U() {
-        this.PlayMp3(R.raw.az_u);
-    }
-
-    public void play_UU() {
-        this.PlayMp3(R.raw.az_uu);
-    }
-
-    public void play_V() {
-        this.PlayMp3(R.raw.az_v);
-    }
-
-    public void play_Y() {
-        this.PlayMp3(R.raw.az_y);
-    }
-
-    public void play_Z() {
-        this.PlayMp3(R.raw.az_z);
-    }
-    /*  Play Alphabet */
-
-
-    /*  Play Numbers */
-
-    /*  Play Numbers */
 }
