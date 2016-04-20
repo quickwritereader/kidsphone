@@ -115,6 +115,7 @@ public class SoundPlayer {
                 break;
             case 'Ö':
                 this.PlayMp3(R.raw.az_oo);
+                break;
             case 'P':
                 this.PlayMp3(R.raw.az_p);
                 break;
