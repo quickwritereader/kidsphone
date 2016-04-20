@@ -29,11 +29,9 @@ public class SoundPlayer {
     }
 
     public void StopMp3() {
-        if (mediaPlayer.isPlaying()) {
-            mediaPlayer.stop();
-            mediaPlayer.release();
-            mediaPlayer = null;
-        }
+        mediaPlayer.stop();
+        mediaPlayer.release();
+        mediaPlayer = null;
     }
 
     public void play_LettersMode() {
