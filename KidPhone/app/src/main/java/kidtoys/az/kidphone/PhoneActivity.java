@@ -11,6 +11,8 @@ import android.widget.Toast;
 
 import org.apache.http.client.protocol.ClientContextConfigurer;
 
+import java.io.IOException;
+
 public class PhoneActivity extends AppCompatActivity implements View.OnClickListener {
 
     FunnyButton.BehaviorMode mode = FunnyButton.BehaviorMode.Letters;
@@ -19,12 +21,17 @@ public class PhoneActivity extends AppCompatActivity implements View.OnClickList
     private String lastPressed ="";
     private int pressedTimes = 0;
 
+    public static SoundPlayer soundPlayer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_phone);
+
+        soundPlayer = new SoundPlayer(getApplicationContext());
+
         setListenersForKeys();
         FunnyButton button=(FunnyButton)findViewById(R.id.KeysMode);
         button.setOnClickListener(this);
@@ -98,19 +105,24 @@ public class PhoneActivity extends AppCompatActivity implements View.OnClickList
             case Numbers:
                 newMode = FunnyButton.BehaviorMode.Figures;
                 changeTextColor = true;
+                soundPlayer.play_FiguresMode();
                 break;
             case Normal:
                 newMode = FunnyButton.BehaviorMode.Numbers;
                 changeTextColor = true;
+                soundPlayer.play_NumbersMode();
                 break;
             case Letters:
                 newMode = FunnyButton.BehaviorMode.Numbers;
+                soundPlayer.play_NumbersMode();
                 break;
             case Figures:
                 newMode = FunnyButton.BehaviorMode.Letters;
+                soundPlayer.play_LettersMode();
                 break;
             default:
                 newMode = FunnyButton.BehaviorMode.Letters;
+                soundPlayer.play_LettersMode();
         }
         FunnyButton funnyButton;
         for (int i = 0; i < childcount; i++) {

@@ -267,147 +267,179 @@ public class FunnySurfaceUtils {
             case 'a':
                 if(center) x=x-standardWidth/2;
                 drawA(surface, x, y, standardWidth,standardHeight, color, figure);
+                PhoneActivity.soundPlayer.play_A();
                 break;
             case 'B':
             case 'b':
                 drawB(surface, x, y, standardWidth,standardHeight, color, figure);
+                PhoneActivity.soundPlayer.play_B();
                 break;
             case 'C':
             case 'c':
                 drawC(surface, x, y, standardWidth,standardHeight, color, figure);
+                PhoneActivity.soundPlayer.play_C();
                 break;
             case 'Ç':
             case 'ç':
                 drawCh(surface, x, y, standardWidth,standardHeight, color, figure);
+                PhoneActivity.soundPlayer.play_CH();
                 break;
             case 'D':
             case 'd':
                 drawD(surface, x, y, standardWidth,standardHeight, color, figure);
+                PhoneActivity.soundPlayer.play_D();
                 break;
             case 'E':
             case 'e':
                 if(center) x=x-standardWidth/2;
                 drawE(surface, x, y, standardWidth,standardHeight, color, figure);
+                PhoneActivity.soundPlayer.play_E();
                 break;
             case 'Ə':
             case 'ə':
                 drawEE(surface, x, y, standardWidth,standardHeight, color, figure);
+                PhoneActivity.soundPlayer.play_EE();
                 break;
             case 'F':
             case 'f':
                 if(center) x=x-standardWidth/2;
                 drawF(surface, x, y, standardWidth,standardHeight, color, figure);
+                PhoneActivity.soundPlayer.play_F();
                 break;
             case 'G':
             case 'g':
                 drawG(surface, x, y, standardWidth,standardHeight, color, figure);
+                PhoneActivity.soundPlayer.play_G();
                 break;
             case 'Ğ':
             case 'ğ':
                 drawGH(surface, x, y, standardWidth,standardHeight, color, figure);
+                PhoneActivity.soundPlayer.play_GH();
                 break;
             case 'H':
             case 'h':
                 if(center) x=x-standardWidth/2;
                 drawH(surface, x, y, standardWidth,standardHeight, color, figure);
+                PhoneActivity.soundPlayer.play_H();
                 break;
             case 'I':
             case 'ı':
                 if(center) x=x-standardWidth/2;
                 drawII(surface, x, y, standardWidth, standardHeight, color, figure);
+                PhoneActivity.soundPlayer.play_II();
                 break;
             case 'İ':
             case 'i':
                 if(center) x=x-standardWidth/2;
                 drawI(surface, x, y, standardWidth, standardHeight, color, figure);
+                PhoneActivity.soundPlayer.play_I();
                 break;
             case 'J':
             case 'j':
                 drawJ(surface, x, y, standardWidth,standardHeight, color, figure);
+                PhoneActivity.soundPlayer.play_J();
                 break;
             case 'K':
             case 'k':
                 if(center) x=x-standardHeight/2;
                 drawK(surface, x, y, standardHeight,standardHeight, color, figure);
+                PhoneActivity.soundPlayer.play_K();
                 break;
             case 'Q':
             case 'q':
                 drawQ(surface, x, y, standardHeight,standardHeight, color, figure);
+                PhoneActivity.soundPlayer.play_Q();
                 break;
             case 'L':
             case 'l':
                 standardWidth=5;
                 if(center) x=x-standardWidth/2;
                 drawL(surface, x, y, standardWidth,standardHeight, color, figure);
+                PhoneActivity.soundPlayer.play_L();
                 break;
             case 'M':
             case 'm':
                 if(center) x=x-standardHeight/2;
                 drawM(surface, x, y, standardHeight,standardHeight, color, figure);
+                PhoneActivity.soundPlayer.play_M();
                 break;
             case 'N':
             case 'n':
                 if(center) x=x-standardHeight/2;
                 drawN(surface, x, y, standardHeight,standardHeight, color, figure);
+                PhoneActivity.soundPlayer.play_N();
                 break;
             case 'O':
             case 'o':
                 drawO(surface, x, y, standardWidth,standardHeight, color, figure);
+                PhoneActivity.soundPlayer.play_O();
                 break;
             case 'Ö':
             case 'ö':
                 drawOO(surface, x, y, standardWidth,standardHeight, color, figure);
+                PhoneActivity.soundPlayer.play_OO();
                 break;
             case 'P':
             case 'p':
                 drawP(surface, x, y, standardWidth,standardHeight, color, figure);
+                PhoneActivity.soundPlayer.play_P();
                 break;
             case 'R':
             case 'r':
                 drawR(surface, x, y, standardWidth,standardHeight, color, figure);
+                PhoneActivity.soundPlayer.play_R();
                 break;
             case 'S':
             case 's':
                 drawS(surface, x, y, standardWidth,standardHeight, color, figure);
+                PhoneActivity.soundPlayer.play_S();
                 break;
             case 'Ş':
             case 'ş':
                 drawSH(surface, x, y, standardWidth,standardHeight, color, figure);
+                PhoneActivity.soundPlayer.play_SH();
                 break;
             case 'T':
             case 't':
                 if(center) x=x-standardWidth/2;
                 drawT(surface, x, y, standardWidth,standardHeight, color, figure);
+                PhoneActivity.soundPlayer.play_T();
                 break;
             case 'U':
             case 'u':
                 if(center) x=x-standardWidth/2;
                 drawU(surface, x, y, standardWidth,standardHeight, color, figure);
+                PhoneActivity.soundPlayer.play_U();
                 break;
             case 'Ü':
             case 'ü':
                 if(center) x=x-standardWidth/2;
                 drawUU(surface, x, y, standardWidth,standardHeight, color, figure);
+                PhoneActivity.soundPlayer.play_UU();
                 break;
             case 'V':
             case 'v':
                 if(center) x=x-standardHeight/2;
                 drawV(surface, x, y, standardHeight,standardHeight, color, figure);
+                PhoneActivity.soundPlayer.play_V();
                 break;
             case 'Y':
             case 'y':
                 if(center) x=x-standardHeight/2;
                 drawY(surface, x, y, standardHeight,standardHeight, color, figure);
+                PhoneActivity.soundPlayer.play_Y();
                 break;
             case 'X':
             case 'x':
                 if(center) x=x-standardHeight/2;
                 drawX(surface, x, y, standardHeight,standardHeight, color, figure);
+                PhoneActivity.soundPlayer.play_X();
                 break;
             case 'Z':
             case 'z':
                 if(center) x=x-standardHeight/2;
                 drawZ(surface, x, y, standardHeight,standardHeight, color, figure);
+                PhoneActivity.soundPlayer.play_Z();
                 break;
             default:
         }
