@@ -13,7 +13,7 @@ import org.apache.http.client.protocol.ClientContextConfigurer;
 
 public class PhoneActivity extends AppCompatActivity implements View.OnClickListener {
 
-    FunnyButton.BehaviorMode mode = FunnyButton.BehaviorMode.Normal;
+    FunnyButton.BehaviorMode mode = FunnyButton.BehaviorMode.Letters;
     int defaultColor = Color.BLACK;
     FunnyDisplay display;
     private String lastPressed ="";
@@ -96,7 +96,7 @@ public class PhoneActivity extends AppCompatActivity implements View.OnClickList
         FunnyButton.BehaviorMode newMode;
         switch (mode) {
             case Numbers:
-                newMode = FunnyButton.BehaviorMode.Letters;
+                newMode = FunnyButton.BehaviorMode.Figures;
                 changeTextColor = true;
                 break;
             case Normal:
@@ -104,13 +104,13 @@ public class PhoneActivity extends AppCompatActivity implements View.OnClickList
                 changeTextColor = true;
                 break;
             case Letters:
-                newMode = FunnyButton.BehaviorMode.Figures;
+                newMode = FunnyButton.BehaviorMode.Numbers;
                 break;
             case Figures:
-                newMode = FunnyButton.BehaviorMode.Normal;
+                newMode = FunnyButton.BehaviorMode.Letters;
                 break;
             default:
-                newMode = FunnyButton.BehaviorMode.Normal;
+                newMode = FunnyButton.BehaviorMode.Letters;
         }
         FunnyButton funnyButton;
         for (int i = 0; i < childcount; i++) {
@@ -119,14 +119,14 @@ public class PhoneActivity extends AppCompatActivity implements View.OnClickList
             if (v instanceof FunnyButton) {
                 funnyButton = (FunnyButton) group.getChildAt(i);
                 if (funnyButton.getbMode() != FunnyButton.BehaviorMode.System) {
-                    if (mode == FunnyButton.BehaviorMode.Normal) {
-                        defaultColor = funnyButton.getTextColor();
-                    }
-                    if (changeTextColor) {
+                   // if (mode == FunnyButton.BehaviorMode.Normal) {
+                   //    defaultColor = funnyButton.getTextColor();
+                   // }
+                    //if (changeTextColor) {
                         funnyButton.setTextColor(Color.WHITE);
-                    } else {
-                        funnyButton.setTextColor(defaultColor);
-                    }
+                    //} else {
+                    //    funnyButton.setTextColor(defaultColor);
+                   // }
                     //set mode after
                     funnyButton.setbMode(newMode);
                 }
