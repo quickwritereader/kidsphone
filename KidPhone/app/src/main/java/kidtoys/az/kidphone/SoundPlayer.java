@@ -16,6 +16,8 @@ public class SoundPlayer {
     public MediaPlayer mediaPlayer;
     public Context context;
 
+    public static final int [] wait_sounds={R.raw.az_wait_1,R.raw.az_wait_2,R.raw.az_wait_3};
+
     public SoundPlayer(Context ct) {
         this.context = ct;
     }
@@ -48,6 +50,10 @@ public class SoundPlayer {
 
     public void playPhoneOpenMode() {
         this.PlayMp3(R.raw.az_open_ringtone);
+    }
+
+    public void playPhoneCloseMode() {
+        this.PlayMp3(R.raw.az_close);
     }
 
     /*play*/
@@ -183,4 +189,14 @@ public class SoundPlayer {
             default:
         }
     }
+
+    /**
+     * Play wait sound
+     * @param index
+     */
+    public void playWait(int index){
+        this.PlayMp3(wait_sounds[index%wait_sounds.length]);
+    }
+
+
 }

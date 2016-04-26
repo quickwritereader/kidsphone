@@ -15,8 +15,9 @@ public class PhoneActivity extends AppCompatActivity implements View.OnClickList
     FunnyDisplay display;
     private String lastPressed ="";
     private int pressedTimes = 0;
-
+    public long userActivityTime;
     public static SoundPlayer soundPlayer;
+    private UiHandler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +34,28 @@ public class PhoneActivity extends AppCompatActivity implements View.OnClickList
         display = (FunnyDisplay) findViewById(R.id.display);
 
         soundPlayer.playPhoneOpenMode();
+        userActivityTime =System.currentTimeMillis();
+        handler=new UiHandler(this);
+
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        handler.activateDelay(UiHandler.TIME_DELAY * 2);
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        /*handler.deActivateDelay();*/
+    }
+
+    @Override
+    public  void onBackPressed(){
+        handler.deActivateDelay();
+        this.soundPlayer.playPhoneCloseMode();
+         super.onBackPressed();
     }
 
     /**
@@ -51,6 +74,7 @@ public class PhoneActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View v) {
+        userActivityTime =System.currentTimeMillis();
         if (v.getId() == R.id.KeysMode) {
             changeKeys();
             lastPressed = "";
@@ -154,5 +178,10 @@ public class PhoneActivity extends AppCompatActivity implements View.OnClickList
         FunnySurface mainSurface = display.getMainSurface();
         mainSurface.clear();
         display.Render();
+    }
+
+
+    public void playWait(int index){
+        this.soundPlayer.playWait(index);
     }
 }
