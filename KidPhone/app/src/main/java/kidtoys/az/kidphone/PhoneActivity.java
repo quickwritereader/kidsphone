@@ -31,6 +31,8 @@ public class PhoneActivity extends AppCompatActivity implements View.OnClickList
         FunnyButton button=(FunnyButton)findViewById(R.id.KeysMode);
         button.setOnClickListener(this);
         display = (FunnyDisplay) findViewById(R.id.display);
+
+        soundPlayer.playPhoneOpenMode();
     }
 
     /**

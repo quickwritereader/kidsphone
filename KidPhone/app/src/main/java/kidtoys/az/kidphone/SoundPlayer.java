@@ -46,6 +46,9 @@ public class SoundPlayer {
         this.PlayMp3(R.raw.az_figures_mode);
     }
 
+    public void playPhoneOpenMode() {
+        this.PlayMp3(R.raw.az_open_ringtone);
+    }
 
     /*play*/
     public  void playChar(char Letter){
