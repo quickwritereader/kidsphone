@@ -13,7 +13,7 @@ public class PhoneActivity extends AppCompatActivity implements View.OnClickList
     FunnyButton.BehaviorMode mode = FunnyButton.BehaviorMode.Letters;
     int defaultColor = Color.BLACK;
     FunnyDisplay display;
-    private String lastPressed ="";
+    private String lastPressed = "";
     private int pressedTimes = 0;
     public long userActivityTime;
     public static SoundPlayer soundPlayer;
@@ -29,33 +29,33 @@ public class PhoneActivity extends AppCompatActivity implements View.OnClickList
         soundPlayer = new SoundPlayer(getApplicationContext());
 
         setListenersForKeys();
-        FunnyButton button=(FunnyButton)findViewById(R.id.KeysMode);
+        FunnyButton button = (FunnyButton) findViewById(R.id.KeysMode);
         button.setOnClickListener(this);
         display = (FunnyDisplay) findViewById(R.id.display);
 
         soundPlayer.playPhoneOpenMode();
-        userActivityTime =System.currentTimeMillis();
-        handler=new UiHandler(this);
+        userActivityTime = System.currentTimeMillis();
+        handler = new UiHandler(this);
 
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         handler.activateDelay(UiHandler.TIME_DELAY * 2);
     }
 
     @Override
-    public void onPause(){
+    public void onPause() {
         super.onPause();
         /*handler.deActivateDelay();*/
     }
 
     @Override
-    public  void onBackPressed(){
+    public void onBackPressed() {
         handler.deActivateDelay();
         this.soundPlayer.playPhoneCloseMode();
-         super.onBackPressed();
+        super.onBackPressed();
     }
 
     /**
@@ -74,7 +74,7 @@ public class PhoneActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-        userActivityTime =System.currentTimeMillis();
+        userActivityTime = System.currentTimeMillis();
         if (v.getId() == R.id.KeysMode) {
             changeKeys();
             lastPressed = "";
@@ -91,7 +91,7 @@ public class PhoneActivity extends AppCompatActivity implements View.OnClickList
                 if (pressedTimes < letters.length()) {
                     l = letters.charAt(pressedTimes);
                     pressedTimes += 1;
-                    if(pressedTimes==letters.length())pressedTimes=0;
+                    if (pressedTimes == letters.length()) pressedTimes = 0;
                 }
                 if (l != '_') {
                     //Toast.makeText(this, "letter: " + l, Toast.LENGTH_SHORT).show();
@@ -100,11 +100,14 @@ public class PhoneActivity extends AppCompatActivity implements View.OnClickList
                 }
 
             }
-        }else if   (funnyButton.getbMode() == FunnyButton.BehaviorMode.Numbers){
+        } else if (funnyButton.getbMode() == FunnyButton.BehaviorMode.Numbers) {
             String number = funnyButton.getNumbersText();
-            if (number.length() > 0){
+            if (number.length() > 0) {
                 draw_play(number.charAt(0));
             }
+        } else if (funnyButton.getbMode() == FunnyButton.BehaviorMode.Figures) {
+            FunnyButton.InnerShapeType innerShapeType = funnyButton.getInnerShape();
+            soundPlayer.playFigures(innerShapeType);
         }
 
 
@@ -112,6 +115,7 @@ public class PhoneActivity extends AppCompatActivity implements View.OnClickList
 
     /**
      * draw char and play at the same time
+     *
      * @param l
      */
     public void draw_play(char l) {
@@ -119,7 +123,7 @@ public class PhoneActivity extends AppCompatActivity implements View.OnClickList
         FunnySurface mainSurface = display.getMainSurface();
         mainSurface.clear();
         int figureRandom = (int) (Math.random() * (FunnySurface.DotType.values().length - 1)) + 1;
-        int colorRandom =(int) (Math.random() * (FunnySurface.DotColor.values().length - 2))+1;//exclude white and black
+        int colorRandom = (int) (Math.random() * (FunnySurface.DotColor.values().length - 2)) + 1;//exclude white and black
         FunnySurfaceUtils.drawChar(mainSurface, mainSurface.getWidth() / 2, 4, l, FunnySurface.DotColor.values()[colorRandom],
                 FunnySurface.DotType.values()[figureRandom], true);
         display.Render();
@@ -181,7 +185,7 @@ public class PhoneActivity extends AppCompatActivity implements View.OnClickList
     }
 
 
-    public void playWait(int index){
+    public void playWait(int index) {
         this.soundPlayer.playWait(index);
     }
 }

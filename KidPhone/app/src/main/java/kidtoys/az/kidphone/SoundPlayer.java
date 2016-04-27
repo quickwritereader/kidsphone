@@ -198,5 +198,44 @@ public class SoundPlayer {
         this.PlayMp3(wait_sounds[index%wait_sounds.length]);
     }
 
+    /**
+     * Play figures
+     * @param innerShapeType
+     */
+    public void playFigures(FunnyButton.InnerShapeType innerShapeType) {
+        switch (innerShapeType) {
+            case Circle:
+                this.PlayMp3(R.raw.az_daire);
+                break;
+            case Square:
+                this.PlayMp3(R.raw.az_kvadrat);
+                break;
+            case Triangle:
+                this.PlayMp3(R.raw.az_ucbucaq);
+                break;
+            case Rectangle:
+                this.PlayMp3(R.raw.az_duzbucaq);
+                break;
+            case Trapes:
+                this.PlayMp3(R.raw.az_trapesiya);
+                break;
+            case Heart:
+                this.PlayMp3(R.raw.az_urek);
+                break;
+            case Star:
+                this.PlayMp3(R.raw.az_ulduz);
+                break;
+            case Pentagon:
+                this.PlayMp3(R.raw.az_beshbucaq);
+                break;
+            case Ellipse:
+                this.PlayMp3(R.raw.az_elips);
+                break;
+            case Hexagon:
+                this.PlayMp3(R.raw.az_altibucaq);
+                break;
+            default:
+        }
+    }
 
 }
