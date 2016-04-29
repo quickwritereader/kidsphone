@@ -27,7 +27,7 @@
         <enum name="Picture" value="5"/>
     </attr>
 
-    <attr name="BehaviorMode" format="enum">
+    <attr name="KeyMode" format="enum">
         <enum name="Normal" value="0"/>
         <enum name="Figures" value="1"/>
         <enum name="Numbers" value="2"/>
@@ -38,7 +38,7 @@
     <declare-styleable name="FunnyButton">
         <attr name ="InnerShapeProperty" />
         <attr name="OuterShapeProperty" />
-        <attr name="BehaviorMode" />
+        <attr name="KeyMode" />
         <attr name="NumbersText" format="string" />
         <attr name="LettersText" format="string" />
         <attr name="TextSize" format="dimension"/>

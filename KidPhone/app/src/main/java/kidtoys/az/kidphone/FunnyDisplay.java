@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 /**
@@ -134,8 +135,23 @@ public class FunnyDisplay extends View {
         mainSurface = new FunnySurface(surfaceWidth, surfaceHeight);
     }
 
-    public void Render() {
+    public void render() {
         invalidate();
+    }
+
+    public void clear(){
+        mainSurface.clear();
+        render();
+    }
+
+    public void drawChar(char l){
+        Log.d("letter", "letter: " + l);
+        mainSurface.clear();
+        int figureRandom = (int) (Math.random() * (FunnySurface.DotType.values().length - 1)) + 1;
+        int colorRandom = (int) (Math.random() * (FunnySurface.DotColor.values().length - 2)) + 1;//exclude white and black
+        FunnySurfaceUtils.drawChar(mainSurface, mainSurface.getWidth() / 2, 4, l, FunnySurface.DotColor.values()[colorRandom],
+                FunnySurface.DotType.values()[figureRandom], true);
+        render();
     }
 
     public Path getDotPath(FunnySurface.DotType type, int cx, int cy, int radius, int pad) {

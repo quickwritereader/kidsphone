@@ -4,9 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.AttributeSet;
@@ -30,11 +28,11 @@ public class FunnyButton extends View {
         invalidate();
     }
 
-    public BehaviorMode getbMode() {
+    public KeyMode getKeyMode() {
         return bMode;
     }
 
-    public void setbMode(BehaviorMode bMode) {
+    public void setKeyMode(KeyMode bMode) {
         this.bMode = bMode;
         invalidate();
     }
@@ -49,7 +47,7 @@ public class FunnyButton extends View {
     private RectF rectF;
 
 
-    public enum BehaviorMode {
+    public enum KeyMode {
         Normal,
         Figures,
         Numbers,
@@ -86,7 +84,7 @@ public class FunnyButton extends View {
 
     private InnerShapeType innerShape;
     private OuterShapeType outerShape;
-    private BehaviorMode bMode;
+    private KeyMode bMode;
 
 
     View.OnClickListener clickListener;
@@ -166,7 +164,7 @@ public class FunnyButton extends View {
         this.setClickable(true);
         float centerTextSize;
         int centerTextColor, innerShapeColor;
-        bMode = BehaviorMode.Letters;
+        bMode = KeyMode.Letters;
 
         try {
             numbersText = typedArray.getString(R.styleable.FunnyButton_NumbersText);
@@ -184,9 +182,9 @@ public class FunnyButton extends View {
             if (ordinal >= 0 && ordinal < InnerShapeType.values().length) {
                 outerShape = OuterShapeType.values()[ordinal];
             }
-            ordinal = typedArray.getInt(R.styleable.FunnyButton_BehaviorMode, BehaviorMode.Letters.ordinal());
+            ordinal = typedArray.getInt(R.styleable.FunnyButton_KeyMode, KeyMode.Letters.ordinal());
             if (ordinal >= 0 && ordinal < InnerShapeType.values().length) {
-                bMode = BehaviorMode.values()[ordinal];
+                bMode = KeyMode.values()[ordinal];
             }
         } finally {
             typedArray.recycle();
@@ -206,9 +204,6 @@ public class FunnyButton extends View {
         centerTxtP.setTextAlign(Paint.Align.CENTER);
         rectF = new RectF();
         rectF.set(getPaddingLeft(), getPaddingTop(), getWidth() - getPaddingRight(), getHeight() - getPaddingBottom());
-    }
-
-    public void draw() {
     }
 
 
@@ -379,12 +374,12 @@ public class FunnyButton extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         drawOuter(canvas, isPressed());
-        if (bMode == BehaviorMode.Figures || bMode == BehaviorMode.Normal || bMode == BehaviorMode.System) {
+        if (bMode == KeyMode.Figures || bMode == KeyMode.Normal || bMode == KeyMode.System) {
             drawInner(canvas);
         }
-        if ((bMode != BehaviorMode.Figures && bMode != BehaviorMode.System) || bMode == BehaviorMode.Normal) {
+        if ((bMode != KeyMode.Figures && bMode != KeyMode.System) || bMode == KeyMode.Normal) {
             String t = "";
-            if (bMode == BehaviorMode.Letters) {
+            if (bMode == KeyMode.Letters) {
                 t = lettersText;
             } else {
                 t = numbersText;

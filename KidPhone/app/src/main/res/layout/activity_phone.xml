@@ -47,7 +47,7 @@
                 android:layout_weight="1"
                 app:InnerShapeProperty="YesPhone"
                 app:OuterShapeProperty="YesButton"
-                app:BehaviorMode="System"
+                app:KeyMode="System"
                 app:innerShapeColor="#ffffff"
                 app:outerShapeColor="#00ff00" />
 
@@ -59,7 +59,7 @@
                 android:layout_weight="1"
                 app:InnerShapeProperty="NoPhone"
                 app:OuterShapeProperty="NoButton"
-                app:BehaviorMode="System"
+                app:KeyMode="System"
                 app:innerShapeColor="#ffffff"
                 app:outerShapeColor="#ff0004" />
         </LinearLayout>
@@ -80,7 +80,7 @@
                 android:layout_weight="1"
                 android:id="@+id/KeysMode"
                 android:padding="@dimen/smallSpace2"
-                app:BehaviorMode="System"
+                app:KeyMode="System"
                 app:OuterShapeProperty="Rounded"
                 app:outerShapeColor="#00ff00" />
 
@@ -90,7 +90,7 @@
                 android:layout_margin="@dimen/smallSpace"
                 android:layout_weight="1"
                 android:padding="@dimen/smallSpace2"
-                app:BehaviorMode="System"
+                app:KeyMode="System"
                 app:OuterShapeProperty="Rounded"
                 app:outerShapeColor="#00ff00" />
 
@@ -100,7 +100,7 @@
                 android:layout_margin="@dimen/smallSpace2"
                 android:layout_weight="1"
                 android:padding="@dimen/smallSpace2"
-                app:BehaviorMode="System"
+                app:KeyMode="System"
                 app:OuterShapeProperty="Rounded"
                 app:outerShapeColor="#00ff00" />
         </LinearLayout>

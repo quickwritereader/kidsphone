@@ -8,16 +8,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 
-public class PhoneActivity extends AppCompatActivity implements View.OnClickListener {
+public class PhoneActivity extends AppCompatActivity implements Phone, View.OnClickListener {
 
-    FunnyButton.BehaviorMode mode = FunnyButton.BehaviorMode.Letters;
-    int defaultColor = Color.BLACK;
-    FunnyDisplay display;
-    private String lastPressed = "";
-    private int pressedTimes = 0;
+
     public long userActivityTime;
-    public static SoundPlayer soundPlayer;
+    private SoundPlayer soundPlayer;
+    private FunnyDisplay display;
+
     private UiHandler handler;
+    private ViewGroup keysGroup;
+
+    public BaseMode mode=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,9 +26,7 @@ public class PhoneActivity extends AppCompatActivity implements View.OnClickList
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_phone);
-
         soundPlayer = new SoundPlayer(getApplicationContext());
-
         setListenersForKeys();
         FunnyButton button = (FunnyButton) findViewById(R.id.KeysMode);
         button.setOnClickListener(this);
@@ -36,10 +35,17 @@ public class PhoneActivity extends AppCompatActivity implements View.OnClickList
         buttonYes.setOnClickListener(this);
 
         display = (FunnyDisplay) findViewById(R.id.display);
-
+        keysGroup=(ViewGroup) findViewById(R.id.KeysGroup);
         soundPlayer.playPhoneOpenMode();
         userActivityTime = System.currentTimeMillis();
         handler = new UiHandler(this);
+
+        //finally, we can set mode
+        try {
+            mode=new TeachMode(this);
+        } catch (Exception e) {
+            //should not happen
+        }
 
     }
 
@@ -81,120 +87,66 @@ public class PhoneActivity extends AppCompatActivity implements View.OnClickList
         FunnyButton funnyButton = (FunnyButton) v;
 
         userActivityTime = System.currentTimeMillis();
-        if (v.getId() == R.id.KeysMode) {
-            changeKeys();
-            lastPressed = "";
-            return;
-        } else if (v.getId() == R.id.buttonYes) {
-            funnyButton.setbMode(FunnyButton.BehaviorMode.Numbers);
-            soundPlayer.playCallAnyOne();
-        }
-
-
-        if (funnyButton.getbMode() == FunnyButton.BehaviorMode.Letters) {
-            String letters = funnyButton.getLettersText();
-            pressedTimes = lastPressed.equals(letters) ? pressedTimes : 0;
-            lastPressed = letters;
-            if (letters.length() > 0) {
-                char l = '_';
-                if (pressedTimes < letters.length()) {
-                    l = letters.charAt(pressedTimes);
-                    pressedTimes += 1;
-                    if (pressedTimes == letters.length()) pressedTimes = 0;
-                }
-                if (l != '_') {
-                    //Toast.makeText(this, "letter: " + l, Toast.LENGTH_SHORT).show();
-                    //drawChar
-                    draw_play(l);
+        try{
+            if (v.getId() == R.id.KeysMode) {
+                if(mode!=null && mode instanceof TeachMode){
+                    mode.onRefresh();
+                }else {
+                    mode = null;
+                    mode = new TeachMode(this);
                 }
 
+            } else if (v.getId() == R.id.buttonYes) {
+                if(mode!=null && mode instanceof CallMode){
+                    mode.onRefresh();
+                }else {
+                    mode = null;
+                    mode = new CallMode(this);
+                }
+            }else if(((FunnyButton) v).getKeyMode()!= FunnyButton.KeyMode.System){
+                  if(mode!=null){
+                      mode.onClick((FunnyButton)v);
+                  }
             }
-        } else if (funnyButton.getbMode() == FunnyButton.BehaviorMode.Numbers) {
-            String number = funnyButton.getNumbersText();
-            if (number.length() > 0) {
-                draw_play(number.charAt(0));
-            }
-        } else if (funnyButton.getbMode() == FunnyButton.BehaviorMode.Figures) {
-            FunnyButton.InnerShapeType innerShapeType = funnyButton.getInnerShape();
-            soundPlayer.playFigures(innerShapeType);
-        }
+        }catch (Exception ignored){
 
+        }
 
     }
 
-    /**
-     * draw char and play at the same time
-     *
-     * @param l
-     */
-    public void draw_play(char l) {
-        Log.d("letter", "letter: " + l);
-        FunnySurface mainSurface = display.getMainSurface();
-        mainSurface.clear();
-        int figureRandom = (int) (Math.random() * (FunnySurface.DotType.values().length - 1)) + 1;
-        int colorRandom = (int) (Math.random() * (FunnySurface.DotColor.values().length - 2)) + 1;//exclude white and black
-        FunnySurfaceUtils.drawChar(mainSurface, mainSurface.getWidth() / 2, 4, l, FunnySurface.DotColor.values()[colorRandom],
-                FunnySurface.DotType.values()[figureRandom], true);
-        display.Render();
-        //play sound
-        soundPlayer.playChar(l);
-    }
 
 
-    /**
-     * Change keys' Mode while pressing KeysMode
-     */
-    private void changeKeys() {
-        ViewGroup group = (ViewGroup) findViewById(R.id.KeysGroup);
-        int childcount = group.getChildCount();
-        boolean changeTextColor = false;
-        FunnyButton.BehaviorMode newMode;
-        switch (mode) {
-            case Numbers:
-                newMode = FunnyButton.BehaviorMode.Figures;
-                changeTextColor = true;
-                soundPlayer.play_FiguresMode();
-                break;
-            case Normal:
-                newMode = FunnyButton.BehaviorMode.Numbers;
-                changeTextColor = true;
-                soundPlayer.play_NumbersMode();
-                break;
-            case Letters:
-                newMode = FunnyButton.BehaviorMode.Numbers;
-                soundPlayer.play_NumbersMode();
-                break;
-            case Figures:
-                newMode = FunnyButton.BehaviorMode.Letters;
-                soundPlayer.play_LettersMode();
-                break;
-            default:
-                newMode = FunnyButton.BehaviorMode.Letters;
-                soundPlayer.play_LettersMode();
-        }
+    @Override
+    public void changeKeys(FunnyButton.KeyMode newMode) {
         FunnyButton funnyButton;
-        for (int i = 0; i < childcount; i++) {
+        int childCount = keysGroup.getChildCount();
+        for (int i = 0; i < childCount; i++) {
 
-            View v = group.getChildAt(i);
+            View v = keysGroup.getChildAt(i);
             if (v instanceof FunnyButton) {
-                funnyButton = (FunnyButton) group.getChildAt(i);
-                if (funnyButton.getbMode() != FunnyButton.BehaviorMode.System) {
-
-                    //set mode after
-                    funnyButton.setbMode(newMode);
+                funnyButton = (FunnyButton) keysGroup.getChildAt(i);
+                if (funnyButton.getKeyMode() != FunnyButton.KeyMode.System) {
+                    //set keysMode after
+                    funnyButton.setKeyMode(newMode);
                 }
             }
 
         }
-        mode = newMode;
-        //clear screen
-        FunnySurface mainSurface = display.getMainSurface();
-        mainSurface.clear();
-        display.Render();
     }
 
+    @Override
+    public FunnyDisplay getDisplay() {
+        return this.display;
+    }
+
+    @Override
+    public SoundPlayer getAudio() {
+        return this.soundPlayer;
+    }
 
     public void playWait(int index) {
         this.soundPlayer.playWait(index);
     }
+
+
 }
