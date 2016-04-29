@@ -40,7 +40,7 @@
             app:layout_rowWeight="1">
 
             <kidtoys.az.kidphone.FunnyButton
-                android:id="@+id/b2"
+                android:id="@+id/buttonYes"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/smallSpace"
@@ -52,7 +52,7 @@
                 app:outerShapeColor="#00ff00" />
 
             <kidtoys.az.kidphone.FunnyButton
-                android:id="@+id/b4"
+                android:id="@+id/buttonNo"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/smallSpace"

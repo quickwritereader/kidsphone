@@ -238,4 +238,49 @@ public class SoundPlayer {
         }
     }
 
+    /**
+     * Play keypad tones
+     * @param keypad
+     */
+    public void playKeypadTones(char keypad) {
+        switch (keypad) {
+            case 0:
+                this.PlayMp3(R.raw.keypad_0);
+                break;
+            case 1:
+                this.PlayMp3(R.raw.keypad_1);
+                break;
+            case 2:
+                this.PlayMp3(R.raw.keypad_2);
+                break;
+            case 3:
+                this.PlayMp3(R.raw.keypad_3);
+                break;
+            case 4:
+                this.PlayMp3(R.raw.keypad_4);
+                break;
+            case 5:
+                this.PlayMp3(R.raw.keypad_5);
+                break;
+            case 6:
+                this.PlayMp3(R.raw.keypad_6);
+                break;
+            case 7:
+                this.PlayMp3(R.raw.keypad_7);
+                break;
+            case 8:
+                this.PlayMp3(R.raw.keypad_8);
+                break;
+            case 9:
+                this.PlayMp3(R.raw.keypad_9);
+                break;
+            default:
+        }
+    }
+
+    public void playCallAnyOne() {
+        this.PlayMp3(R.raw.az_gel_birine_zeng_edek);
+    }
+
+
 }
