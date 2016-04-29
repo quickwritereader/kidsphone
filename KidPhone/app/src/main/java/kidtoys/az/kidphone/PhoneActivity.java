@@ -31,6 +31,10 @@ public class PhoneActivity extends AppCompatActivity implements View.OnClickList
         setListenersForKeys();
         FunnyButton button = (FunnyButton) findViewById(R.id.KeysMode);
         button.setOnClickListener(this);
+
+        FunnyButton buttonYes = (FunnyButton) findViewById(R.id.buttonYes);
+        buttonYes.setOnClickListener(this);
+
         display = (FunnyDisplay) findViewById(R.id.display);
 
         soundPlayer.playPhoneOpenMode();
@@ -74,14 +78,19 @@ public class PhoneActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View v) {
+        FunnyButton funnyButton = (FunnyButton) v;
+
         userActivityTime = System.currentTimeMillis();
         if (v.getId() == R.id.KeysMode) {
             changeKeys();
             lastPressed = "";
             return;
+        } else if (v.getId() == R.id.buttonYes) {
+            funnyButton.setbMode(FunnyButton.BehaviorMode.Numbers);
+            soundPlayer.playCallAnyOne();
         }
 
-        FunnyButton funnyButton = (FunnyButton) v;
+
         if (funnyButton.getbMode() == FunnyButton.BehaviorMode.Letters) {
             String letters = funnyButton.getLettersText();
             pressedTimes = lastPressed.equals(letters) ? pressedTimes : 0;
