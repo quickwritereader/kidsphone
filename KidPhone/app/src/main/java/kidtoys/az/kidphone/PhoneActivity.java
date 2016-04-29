@@ -63,8 +63,8 @@ public class PhoneActivity extends AppCompatActivity implements View.OnClickList
      */
     private void setListenersForKeys() {
         ViewGroup group = (ViewGroup) findViewById(R.id.KeysGroup);
-        int childcount = group.getChildCount();
-        for (int i = 0; i < childcount; i++) {
+        int childCount = group.getChildCount();
+        for (int i = 0; i < childCount; i++) {
             View v = group.getChildAt(i);
             if (v instanceof FunnyButton) {
                 v.setOnClickListener(this);
