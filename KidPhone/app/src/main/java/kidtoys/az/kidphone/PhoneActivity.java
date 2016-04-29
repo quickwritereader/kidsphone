@@ -92,6 +92,7 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
                 if(mode!=null && mode instanceof TeachMode){
                     mode.onRefresh();
                 }else {
+                    if(mode!=null) mode.onSave();
                     mode = null;
                     mode = new TeachMode(this);
                 }
@@ -100,6 +101,7 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
                 if(mode!=null && mode instanceof CallMode){
                     mode.onRefresh();
                 }else {
+                    if(mode!=null) mode.onSave();
                     mode = null;
                     mode = new CallMode(this);
                 }

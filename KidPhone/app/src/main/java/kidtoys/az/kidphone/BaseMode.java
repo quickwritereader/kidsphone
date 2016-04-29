@@ -1,11 +1,7 @@
 package kidtoys.az.kidphone;
 
-import android.os.Bundle;
-import android.view.Display;
-
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.Objects;
 
 /**
  * BaseMode has basic functions for modes
@@ -13,8 +9,13 @@ import java.util.Objects;
  */
 public abstract class BaseMode  {
 
-
-    public  static final HashMap<String,Serializable> stateObject=new HashMap<>();
+    /**
+     * Global state Storage
+     */
+    public  static final HashMap<String,Serializable> stateStorage =new HashMap<>();
+    /**
+     * Phone interface
+     */
     protected Phone phone=null;
 
     public BaseMode(Phone phone) throws Exception {
@@ -25,24 +26,44 @@ public abstract class BaseMode  {
 
     }
 
+    /**
+     * On Click
+     * @param funnyButton
+     */
     public abstract void onClick(FunnyButton funnyButton);
 
+    /**
+     * It will be called when Mode key pressed
+     */
     public abstract void onRefresh();
 
+    /**
+     * Event for saving states of Mode
+     */
     public abstract void onSave();
 
 
+    /**
+     * Gets object from storage by key for  Mode
+     * @param key key string
+     * @return
+     */
     public Serializable getState(String key){
          String realKey=this.getClass().getName()+"_"+key;
-         if( stateObject.containsKey(realKey)){
-             return  stateObject.get(realKey);
+         if( stateStorage.containsKey(realKey)){
+             return  stateStorage.get(realKey);
          }
         return null;
     }
 
+    /**
+     * Put objects  into storage for  Mode
+     * @param key key string
+     * @param object
+     */
     public void putState(String key,Serializable object){
         String realKey=this.getClass().getName()+"_"+key;
-         stateObject.put(realKey,object);
+         stateStorage.put(realKey, object);
     }
 
 }

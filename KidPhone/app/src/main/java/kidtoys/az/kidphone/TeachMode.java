@@ -1,7 +1,5 @@
 package kidtoys.az.kidphone;
 
-import android.view.Display;
-
 /**
  * on TeachMode kid will learn basics
  */
@@ -9,7 +7,7 @@ public class TeachMode extends BaseMode{
 
 
     public static final String STATE = "keyMode";
-    FunnyButton.KeyMode keysMode = FunnyButton.KeyMode.Figures;//this way it will be letters
+    FunnyButton.KeyMode keysMode = FunnyButton.KeyMode.Letters;//this way it will be letters
     private String lastPressed = "";
     private int pressedTimes = 0;
     private SoundPlayer soundPlayer;
@@ -21,7 +19,7 @@ public class TeachMode extends BaseMode{
         this.display=phone.getDisplay();
         FunnyButton.KeyMode mode=(FunnyButton.KeyMode)  getState(STATE);
         if(mode!=null) keysMode=mode;
-        onRefresh();
+        openKeyMode(keysMode);
     }
 
     @Override
@@ -65,45 +63,63 @@ public class TeachMode extends BaseMode{
         phone.getAudio().playChar(l);
     }
 
-    /**
-     * Change keys' Mode while pressing KeysMode
-     */
-    private void changeKeys() {
-
-        FunnyButton.KeyMode newMode;
-        switch (keysMode) {
+    private FunnyButton.KeyMode switchMode(FunnyButton.KeyMode old){
+        FunnyButton.KeyMode retMode;
+        switch (old) {
             case Numbers:
-                newMode = FunnyButton.KeyMode.Figures;
-                soundPlayer.play_FiguresMode();
+                retMode = FunnyButton.KeyMode.Figures;
                 break;
             case Normal:
-                newMode = FunnyButton.KeyMode.Numbers;
+                retMode = FunnyButton.KeyMode.Numbers;
+                break;
+            case Letters:
+                retMode = FunnyButton.KeyMode.Numbers;
+                break;
+            case Figures:
+                retMode = FunnyButton.KeyMode.Letters;
+                break;
+            default:
+                retMode = FunnyButton.KeyMode.Letters;
+        }
+        return retMode;
+    }
+
+    private void playMode(FunnyButton.KeyMode mode){
+        switch (mode) {
+            case Normal:
+            case Numbers:
                 soundPlayer.play_NumbersMode();
                 break;
             case Letters:
-                newMode = FunnyButton.KeyMode.Numbers;
-                soundPlayer.play_NumbersMode();
+                soundPlayer.play_LettersMode();
                 break;
             case Figures:
-                newMode = FunnyButton.KeyMode.Letters;
-                soundPlayer.play_LettersMode();
+                soundPlayer.play_FiguresMode();
                 break;
             default:
-                newMode = FunnyButton.KeyMode.Letters;
                 soundPlayer.play_LettersMode();
         }
+    }
 
-        keysMode = newMode;
+    /**
+     * Change keys' Mode while pressing KeysMode
+     */
+    private void changeKeyMode() {
+        keysMode = switchMode(keysMode);
+        openKeyMode(keysMode);
+    }
+
+    private void openKeyMode(FunnyButton.KeyMode mode) {
+        playMode(mode);
+        phone.changeKeys(mode);
         //clear screen
-
-        phone.changeKeys(newMode);
         display.clear();
     }
 
     public   void onRefresh(){
         lastPressed="";
         pressedTimes=0;
-        changeKeys();
+        changeKeyMode();
     }
 
     public   void onSave(){
