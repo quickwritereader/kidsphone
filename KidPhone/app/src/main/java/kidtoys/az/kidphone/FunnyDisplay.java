@@ -21,8 +21,7 @@ public class FunnyDisplay extends View {
     Paint centerColors[];
     Paint outerColors[];
 
-    Path pathList[] = null;
-    Path fillPathList[] = null;
+
     public static double sqrt2=Math.sqrt(2);
 
     /**
@@ -194,46 +193,29 @@ public class FunnyDisplay extends View {
         return getDotPath(type, cx, cy, radius, pad);
     }
 
-    void initPath(int radius) {
-        FunnySurface.DotType[] dotTypes = FunnySurface.DotType.values();
-        pathList = new Path[dotTypes.length];
-        fillPathList = new Path[dotTypes.length];
-        for (int i = 0; i < dotTypes.length; i++) {
-            pathList[i] = getDotPath(dotTypes[i], radius, -5);
-            fillPathList[i] = getDotPath(dotTypes[i], radius, -15);
-        }
-    }
 
-    int diameter = 0;
+
+    int diameter = -1;
     Paint pback = new Paint();
-
+    Path back=null;
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        if (pathList == null) {
+        if (diameter < 0) {
             diameter = (getWidth() - 40) / mainSurface.getWidth();
-            // initPath(diameter/2);
+            pback.setColor(Color.BLACK);
+            pback.setAntiAlias(true);
         }
-        pback.setColor(Color.BLACK);
-        pback.setAntiAlias(true);
-        canvas.drawPath(CanvasUtils.Rounded(0, 0, (float) getWidth(), (float) getHeight(), 30.f, 30.f), pback);
+        if(back==null) back=CanvasUtils.Rounded(0, 0, (float) getWidth(), (float) getHeight(), 30.f, 30.f);
+        canvas.drawPath(back, pback);
 
         //blt surface
-        for (int j = 0; j < mainSurface.getHeight(); j++) {
-            for (int i = 0; i < mainSurface.getWidth(); i++) {
+        bltBack(canvas);
+        bltFront(canvas);
 
-                FunnySurface.DotType d = mainSurface.getDotType(i, j);
-                if (d != FunnySurface.DotType.None) {
-                    Path path;//=pathList[d.ordinal()];
-                    path = getDotPath(d, 20 + i * diameter + diameter / 2, 20 + j * diameter + diameter / 2, diameter / 2,11);
-                    if (path != null) {
-                        Paint p = outerColors[mainSurface.getDotColor(i, j).ordinal()];
-                        canvas.drawPath(path, p);
-                    }
-                }
-            }
-        }
+    }
 
+    private void bltFront(Canvas canvas) {
         for (int j = 0; j < mainSurface.getHeight(); j++) {
             for (int i = 0; i < mainSurface.getWidth(); i++) {
 
@@ -245,24 +227,41 @@ public class FunnyDisplay extends View {
                     if (path != null) {
                         Paint p = centerColors[mainSurface.getDotColor(i, j).ordinal()];
                         canvas.drawPath(path, p);
+                        path=null;
                         if(diameter/2-5>3) {
 
                             path = getDotPath(d, 20 + i * diameter + diameter / 2, 20 + j * diameter + diameter / 2, diameter / 2, -5);
 
                             p = innerLight;
                             canvas.drawPath(path, p);
-
-                           // getDotPath(d, 20 + i * diameter + diameter / 2, 20 + j * diameter + diameter / 2, diameter / 2, -4);
+                            // getDotPath(d, 20 + i * diameter + diameter / 2, 20 + j * diameter + diameter / 2, diameter / 2, -4);
                             p = realColors[mainSurface.getDotColor(i, j).ordinal()];
                             canvas.drawPath(path, p);
-
+                            path=null;
                         }
                     }
                 }
 
             }
         }//for exit
+    }
 
+    private void bltBack(Canvas canvas) {
+        for (int j = 0; j < mainSurface.getHeight(); j++) {
+            for (int i = 0; i < mainSurface.getWidth(); i++) {
+
+                FunnySurface.DotType d = mainSurface.getDotType(i, j);
+                if (d != FunnySurface.DotType.None) {
+                    Path path;//=pathList[d.ordinal()];
+                    path = getDotPath(d, 20 + i * diameter + diameter / 2, 20 + j * diameter + diameter / 2, diameter / 2,11);
+                    if (path != null) {
+                        Paint p = outerColors[mainSurface.getDotColor(i, j).ordinal()];
+                        canvas.drawPath(path, p);
+                        path=null;
+                    }
+                }
+            }
+        }
     }
 
 

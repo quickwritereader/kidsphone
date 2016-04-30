@@ -1,6 +1,10 @@
 package kidtoys.az.kidphone;
 
 
+import android.media.AudioManager;
+import android.media.SoundPool;
+import android.util.Log;
+
 import java.io.Serializable;
 import java.util.Random;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -8,10 +12,13 @@ import java.util.concurrent.ArrayBlockingQueue;
 public class GameMode extends  BaseMode {
 
     public  Snake snakeGame=null;
+    public  SoundPool pool=null;
+
 
     public GameMode(Phone phone) throws Exception{
         super(phone);
         onRefresh();
+        pool=phone.getAudio().getPool();
     }
 
     @Override
@@ -36,6 +43,8 @@ public class GameMode extends  BaseMode {
 
     @Override
     public   void onRefresh(){
+        //deactivate delat
+        ((UiHandler)phone.getHandler()).deActivateDelay();
         phone.changeKeys(FunnyButton.KeyMode.Numbers);
         if(snakeGame!=null){
             if(snakeGame.isStopped()){
@@ -49,23 +58,7 @@ public class GameMode extends  BaseMode {
 
     }
 
-    public void playFruit(){
-        this.phone.getHandler().post(new Runnable() {
-            @Override
-            public void run() {
-                phone.getAudio().playKeypadTones('7');
-            }
-        });
-    }
 
-    public void playDead(){
-        this.phone.getHandler().post(new Runnable() {
-            @Override
-            public void run() {
-                phone.getAudio().playKeypadTones('8');
-            }
-        });
-    }
 
     @Override
     public   void onSave(){
@@ -73,7 +66,8 @@ public class GameMode extends  BaseMode {
             snakeGame.save();
             snakeGame.interrupt();
         }
-
+        //reactivate delay
+        ((UiHandler)phone.getHandler()).activateDelay();
     }
 
     /**
@@ -85,7 +79,6 @@ public class GameMode extends  BaseMode {
         public static final String SNAKE = "snake";
         public static final String LAST_KEY = "lastKey";
         public  final FunnyDisplay display;
-        public final  SoundPlayer audio;
         private final GameMode mode;
         private int snakeLength;
         private short[] snakePos;
@@ -98,10 +91,9 @@ public class GameMode extends  BaseMode {
         public ArrayBlockingQueue<KeyPress> events=new ArrayBlockingQueue<KeyPress>(5);
         public boolean stop;
         public  boolean gameRun;
-
+        private SoundPool pool;
         public Snake(GameMode mode){
             this.display=mode.phone.getDisplay();
-            this.audio=mode.phone.getAudio();
             this.mode=mode;
             this.stop=false;
         }
@@ -157,7 +149,7 @@ public class GameMode extends  BaseMode {
                     dead=false;
                     events.clear();
                 }
-                if(!dead && time +200<System.currentTimeMillis()) {
+                if(!dead && time +180<System.currentTimeMillis()) {
                     time = System.currentTimeMillis();
                     if(events.peek()!=null){
                         KeyPress key=events.poll();
@@ -176,8 +168,8 @@ public class GameMode extends  BaseMode {
                     }
 
                     //map data on map
-                    mapFruitOnMap( );
                     mapSnakeOnMap( );
+                    mapFruitOnMap( );
                     //display
                     display( );
 
@@ -185,14 +177,15 @@ public class GameMode extends  BaseMode {
                        mode.playFruit();
                     }
                     if(dead && gameRun){
-                        mode.playFruit();
+                        mode.playDead();
                         initGame();
                     }
-
+                    // Log.d("game time in loop ",""+(System.currentTimeMillis()-time) );
 
                 }//timer
 
             }//run game
+            Log.d("game","exited");
             this.mode.putState(LAST_KEY,last);
             this.mode.putState(LEN,snakeLength);
             this.mode.putState(SNAKE,snakePos);
@@ -244,7 +237,7 @@ public class GameMode extends  BaseMode {
             if(map.getDotType(x,y)== FunnySurface.DotType.Circle){
                 //find first empty
                 for(int i=0;i<map.getWidth();i++){
-                    for(int j=0;i<map.getHeight();j--){
+                    for(int j=0;i<map.getHeight();j++){
                         int newX =x+i;
                         int newY=y+j;
                         if(newX>=map.getWidth())newX=newX-map.getWidth();
@@ -315,5 +308,15 @@ public class GameMode extends  BaseMode {
         public    void save(){
             gameRun=false;
         }
+    }
+
+    private void playDead() {
+
+        pool.play(phone.getAudio().poolAudio2,1, 1, 0, 0, 1);
+        Runtime.getRuntime().gc();
+    }
+
+    private void playFruit() {
+        pool.play(phone.getAudio().poolAudio1,1, 1, 0, 0, 1);
     }
 }

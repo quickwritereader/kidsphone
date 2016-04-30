@@ -4,6 +4,7 @@ package kidtoys.az.kidphone;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.SoundPool;
 import android.net.Uri;
 
 import java.io.IOException;
@@ -282,5 +283,16 @@ public class SoundPlayer {
         this.PlayMp3(R.raw.az_gel_birine_zeng_edek);
     }
 
+    SoundPool pool;
+    public  int poolAudio1;
+    public  int poolAudio2;
+    public  SoundPool getPool( ){
+        if(pool==null){
+           pool=new SoundPool(0,AudioManager.STREAM_MUSIC, 0);
+            poolAudio1=pool.load(context,R.raw.keypad_3,1);
+            poolAudio2=pool.load(context,R.raw.keypad_8,1);
+        }
+        return pool;
+    }
 
 }

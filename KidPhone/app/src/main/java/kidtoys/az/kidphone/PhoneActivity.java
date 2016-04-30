@@ -40,14 +40,12 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
         soundPlayer.playPhoneOpenMode();
         userActivityTime = System.currentTimeMillis();
         handler = new UiHandler(this);
-
         //finally, we can set mode
         try {
             mode=new TeachMode(this);
         } catch (Exception e) {
             //should not happen
         }
-
     }
 
     @Override
@@ -60,6 +58,7 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
     public void onPause() {
         super.onPause();
         /*handler.deActivateDelay();*/
+        if(mode!=null)mode.onSave();
     }
 
     @Override
