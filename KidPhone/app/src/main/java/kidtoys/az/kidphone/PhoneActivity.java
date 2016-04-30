@@ -2,6 +2,7 @@ package kidtoys.az.kidphone;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -163,6 +164,10 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
 
     public void playWait(int index) {
         this.soundPlayer.playWait(index);
+    }
+
+    public Handler getHandler(){
+        return  this.handler;
     }
 
 

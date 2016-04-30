@@ -49,10 +49,29 @@ public class GameMode extends  BaseMode {
 
     }
 
+    public void playFruit(){
+        this.phone.getHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                phone.getAudio().playKeypadTones('7');
+            }
+        });
+    }
+
+    public void playDead(){
+        this.phone.getHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                phone.getAudio().playKeypadTones('8');
+            }
+        });
+    }
+
     @Override
     public   void onSave(){
         if(snakeGame!=null){
             snakeGame.save();
+            snakeGame.interrupt();
         }
 
     }
@@ -126,6 +145,12 @@ public class GameMode extends  BaseMode {
             }
             while (gameRun){
 
+                try {
+                    Thread.sleep(20);
+                } catch (InterruptedException e) {
+                    gameRun=false;
+                    break;
+                }
 
                 if(dead && time+1800<System.currentTimeMillis()){
                     time=System.currentTimeMillis();
@@ -157,18 +182,17 @@ public class GameMode extends  BaseMode {
                     display( );
 
                     if(eaten && gameRun){
-                        audio.playKeypadTones('8');
+                       mode.playFruit();
                     }
                     if(dead && gameRun){
-
-                        audio.playKeypadTones('2');
+                        mode.playFruit();
                         initGame();
                     }
 
 
                 }//timer
 
-            }
+            }//run game
             this.mode.putState(LAST_KEY,last);
             this.mode.putState(LEN,snakeLength);
             this.mode.putState(SNAKE,snakePos);
@@ -213,8 +237,8 @@ public class GameMode extends  BaseMode {
         }
 
         private void generateFruit( ) {
-            int x=random.nextInt(map.getWidth());
-            int y=random.nextInt(map.getHeight());
+            int x=random.nextInt(map.getWidth()-1);
+            int y=random.nextInt(map.getHeight()-1);
             //if on body move it away untill it is not
             out:
             if(map.getDotType(x,y)== FunnySurface.DotType.Circle){
@@ -225,7 +249,7 @@ public class GameMode extends  BaseMode {
                         int newY=y+j;
                         if(newX>=map.getWidth())newX=newX-map.getWidth();
                         if(newY>=map.getHeight()) newY=newY-map.getHeight();
-                        if(map.getDotType(i,j)!= FunnySurface.DotType.Circle){
+                        if(map.getDotType(newX,newY)!= FunnySurface.DotType.Circle){
                             x=newX;
                             y=newY;
                             break out;
