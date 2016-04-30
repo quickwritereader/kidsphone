@@ -35,8 +35,8 @@ Start Date	|Task	|Time Required| Current State
 2016-03-09	| Letters,Figures	| 3-4 week | 10-20% (delaying)  
 2016-04-19   | Implement Sounds | 2 weeks | started
 ---    | Ask Questions  | 2 weeks | not started
----    | Telephone Call mode | 2 weeks | not started
----    | Implement funny game | 2 weeks | not started 
+2016-04-29    | Telephone Call mode | 2 weeks |  started
+2016-04-30    | Implement funny game | 2 weeks | implemented Snake game
 ---    | Light Visualizations And Animations | 2 weeks | not started
 
 ####Daily Schedule:####
