@@ -24,6 +24,7 @@ public class CallMode extends BaseMode{
     public   void onRefresh(){
         phone.getAudio().playCallAnyOne();
         phone.changeKeys(FunnyButton.KeyMode.Numbers);
+        phone.getDisplay().clear();
     }
 
     @Override

@@ -101,6 +101,7 @@
                 android:layout_weight="1"
                 android:padding="@dimen/smallSpace2"
                 app:KeyMode="System"
+                android:id="@+id/gameMode"
                 app:OuterShapeProperty="Rounded"
                 app:outerShapeColor="#00ff00" />
         </LinearLayout>

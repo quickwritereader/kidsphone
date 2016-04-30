@@ -11,13 +11,13 @@ import android.view.WindowManager;
 public class PhoneActivity extends AppCompatActivity implements Phone, View.OnClickListener {
 
 
-    public long userActivityTime;
+
     private SoundPlayer soundPlayer;
     private FunnyDisplay display;
-
+    private FunnyButton.KeyMode lastKeyMode=null;
     private UiHandler handler;
     private ViewGroup keysGroup;
-
+    public long userActivityTime;
     public BaseMode mode=null;
 
     @Override
@@ -28,12 +28,12 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
         setContentView(R.layout.activity_phone);
         soundPlayer = new SoundPlayer(getApplicationContext());
         setListenersForKeys();
-        FunnyButton button = (FunnyButton) findViewById(R.id.KeysMode);
+        View button =  findViewById(R.id.KeysMode);
         button.setOnClickListener(this);
-
-        FunnyButton buttonYes = (FunnyButton) findViewById(R.id.buttonYes);
-        buttonYes.setOnClickListener(this);
-
+        button =   findViewById(R.id.gameMode);
+        button.setOnClickListener(this);
+        button =   findViewById(R.id.buttonYes);
+        button.setOnClickListener(this);
         display = (FunnyDisplay) findViewById(R.id.display);
         keysGroup=(ViewGroup) findViewById(R.id.KeysGroup);
         soundPlayer.playPhoneOpenMode();
@@ -88,28 +88,40 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
 
         userActivityTime = System.currentTimeMillis();
         try{
-            if (v.getId() == R.id.KeysMode) {
-                if(mode!=null && mode instanceof TeachMode){
-                    mode.onRefresh();
-                }else {
-                    if(mode!=null) mode.onSave();
-                    mode = null;
-                    mode = new TeachMode(this);
+            switch (v.getId()) {
+                case R.id.KeysMode:
+                    if (mode != null && mode instanceof TeachMode) {
+                        mode.onRefresh();
+                    } else {
+                        if (mode != null) mode.onSave();
+                        mode = null;
+                        mode = new TeachMode(this);
+                    }
+                    break;
+                case R.id.buttonYes:
+                    if (mode != null && mode instanceof CallMode) {
+                        mode.onRefresh();
+                    } else {
+                        if (mode != null) mode.onSave();
+                        mode = null;
+                        mode = new CallMode(this);
+                    }
+                break;
+                case R.id.gameMode:
+                    if (mode != null && mode instanceof GameMode) {
+                        mode.onRefresh();
+                    } else {
+                        if (mode != null) mode.onSave();
+                        mode = null;
+                        mode = new GameMode(this);
+                    }
+                default:
+                if (((FunnyButton) v).getKeyMode() != FunnyButton.KeyMode.System) {
+                    if (mode != null) {
+                        mode.onClick((FunnyButton) v);
+                    }
                 }
-
-            } else if (v.getId() == R.id.buttonYes) {
-                if(mode!=null && mode instanceof CallMode){
-                    mode.onRefresh();
-                }else {
-                    if(mode!=null) mode.onSave();
-                    mode = null;
-                    mode = new CallMode(this);
-                }
-            }else if(((FunnyButton) v).getKeyMode()!= FunnyButton.KeyMode.System){
-                  if(mode!=null){
-                      mode.onClick((FunnyButton)v);
-                  }
-            }
+            }//switch end
         }catch (Exception ignored){
 
         }
@@ -118,8 +130,10 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
 
 
 
+
     @Override
     public void changeKeys(FunnyButton.KeyMode newMode) {
+        if(newMode==lastKeyMode ) return;
         FunnyButton funnyButton;
         int childCount = keysGroup.getChildCount();
         for (int i = 0; i < childCount; i++) {
@@ -134,6 +148,7 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
             }
 
         }
+        lastKeyMode=newMode;
     }
 
     @Override

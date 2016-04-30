@@ -18,7 +18,7 @@ public class UiHandler extends Handler {
      * DELAy_MSG will be used to constantly inform about inactivity
      */
     public static final int DELAY_MSG=1;
-    public static final long TIME_DELAY=10000;
+    public static final long TIME_DELAY=20000;
     public static int wait_signal=0;
     public boolean active=false;
 

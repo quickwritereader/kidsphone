@@ -139,6 +139,10 @@ public class FunnyDisplay extends View {
         invalidate();
     }
 
+    public void postRender() {
+        postInvalidate();
+    }
+
     public void clear(){
         mainSurface.clear();
         render();

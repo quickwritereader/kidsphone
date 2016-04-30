@@ -48,7 +48,7 @@ public abstract class BaseMode  {
      * @param key key string
      * @return
      */
-    public Serializable getState(String key){
+    public synchronized Serializable  getState(String key){
          String realKey=this.getClass().getName()+"_"+key;
          if( stateStorage.containsKey(realKey)){
              return  stateStorage.get(realKey);
@@ -61,7 +61,7 @@ public abstract class BaseMode  {
      * @param key key string
      * @param object
      */
-    public void putState(String key,Serializable object){
+    public synchronized void putState(String key,Serializable object){
         String realKey=this.getClass().getName()+"_"+key;
          stateStorage.put(realKey, object);
     }

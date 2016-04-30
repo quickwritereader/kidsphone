@@ -10,6 +10,20 @@ public class FunnySurface {
     private int width;
     private int height;
 
+    public boolean locked=false;
+
+    public synchronized boolean tryLock(){
+        if(locked) return false;
+        locked=true;
+        return true;
+    }
+
+    public synchronized void unlock(){
+        locked=false;
+    }
+
+
+
     /**
      * Create 1x1 blank surface
      */
@@ -45,7 +59,7 @@ public class FunnySurface {
      */
     static public FunnySurface createSurface(int width, int height, DotColor color, DotType type) {
         FunnySurface newS = new FunnySurface(width, height);
-        int cInt = color.ordinal() | type.ordinal() << 4;
+        int cInt = color.ordinal() | (type.ordinal() << 4);
         byte c = (byte) (cInt);
         for (int i = 0; i < newS.mem.length; i++) {
             newS.mem[i] = c;
