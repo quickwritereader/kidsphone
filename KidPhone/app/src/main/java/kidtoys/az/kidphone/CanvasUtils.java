@@ -10,8 +10,8 @@ public class CanvasUtils {
     public static Path StarPath(float cx, float cy, int spikes, float outerRadius, float innerRadius) {
         Path path = new Path();
         float rot = (float) Math.PI / 2 * 3;
-        float x = cx;
-        float y = cy;
+        float x;
+        float y;
         float step = (float) Math.PI / spikes;
         path.moveTo(cx, cy - outerRadius);
         for (int i = 0; i < spikes; i++) {
@@ -56,7 +56,7 @@ public class CanvasUtils {
 
         for (int i = 1; i < sides; i++) {
             // Log.d("p: ", " "+sides+"p: " + cx +" : " + (float) radius * (float) Math.cos(a * i + start) + " : " + cy + " : " + (float) radius * (float) Math.sin(a * i + start));
-            path.lineTo(cx + (float) radius * (float) Math.cos(a * i + start), cy + (float) radius * (float) Math.sin(a * i + start));
+            path.lineTo(cx + radius * (float) Math.cos(a * i + start), cy + radius * (float) Math.sin(a * i + start));
         }
         path.close();
         return path;
@@ -65,44 +65,40 @@ public class CanvasUtils {
     public static Path HeartPath(float left, float top, float right, float bottom) {
         Path path = new Path();
         float d = Math.min(right - left, bottom - top);
-        float k = left;
-        float k2 = top;
-        path.moveTo(k, k2 + d / 4);
-        path.quadTo(k, k2, k + d / 4, k2);
-        path.quadTo(k + d / 2, k2, k + d / 2, k2 + d / 4);
-        path.quadTo(k + d / 2, k2, k + d * 3 / 4, k2);
-        path.quadTo(k + d, k2, k + d, k2 + d / 4);
-        path.quadTo(k + d, k2 + d / 2, k + d * 3 / 4, k2 + d * 3 / 4);
-        path.lineTo(k + d / 2, k2 + d);
-        path.lineTo(k + d / 4, k2 + d * 3 / 4);
-        path.quadTo(k, k2 + d / 2, k, k2 + d / 4);
+        path.moveTo(left, top + d / 4);
+        path.quadTo(left, top, left + d / 4, top);
+        path.quadTo(left + d / 2, top, left + d / 2, top + d / 4);
+        path.quadTo(left + d / 2, top, left + d * 3 / 4, top);
+        path.quadTo(left + d, top, left + d, top + d / 4);
+        path.quadTo(left + d, top + d / 2, left + d * 3 / 4, top + d * 3 / 4);
+        path.lineTo(left + d / 2, top + d);
+        path.lineTo(left + d / 4, top + d * 3 / 4);
+        path.quadTo(left, top + d / 2, left, top + d / 4);
         path.close();
         return path;
     }
 
     public static Path PhonePath(float left, float top, float right, float bottom, boolean isNo) {
         Path p = new Path();
-        float x = left;
-        float y = top;
         float w = right - left;
         float h = bottom - top;
         //make sure that height is half of width
         if (h > w / 2.f) h = w / 2.f;
-        p.moveTo(x, y + h / 4);
-        p.lineTo(x, y + h);
-        p.lineTo(x + w / 4, y + h - h / 4);
-        p.lineTo(x + w / 4, y + h / 2);
-        p.lineTo(x + w - w / 4, y + h / 2);
-        p.lineTo(x + w - w / 4, y + h - h / 4);
-        p.lineTo(x + w, y + h);
-        p.lineTo(x + w, y + h / 4);
-        p.cubicTo(x + w, y, x, y, x, y + h / 4);
+        p.moveTo(left, top + h / 4);
+        p.lineTo(left, top + h);
+        p.lineTo(left + w / 4, top + h - h / 4);
+        p.lineTo(left + w / 4, top + h / 2);
+        p.lineTo(left + w - w / 4, top + h / 2);
+        p.lineTo(left + w - w / 4, top + h - h / 4);
+        p.lineTo(left + w, top + h);
+        p.lineTo(left + w, top + h / 4);
+        p.cubicTo(left + w, top, left, top, left, top + h / 4);
         if (isNo) {
-            p.moveTo(x + w / 4 + w / 12, y + h - h / 4);
-            p.lineTo(x + w - w / 4 - w / 12, y + h - h / 4);
-            p.lineTo(x + w - w / 4 - w / 12, y + h);
-            p.lineTo(x + w / 4 + w / 12, y + h);
-            p.lineTo(x + w / 4 + w / 12, y + h - h / 4);
+            p.moveTo(left + w / 4 + w / 12, top + h - h / 4);
+            p.lineTo(left + w - w / 4 - w / 12, top + h - h / 4);
+            p.lineTo(left + w - w / 4 - w / 12, top + h);
+            p.lineTo(left + w / 4 + w / 12, top + h);
+            p.lineTo(left + w / 4 + w / 12, top + h - h / 4);
         }
         p.close();
         return p;
@@ -136,6 +132,7 @@ public class CanvasUtils {
         if (brx > width / 4) brx = width / 4;
         if (bry > height / 4) bry = height / 4;
         float bwidthMinusCorners = (width - (2 * brx));
+        //noinspection UnusedAssignment
         float bheightMinusCorners = (height - (2 * bry));
         float widthMinusCorners = (width - (2 * rx));
         float heightMinusCorners = (height - (2 * ry));
@@ -149,7 +146,7 @@ public class CanvasUtils {
         path.rQuadTo(0, 2 * bry + ry, rx, 2 * bry + ry);//bottom-left corner
         path.rLineTo(widthMinusCorners, 0);
         path.rQuadTo(rx, 0, rx, -(2 * bry + ry)); //bottom-right corner
-        path.close();//Given close, last lineto can be removed.
+        path.close();//Given close, last lineTo can be removed.
 
         return path;
     }
@@ -176,7 +173,7 @@ public class CanvasUtils {
 
             path.rLineTo(0, -heightMinusCorners);
 
-            path.close();//Given close, last lineto can be removed.
+            path.close();//Given close, last lineTo can be removed.
 
             return path;
     }

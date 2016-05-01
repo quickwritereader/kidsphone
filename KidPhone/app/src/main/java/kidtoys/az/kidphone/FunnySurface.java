@@ -6,11 +6,11 @@ package kidtoys.az.kidphone;
  * This class will be used as main block for drawings
  */
 public class FunnySurface {
-    public byte[] mem = null;
-    private int width;
-    private int height;
+    private byte[] mem = null;
+    private final int width;
+    private final int height;
 
-    public boolean locked=false;
+    private boolean locked=false;
 
     public synchronized boolean tryLock(){
         if(locked) return false;
@@ -80,7 +80,7 @@ public class FunnySurface {
     }
 
     /**
-     * get dot color (Similar getpixel)
+     * get dot color (Similar get pixel)
      *
      * @param x
      * @param y
@@ -99,7 +99,7 @@ public class FunnySurface {
     }
 
     /**
-     * get dot type (Similar getpixel)
+     * get dot type (Similar get pixel)
      *
      * @param x
      * @param y
@@ -126,7 +126,6 @@ public class FunnySurface {
         if (x >= 0 && x < width && y >= 0 && y < height) {
             mem[y * width + x] = (byte) ((mem[y * width + x] & 0xF0) | color.ordinal());
         }
-        return;
     }
 
     /**
@@ -141,7 +140,6 @@ public class FunnySurface {
         if (x >= 0 && x < width && y >= 0 && y < height) {
             mem[y * width + x] = (byte) (color.ordinal() | (type.ordinal() << 4));
         }
-        return;
     }
 
     /**
@@ -242,16 +240,13 @@ public class FunnySurface {
             // delta of exact value and rounded value of the dependant variable
             int d = 0;
 
-            int dy = deltaY;
-            int dx = deltaX;
-
-            int dy2 = (dy << 1); // slope scaling factors to avoid floating
-            int dx2 = (dx << 1); // point
+            int dy2 = (deltaY << 1); // slope scaling factors to avoid floating
+            int dx2 = (deltaX << 1); // point
 
             int ix = x1 < x2 ? 1 : -1; // increment direction
             int iy = y1 < y2 ? 1 : -1;
 
-            if (dy <= dx) {
+            if (deltaY <= deltaX) {
                 for (; ; ) {
                     if (x1 >= 0 && x1 < width && y1 >= 0 && y1 < height) {
                         mem[y1 * width + x1] = c;
@@ -260,7 +255,7 @@ public class FunnySurface {
                         break;
                     x1 += ix;
                     d += dy2;
-                    if (d > dx) {
+                    if (d > deltaX) {
                         y1 += iy;
                         d -= dx2;
                     }
@@ -275,7 +270,7 @@ public class FunnySurface {
                         break;
                     y1 += iy;
                     d += dx2;
-                    if (d > dy) {
+                    if (d > deltaY) {
                         x1 += ix;
                         d -= dy2;
                     }

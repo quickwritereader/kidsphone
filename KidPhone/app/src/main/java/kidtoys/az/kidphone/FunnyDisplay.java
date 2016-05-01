@@ -1,12 +1,14 @@
 package kidtoys.az.kidphone;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.util.LruCache;
 import android.view.View;
 
 /**
@@ -16,13 +18,13 @@ public class FunnyDisplay extends View {
 
     int surfaceWidth = 20;
     int surfaceHeight = 15;
-    Paint innerLight;
-    Paint realColors[];
-    Paint centerColors[];
-    Paint outerColors[];
+    private Paint innerLight;
+    private Paint[] realColors;
+    private Paint[] centerColors;
+    private Paint[] outerColors;
 
-
-    public static double sqrt2=Math.sqrt(2);
+    private LruCache<String,Bitmap> bitmapCache;
+    private static final double sqrt2=Math.sqrt(2);
 
     /**
      * returns Main Surface that you can use to draw
@@ -37,7 +39,7 @@ public class FunnyDisplay extends View {
     private FunnySurface mainSurface;
 
 
-    public static int blend(int color1,int color2 , float alpha){
+    private static int blend(int color1, int color2, float alpha){
         float red1=Color.red(color1);
         float blue1=Color.blue(color1);
         float green1=Color.green(color1);
@@ -51,8 +53,8 @@ public class FunnyDisplay extends View {
 
     }
 
-    public static int realColorFromDotColor(FunnySurface.DotColor color) {
-        int res = 0;
+    private static int realColorFromDotColor(FunnySurface.DotColor color) {
+        int res;
         switch (color) {
             case Red:
                 res = Color.argb(255,255,0x40,0);//Orange red FF2400
@@ -132,9 +134,20 @@ public class FunnyDisplay extends View {
             outerColors[i].setAntiAlias(true);
         }
         mainSurface = new FunnySurface(surfaceWidth, surfaceHeight);
+        bitmapCache =new LruCache<String,Bitmap>(12){
+
+
+            @Override
+            protected void entryRemoved(boolean evicted, String key, Bitmap oldValue, Bitmap newValue) {
+                super.entryRemoved(evicted, key, oldValue, newValue);
+                Log.d("display cache remove",key);
+                oldValue.recycle();
+            }
+        };
+        setWillNotDraw(false);
     }
 
-    public void render() {
+    private void render() {
         invalidate();
     }
 
@@ -157,7 +170,7 @@ public class FunnyDisplay extends View {
         render();
     }
 
-    public Path getDotPath(FunnySurface.DotType type, int cx, int cy, int radius, int pad) {
+    private Path getDotPath(FunnySurface.DotType type, int cx, int cy, int radius, int pad) {
         int r = radius + pad;
         switch (type) {
             case Circle:
@@ -188,81 +201,153 @@ public class FunnyDisplay extends View {
     }
 
     public Path getDotPath(FunnySurface.DotType type, int radius, int pad) {
-        int cx = radius;
-        int cy = radius;
-        return getDotPath(type, cx, cy, radius, pad);
+        return getDotPath(type, radius, radius, radius, pad);
     }
 
 
 
-    int diameter = -1;
-    Paint pback = new Paint();
-    Path back=null;
+    private int diameter = -1;
+    private final Paint paintBack = new Paint();
+    private Path screenPath=null;
+
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        if (diameter < 0) {
+        long time=System.currentTimeMillis();
+        if(diameter<0) {
+            paintBack.setColor(Color.BLACK);
+            paintBack.setAntiAlias(true);
             diameter = (getWidth() - 40) / mainSurface.getWidth();
-            pback.setColor(Color.BLACK);
-            pback.setAntiAlias(true);
         }
-        if(back==null) back=CanvasUtils.Rounded(0, 0, (float) getWidth(), (float) getHeight(), 30.f, 30.f);
-        canvas.drawPath(back, pback);
-
+        if(screenPath==null){
+            screenPath=CanvasUtils.Rounded(0, 0, (float) getWidth(), (float) getHeight(), 30.f, 30.f);
+        }
+        canvas.drawPath(screenPath, paintBack);
         //blt surface
         bltBack(canvas);
-        bltFront(canvas);
+        bltInner(canvas);
+        //Log.d("display render time ", "" + (System.currentTimeMillis() - time));
 
     }
+    //for reducing garbage collection
+    private int oldBackType=-1;
+    private int oldBackColor=-1;
+    private Bitmap previousBackBitmap=null;
+    private int oldType=-1;
+    private int oldColor=-1;
+    private Bitmap previousBitmap=null;
 
-    private void bltFront(Canvas canvas) {
+
+    private void bltBack(Canvas canvas) {
+
         for (int j = 0; j < mainSurface.getHeight(); j++) {
             for (int i = 0; i < mainSurface.getWidth(); i++) {
 
                 FunnySurface.DotType d = mainSurface.getDotType(i, j);
                 if (d != FunnySurface.DotType.None) {
+                    int pad=11;
+                    int color=mainSurface.getDotColor(i, j).ordinal();
 
-                    Path path;//=pathList[d.ordinal()];
-                    path = getDotPath(d, 20 + i * diameter + diameter / 2, 20 + j * diameter + diameter / 2, diameter / 2, 1);
-                    if (path != null) {
-                        Paint p = centerColors[mainSurface.getDotColor(i, j).ordinal()];
-                        canvas.drawPath(path, p);
-                        path=null;
-                        if(diameter/2-5>3) {
+                    Bitmap b=null;
 
-                            path = getDotPath(d, 20 + i * diameter + diameter / 2, 20 + j * diameter + diameter / 2, diameter / 2, -5);
-
-                            p = innerLight;
-                            canvas.drawPath(path, p);
-                            // getDotPath(d, 20 + i * diameter + diameter / 2, 20 + j * diameter + diameter / 2, diameter / 2, -4);
-                            p = realColors[mainSurface.getDotColor(i, j).ordinal()];
-                            canvas.drawPath(path, p);
-                            path=null;
-                        }
+                    //retrieve from previous
+                    if(d.ordinal()==oldBackType && color==oldBackColor && previousBackBitmap!=null){
+                        b=previousBackBitmap;
                     }
-                }
+                    //retrieve from cache
+                    String key=null;
+                    if(b==null) {
+                        //add to cache
+                        key = "" + d.ordinal() + "_" + color;
+                        b =   bitmapCache.get(key);
+                    }
+                    //generate and put into cache and save in previousBitmap
+                    if(b==null){
+                        Path path=getDotPath(d,  pad+diameter / 2,pad+  diameter / 2, diameter / 2,11);
+                        int w=2*pad+diameter;
+                        int h=2*pad+diameter;
+                        Bitmap.Config conf = Bitmap.Config.ARGB_4444;
+                        b = Bitmap.createBitmap(w, h, conf);
+                        Canvas bmpCanvas = new Canvas(b);
+                        Paint p = outerColors[color];
+                        bmpCanvas.drawPath(path, p);
+                        path=null;
+                        bitmapCache.put(key, b);
+                        previousBackBitmap=b;
+                        Log.d("display bitmap cached ", key);
 
-            }
+                    }
+                    if (b != null) {
+                        int left=  20 + i * diameter +  pad  ;
+                        int top=  20 + j * diameter  +pad ;
+                        canvas.drawBitmap(b,left,top,null);
+                    }
+                }//need to draw
+            }//for inner
+        }//for outer
+    }
+
+    private void bltInner(Canvas canvas) {
+        for (int j = 0; j < mainSurface.getHeight(); j++) {
+            for (int i = 0; i < mainSurface.getWidth(); i++) {
+
+                FunnySurface.DotType d = mainSurface.getDotType(i, j);
+                if (d != FunnySurface.DotType.None) {
+                    int pad=1;
+                    int color=mainSurface.getDotColor(i, j).ordinal();
+                    Bitmap b=null;
+                    //retrieve from previous
+                    if(d.ordinal()==oldType && color==oldColor && previousBitmap!=null){
+                        b=previousBitmap;
+                    }
+                    //retrieve from cache
+                    String key=null;
+                    if(b==null) {
+                        //add to cache
+                        key = "inner" + d.ordinal() + "_" + color;
+                        b =  bitmapCache.get(key);
+                    }
+
+                    if(b==null){
+                        int w=2*pad+diameter;
+                        int h=2*pad+diameter;
+                        Bitmap.Config conf = Bitmap.Config.ARGB_4444;
+                        b = Bitmap.createBitmap(w, h, conf);
+                        Canvas bmpCanvas = new Canvas(b);
+                        Path path;//=pathList[d.ordinal()];
+                        path = getDotPath( d,  pad+diameter / 2,pad+  diameter / 2, diameter / 2,  1);
+                        if (path != null) {
+                            Paint p = centerColors[mainSurface.getDotColor(i, j).ordinal()];
+                            bmpCanvas.drawPath(path, p);
+                            if(diameter/2-5>3) {
+                                path=null;
+                                path = getDotPath(d,  pad+diameter / 2,pad+  diameter / 2, diameter / 2, -5);
+
+                                p = innerLight;
+                                bmpCanvas.drawPath(path, p);
+
+                                // getDotPath(d, 20 + i * diameter + diameter / 2, 20 + j * diameter + diameter / 2, diameter / 2, -4);
+                                p = realColors[mainSurface.getDotColor(i, j).ordinal()];
+                                bmpCanvas.drawPath(path, p);
+
+                            }
+                        }
+                        path=null;
+                        //add to cache
+                        bitmapCache.put(key, b);
+                        previousBitmap=b;
+                    }//b==null
+                    if (b != null) {
+                        int left=  20 + i * diameter +  pad  ;
+                        int top=  20 + j * diameter  +pad ;
+                        canvas.drawBitmap(b,left,top,null);
+                    }
+                 }//need to draw
+            }//for inner
         }//for exit
     }
 
-    private void bltBack(Canvas canvas) {
-        for (int j = 0; j < mainSurface.getHeight(); j++) {
-            for (int i = 0; i < mainSurface.getWidth(); i++) {
 
-                FunnySurface.DotType d = mainSurface.getDotType(i, j);
-                if (d != FunnySurface.DotType.None) {
-                    Path path;//=pathList[d.ordinal()];
-                    path = getDotPath(d, 20 + i * diameter + diameter / 2, 20 + j * diameter + diameter / 2, diameter / 2,11);
-                    if (path != null) {
-                        Paint p = outerColors[mainSurface.getDotColor(i, j).ordinal()];
-                        canvas.drawPath(path, p);
-                        path=null;
-                    }
-                }
-            }
-        }
-    }
 
 
 }

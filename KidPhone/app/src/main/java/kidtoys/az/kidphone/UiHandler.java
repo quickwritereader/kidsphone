@@ -12,21 +12,21 @@ import java.lang.ref.WeakReference;
  */
 public class UiHandler extends Handler {
 
-    public static  final String TAG="UiHandler";
+    private static  final String TAG="UiHandler";
 
     /**
      * DELAy_MSG will be used to constantly inform about inactivity
      */
-    public static final int DELAY_MSG=1;
+    private static final int DELAY_MSG=1;
     public static final long TIME_DELAY=20000;
-    public static int wait_signal=0;
-    public boolean active=false;
+    private static int wait_signal=0;
+    private boolean active=false;
 
 
-    final WeakReference<PhoneActivity> phoneRef;
+    private final WeakReference<PhoneActivity> phoneRef;
 
     public UiHandler(PhoneActivity phone){
-        this.phoneRef=new WeakReference<PhoneActivity>(phone);
+        this.phoneRef= new WeakReference<>(phone);
     }
 
     private void sendDelay(long delay) {
@@ -38,13 +38,13 @@ public class UiHandler extends Handler {
 
 
     public synchronized void activateDelay(long delay){
-        if(this.active==false) {
+        if(!this.active) {
             Log.d(TAG,"activateDelay");
             sendDelay(delay);
         }
     }
-    public synchronized void reSendDelay(long delay){
-        if(this.active==true) {
+    private synchronized void reSendDelay(long delay){
+        if(this.active) {
             sendDelay(delay);
         }
     }
@@ -67,7 +67,7 @@ public class UiHandler extends Handler {
     @Override
     public void handleMessage(Message inputMessage){
 
-        if(inputMessage.what==DELAY_MSG && active==true){
+        if(inputMessage.what==DELAY_MSG && active){
             PhoneActivity phone=phoneRef.get();
             if(phone!=null){
                 long current=System.currentTimeMillis();

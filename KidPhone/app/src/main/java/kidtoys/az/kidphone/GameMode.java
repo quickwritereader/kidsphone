@@ -1,7 +1,6 @@
 package kidtoys.az.kidphone;
 
 
-import android.media.AudioManager;
 import android.media.SoundPool;
 import android.util.Log;
 
@@ -11,8 +10,8 @@ import java.util.concurrent.ArrayBlockingQueue;
 
 public class GameMode extends  BaseMode {
 
-    public  Snake snakeGame=null;
-    public  SoundPool pool=null;
+    private Snake snakeGame=null;
+    private SoundPool pool=null;
 
 
     public GameMode(Phone phone) throws Exception{
@@ -26,15 +25,20 @@ public class GameMode extends  BaseMode {
         if (funnyButton.getKeyMode() == FunnyButton.KeyMode.Numbers) {
             String number = funnyButton.getNumbersText();
             Snake.KeyPress key=null;
-             if(number.equals("2")){
-                 key= Snake.KeyPress.UP;
-             }else if(number.equals("4")){
-                 key= Snake.KeyPress.LEFT;
-             }else if(number.equals("6")){
-                 key= Snake.KeyPress.RIGHT;
-             }else if(number.equals("8")){
-                 key= Snake.KeyPress.DOWN;
-             }
+            switch (number) {
+                case "2":
+                    key = Snake.KeyPress.UP;
+                    break;
+                case "4":
+                    key = Snake.KeyPress.LEFT;
+                    break;
+                case "6":
+                    key = Snake.KeyPress.RIGHT;
+                    break;
+                case "8":
+                    key = Snake.KeyPress.DOWN;
+                    break;
+            }
             if(this.snakeGame!=null){
                 this.snakeGame.sendEvent(key);
             }
@@ -43,7 +47,7 @@ public class GameMode extends  BaseMode {
 
     @Override
     public   void onRefresh(){
-        //deactivate delat
+        //deactivate delay
         ((UiHandler)phone.getHandler()).deActivateDelay();
         phone.changeKeys(FunnyButton.KeyMode.Numbers);
         if(snakeGame!=null){
@@ -88,10 +92,10 @@ public class GameMode extends  BaseMode {
         private Random random;
 
         public enum KeyPress { UP,DOWN,RIGHT,LEFT}
-        public ArrayBlockingQueue<KeyPress> events=new ArrayBlockingQueue<KeyPress>(5);
+        public final ArrayBlockingQueue<KeyPress> events= new ArrayBlockingQueue<>(5);
         public boolean stop;
         public  boolean gameRun;
-        private SoundPool pool;
+
         public Snake(GameMode mode){
             this.display=mode.phone.getDisplay();
             this.mode=mode;
@@ -232,7 +236,7 @@ public class GameMode extends  BaseMode {
         private void generateFruit( ) {
             int x=random.nextInt(map.getWidth()-1);
             int y=random.nextInt(map.getHeight()-1);
-            //if on body move it away untill it is not
+            //if on body move it away until it is not
             out:
             if(map.getDotType(x,y)== FunnySurface.DotType.Circle){
                 //find first empty
@@ -265,9 +269,7 @@ public class GameMode extends  BaseMode {
         }
 
         private void moveSnake() {
-            for(int i=snakeLength ;i> 0;i--){
-                snakePos[i ]=snakePos[i-1];
-            }
+            System.arraycopy(snakePos, 0, snakePos, 1, snakeLength);
 
             int x=getX(snakePos[0]);
             int y=getY(snakePos[0]);

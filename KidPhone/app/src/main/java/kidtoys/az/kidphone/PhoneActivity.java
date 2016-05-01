@@ -1,10 +1,8 @@
 package kidtoys.az.kidphone;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -19,7 +17,7 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
     private UiHandler handler;
     private ViewGroup keysGroup;
     public long userActivityTime;
-    public BaseMode mode=null;
+    private BaseMode mode=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,8 +82,6 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
 
     @Override
     public void onClick(View v) {
-        FunnyButton funnyButton = (FunnyButton) v;
-
         userActivityTime = System.currentTimeMillis();
         try{
             switch (v.getId()) {

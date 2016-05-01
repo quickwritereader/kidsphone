@@ -208,7 +208,7 @@ public class FunnyButton extends View {
 
 
 
-    public static int getNewColor(int color, int add) {
+    private static int getNewColor(int color, int add) {
         int red = Color.red(color);
         int green = Color.green(color);
         int blue = Color.blue(color);
@@ -226,22 +226,22 @@ public class FunnyButton extends View {
         return color;
     }
 
-    public void drawOuter(Canvas canvas, boolean pressed) {
+    private void drawOuter(Canvas canvas, boolean pressed) {
 
-        float scaleDivb = 32 * 1.6f;
+        float scaleDivision = 32 * 1.6f;
         int color = getOuterShapeColor();
         if (pressed) {
             //darken our color
             //outercolor
             color = getNewColor(color, -50);
             outerP1.setColor(color);
-            scaleDivb = 32;
+            scaleDivision = 32;
         } else {
             outerP1.setColor(color);
         }
         outerP2.setColor(getNewColor(color, -90));
         RectF rectF2 = new RectF();
-        float pad=rectF.height() / scaleDivb;
+        float pad=rectF.height() / scaleDivision;
         if(pad>5)pad=5;
         rectF2.left = rectF.left + pad;
         rectF2.top = rectF.top + pad;
@@ -278,7 +278,7 @@ public class FunnyButton extends View {
     }
 
 
-    public void drawInner(Canvas canvas) {
+    private void drawInner(Canvas canvas) {
         float squareWidth = rectF.height() > rectF.width() ? rectF.width() / 1.5f : rectF.height() / 1.5f;
         float cx = rectF.left + rectF.width() / 2;
         float cy = rectF.top + rectF.height() / 2;
@@ -345,7 +345,7 @@ public class FunnyButton extends View {
         }
     }
 
-    public void drawText(Canvas canvas, String text, Paint p) {
+    private void drawText(Canvas canvas, String text, Paint p) {
         if (text == null) return;
         Rect bounds = new Rect();
         p.getTextBounds(text, 0, text.length(), bounds);
@@ -356,8 +356,8 @@ public class FunnyButton extends View {
     }
 
     @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
+    protected void onSizeChanged(int w, int h, int oldW, int oldH) {
+        super.onSizeChanged(w, h, oldW, oldH);
         rectF.set(getPaddingLeft(), getPaddingTop(), getWidth() - getPaddingRight(), getHeight() - getPaddingBottom());
         invalidate();
     }
@@ -378,7 +378,7 @@ public class FunnyButton extends View {
             drawInner(canvas);
         }
         if ((bMode != KeyMode.Figures && bMode != KeyMode.System) || bMode == KeyMode.Normal) {
-            String t = "";
+            String t;
             if (bMode == KeyMode.Letters) {
                 t = lettersText;
             } else {

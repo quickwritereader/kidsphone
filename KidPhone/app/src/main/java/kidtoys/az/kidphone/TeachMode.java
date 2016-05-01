@@ -6,7 +6,7 @@ package kidtoys.az.kidphone;
 public class TeachMode extends BaseMode{
 
 
-    public static final String STATE = "keyMode";
+    private static final String STATE = "keyMode";
     FunnyButton.KeyMode keysMode = FunnyButton.KeyMode.Letters;//this way it will be letters
     private String lastPressed = "";
     private int pressedTimes = 0;

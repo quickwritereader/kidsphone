@@ -12,7 +12,7 @@ public abstract class BaseMode  {
     /**
      * Global state Storage
      */
-    public  static final HashMap<String,Serializable> stateStorage =new HashMap<>();
+    private static final HashMap<String,Serializable> stateStorage =new HashMap<>();
     /**
      * Phone interface
      */
@@ -28,7 +28,7 @@ public abstract class BaseMode  {
 
     /**
      * On Click
-     * @param funnyButton
+     * @param funnyButton button
      */
     public abstract void onClick(FunnyButton funnyButton);
 
@@ -46,7 +46,7 @@ public abstract class BaseMode  {
     /**
      * Gets object from storage by key for  Mode
      * @param key key string
-     * @return
+     * @return serializable object
      */
     public synchronized Serializable  getState(String key){
          String realKey=this.getClass().getName()+"_"+key;
@@ -59,7 +59,7 @@ public abstract class BaseMode  {
     /**
      * Put objects  into storage for  Mode
      * @param key key string
-     * @param object
+     * @param object Serializable object
      */
     public synchronized void putState(String key,Serializable object){
         String realKey=this.getClass().getName()+"_"+key;
