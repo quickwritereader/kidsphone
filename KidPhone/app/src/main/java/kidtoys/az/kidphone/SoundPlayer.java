@@ -5,19 +5,18 @@ import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
-import android.net.Uri;
-
-import java.io.IOException;
 
 /**
  * Created by ramil on 20.04.2016.
  */
 public class SoundPlayer {
 
+    public static final int[] wait_sounds = {R.raw.az_wait_1, R.raw.az_wait_2, R.raw.az_wait_3};
     public MediaPlayer mediaPlayer;
     public Context context;
-
-    public static final int [] wait_sounds={R.raw.az_wait_1,R.raw.az_wait_2,R.raw.az_wait_3};
+    public int poolAudio1;
+    public int poolAudio2;
+    private SoundPool pool;
 
     public SoundPlayer(Context ct) {
         this.context = ct;
@@ -58,19 +57,21 @@ public class SoundPlayer {
     }
 
     /*play*/
-    public  void playChar(char Letter){
+    public void playChar(char Letter) {
         switch (Letter) {
             case 'A':
                 this.PlayMp3(R.raw.az_a);
                 break;
             case 'B':
-                this.PlayMp3(R.raw.az_b);;
+                this.PlayMp3(R.raw.az_b);
+                ;
                 break;
             case 'C':
                 this.PlayMp3(R.raw.az_c);
                 break;
             case 'Ç':
-                this.PlayMp3(R.raw.az_ch);;
+                this.PlayMp3(R.raw.az_ch);
+                ;
                 break;
             case 'D':
                 this.PlayMp3(R.raw.az_d);
@@ -80,7 +81,8 @@ public class SoundPlayer {
                 break;
             case 'Ə':
             case 'ə':
-                this.PlayMp3(R.raw.az_ee);;
+                this.PlayMp3(R.raw.az_ee);
+                ;
                 break;
             case 'F':
                 this.PlayMp3(R.raw.az_f);
@@ -143,7 +145,8 @@ public class SoundPlayer {
                 this.PlayMp3(R.raw.az_u);
                 break;
             case 'Ü':
-                this.PlayMp3(R.raw.az_uu);;
+                this.PlayMp3(R.raw.az_uu);
+                ;
                 break;
             case 'V':
                 this.PlayMp3(R.raw.az_v);
@@ -193,14 +196,16 @@ public class SoundPlayer {
 
     /**
      * Play wait sound
+     *
      * @param index
      */
-    public void playWait(int index){
-        this.PlayMp3(wait_sounds[index%wait_sounds.length]);
+    public void playWait(int index) {
+        this.PlayMp3(wait_sounds[index % wait_sounds.length]);
     }
 
     /**
      * Play figures
+     *
      * @param innerShapeType
      */
     public void playFigures(FunnyButton.InnerShapeType innerShapeType) {
@@ -241,6 +246,7 @@ public class SoundPlayer {
 
     /**
      * Play keypad tones
+     *
      * @param keypad
      */
     public void playKeypadTones(char keypad) {
@@ -283,14 +289,11 @@ public class SoundPlayer {
         this.PlayMp3(R.raw.az_gel_birine_zeng_edek);
     }
 
-    SoundPool pool;
-    public  int poolAudio1;
-    public  int poolAudio2;
-    public  SoundPool getPool( ){
-        if(pool==null){
-           pool=new SoundPool(0,AudioManager.STREAM_MUSIC, 0);
-            poolAudio1=pool.load(context,R.raw.keypad_3,1);
-            poolAudio2=pool.load(context,R.raw.keypad_8,1);
+    public SoundPool getPool() {
+        if (pool == null) {
+            pool = new SoundPool(0, AudioManager.STREAM_MUSIC, 0);
+            poolAudio1 = pool.load(context, R.raw.keypad_3, 1);
+            poolAudio2 = pool.load(context, R.raw.keypad_8, 1);
         }
         return pool;
     }

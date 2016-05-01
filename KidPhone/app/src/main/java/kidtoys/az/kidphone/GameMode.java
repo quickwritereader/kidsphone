@@ -3,11 +3,15 @@ package kidtoys.az.kidphone;
 
 import android.media.SoundPool;
 import android.util.Log;
+import android.view.Surface;
 
 import java.io.Serializable;
 import java.util.Random;
 import java.util.concurrent.ArrayBlockingQueue;
 
+/**
+ * Game mode for kids
+ */
 public class GameMode extends  BaseMode {
 
     private Snake snakeGame=null;
@@ -138,11 +142,13 @@ public class GameMode extends  BaseMode {
             random.setSeed(System.currentTimeMillis());
             if(snakePos==null){
                 initGame();
+            }else{
+                mapSnakeOnMapFull();
             }
             while (gameRun){
 
                 try {
-                    Thread.sleep(20);
+                    Thread.sleep(30);
                 } catch (InterruptedException e) {
                     gameRun=false;
                     break;
@@ -206,6 +212,14 @@ public class GameMode extends  BaseMode {
             mapFruitOnMap();
         }
 
+        private void mapSnakeOnMapFull(){
+            for (int i=0;i<snakeLength;i++) {
+                map.putDot(getX(snakePos[i]), getY(snakePos[i]), FunnySurface.DotColor.Yellow, FunnySurface.DotType.Circle);
+            }
+            map.putDot(getX(snakePos[snakeLength]) ,getY(snakePos[snakeLength ]),FunnySurface.DotColor.Black,
+                    FunnySurface.DotType.None);
+        }
+
         private void mapSnakeOnMap() {
             map.putDot(getX(snakePos[0]),getY(snakePos[0]), FunnySurface.DotColor.Yellow, FunnySurface.DotType.Circle);
             map.putDot(getX(snakePos[snakeLength]) ,getY(snakePos[snakeLength ]),FunnySurface.DotColor.Black,
@@ -238,7 +252,7 @@ public class GameMode extends  BaseMode {
             int y=random.nextInt(map.getHeight()-1);
             //if on body move it away until it is not
             out:
-            if(map.getDotType(x,y)== FunnySurface.DotType.Circle){
+            if(map.getDotType(x,y)!= FunnySurface.DotType.None){
                 //find first empty
                 for(int i=0;i<map.getWidth();i++){
                     for(int j=0;i<map.getHeight();j++){
@@ -246,7 +260,7 @@ public class GameMode extends  BaseMode {
                         int newY=y+j;
                         if(newX>=map.getWidth())newX=newX-map.getWidth();
                         if(newY>=map.getHeight()) newY=newY-map.getHeight();
-                        if(map.getDotType(newX,newY)!= FunnySurface.DotType.Circle){
+                        if(map.getDotType(newX,newY)== FunnySurface.DotType.None){
                             x=newX;
                             y=newY;
                             break out;
@@ -260,9 +274,10 @@ public class GameMode extends  BaseMode {
 
         private void display() {
             if(gameRun) {
-                if (display.getMainSurface().tryLock()) {
-                    display.getMainSurface().putSurface(map, 0, 0);
-                    display.getMainSurface().unlock();
+                FunnySurface mainSurface=display.getMainSurface();
+                if (mainSurface.tryLock()) {
+                    mainSurface.putSurface(map, 0, 0);
+                    mainSurface.unlock();
                 }
                 display.postInvalidate();
             }
@@ -313,9 +328,7 @@ public class GameMode extends  BaseMode {
     }
 
     private void playDead() {
-
         pool.play(phone.getAudio().poolAudio2,1, 1, 0, 0, 1);
-        Runtime.getRuntime().gc();
     }
 
     private void playFruit() {

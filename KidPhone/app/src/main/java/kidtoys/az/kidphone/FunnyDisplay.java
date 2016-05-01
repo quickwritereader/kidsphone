@@ -12,44 +12,62 @@ import android.util.LruCache;
 import android.view.View;
 
 /**
- * Created by abdurrauf on 3/5/16.
+ * Funny Display
  */
 public class FunnyDisplay extends View {
-
+    private static final double sqrt2 = Math.sqrt(2);
+    private final Paint paintBack = new Paint();
     int surfaceWidth = 20;
     int surfaceHeight = 15;
+    private int width = -1;
+    private int height = -1;
     private Paint innerLight;
     private Paint[] realColors;
     private Paint[] centerColors;
     private Paint[] outerColors;
+    private LruCache<String, Bitmap> bitmapCache;
+    private FunnySurface mainSurface;
+    private int diameter = -1;
+    private Path screenPath = null;
+    //for reducing garbage collection
+    private int oldBackType = -1;
+    private int oldBackColor = -1;
+    private Bitmap previousBackBitmap = null;
+    private int oldType = -1;
+    private int oldColor = -1;
+    private Bitmap previousBitmap = null;
 
-    private LruCache<String,Bitmap> bitmapCache;
-    private static final double sqrt2=Math.sqrt(2);
+    private Path[] outerPathList = null;
+    private Path[] innerPathList = null;
+    private Path[] centerPathList = null;
 
     /**
-     * returns Main Surface that you can use to draw
-     *
-     * @return
+     * used as backbuffer
      */
-    public FunnySurface getMainSurface() {
-        return mainSurface;
+    // private  FunnySurface backSurface;
+    public FunnyDisplay(Context context) {
+        super(context);
+        init();
+
+
     }
 
+    public FunnyDisplay(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        init();
+    }
 
-    private FunnySurface mainSurface;
-
-
-    private static int blend(int color1, int color2, float alpha){
-        float red1=Color.red(color1);
-        float blue1=Color.blue(color1);
-        float green1=Color.green(color1);
-        float red2=Color.red(color2);
-        float blue2=Color.blue(color2);
-        float green2=Color.green(color2);
-        int b_red= (int) (alpha*red1+(1.0f-alpha)*red2);
-        int b_green= (int) (alpha*green1+(1.0f-alpha)*green2);
-        int b_blue= (int) (alpha*blue1+(1.0f-alpha)*blue2);
-        return Color.argb(255,b_red,b_green,b_blue);
+    private static int blend(int color1, int color2, float alpha) {
+        float red1 = Color.red(color1);
+        float blue1 = Color.blue(color1);
+        float green1 = Color.green(color1);
+        float red2 = Color.red(color2);
+        float blue2 = Color.blue(color2);
+        float green2 = Color.green(color2);
+        int b_red = (int) (alpha * red1 + (1.0f - alpha) * red2);
+        int b_green = (int) (alpha * green1 + (1.0f - alpha) * green2);
+        int b_blue = (int) (alpha * blue1 + (1.0f - alpha) * blue2);
+        return Color.argb(255, b_red, b_green, b_blue);
 
     }
 
@@ -57,10 +75,10 @@ public class FunnyDisplay extends View {
         int res;
         switch (color) {
             case Red:
-                res = Color.argb(255,255,0x40,0);//Orange red FF2400
+                res = Color.argb(255, 255, 0x40, 0);//Orange red FF2400
                 break;
             case Blue:
-                res = Color.argb(255,0,0xbf,255); //
+                res = Color.argb(255, 0, 0xbf, 255); //
                 break;
             case White:
                 res = Color.WHITE;
@@ -86,26 +104,27 @@ public class FunnyDisplay extends View {
         return res;
     }
 
-    /**
-     * used as backbuffer
-     */
-    // private  FunnySurface backSurface;
-    public FunnyDisplay(Context context) {
-        super(context);
-        init();
 
-
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int widthSize = MeasureSpec.getSize(widthMeasureSpec);
+        int heightSize = MeasureSpec.getSize(heightMeasureSpec);
+        initPath(widthSize, heightSize);
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
-
-    public FunnyDisplay(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init();
+    /**
+     * returns Main Surface that you can use to draw
+     *
+     * @return
+     */
+    public FunnySurface getMainSurface() {
+        return mainSurface;
     }
 
     private void init() {
         FunnySurface.DotColor dotColors[] = FunnySurface.DotColor.values();
-        innerLight=new Paint();
+        innerLight = new Paint();
         innerLight.setColor(Color.WHITE);
         innerLight.setAntiAlias(true);
         innerLight.setStyle(Paint.Style.FILL);
@@ -114,11 +133,11 @@ public class FunnyDisplay extends View {
         realColors = new Paint[dotColors.length];
         for (int i = 0; i < dotColors.length; i++) {
             centerColors[i] = new Paint();
-            outerColors[i]=new Paint();
-            realColors[i]=new Paint();
-            int real=realColorFromDotColor(dotColors[i]);
-            int blend1=blend(real, Color.WHITE, 0.375f);
-            int blend2=blend(blend1, Color.BLACK, 0.225f);
+            outerColors[i] = new Paint();
+            realColors[i] = new Paint();
+            int real = realColorFromDotColor(dotColors[i]);
+            int blend1 = blend(real, Color.WHITE, 0.375f);
+            int blend2 = blend(blend1, Color.BLACK, 0.225f);
 
             realColors[i].setColor(real);
             realColors[i].setAntiAlias(true);
@@ -134,17 +153,39 @@ public class FunnyDisplay extends View {
             outerColors[i].setAntiAlias(true);
         }
         mainSurface = new FunnySurface(surfaceWidth, surfaceHeight);
-        bitmapCache =new LruCache<String,Bitmap>(12){
+        bitmapCache = new LruCache<String, Bitmap>(12) {
 
 
             @Override
             protected void entryRemoved(boolean evicted, String key, Bitmap oldValue, Bitmap newValue) {
                 super.entryRemoved(evicted, key, oldValue, newValue);
-                Log.d("display cache remove",key);
+                //Log.d("display cache remove", key);
                 oldValue.recycle();
             }
         };
+        paintBack.setColor(Color.BLACK);
+        paintBack.setAntiAlias(true);
         setWillNotDraw(false);
+    }
+
+    private void initPath(int width, int height) {
+        if (this.width != width || this.height != height) {
+            diameter = (width - 40) / mainSurface.getWidth();
+            screenPath = CanvasUtils.Rounded(0, 0, (float) width, (float) height, 30.f, 30.f);
+            //initialize Pathes
+            FunnySurface.DotType[] dotTypes = FunnySurface.DotType.values();
+            int len = dotTypes.length;
+            outerPathList = new Path[len];
+            innerPathList = new Path[len];
+            centerPathList = new Path[len];
+            for (int i = 0; i < len; i++) {
+                FunnySurface.DotType dType = dotTypes[i];
+                outerPathList[i] = getDotPath(dType, 11 + diameter / 2, 11 + diameter / 2, diameter / 2, 11);
+                centerPathList[i] = getDotPath(dType, 1 + diameter / 2, 1 + diameter / 2, diameter / 2, 1);
+                innerPathList[i] = getDotPath(dType, 1 + diameter / 2, 1 + diameter / 2, diameter / 2, -5);
+            }
+        }
+
     }
 
     private void render() {
@@ -155,12 +196,12 @@ public class FunnyDisplay extends View {
         postInvalidate();
     }
 
-    public void clear(){
+    public void clear() {
         mainSurface.clear();
         render();
     }
 
-    public void drawChar(char l){
+    public void drawChar(char l) {
         Log.d("letter", "letter: " + l);
         mainSurface.clear();
         int figureRandom = (int) (Math.random() * (FunnySurface.DotType.values().length - 1)) + 1;
@@ -179,7 +220,7 @@ public class FunnyDisplay extends View {
                 return CanvasUtils.StandardPolyPath(cx, cy, r, 4);
             case Square: {
                 //increase radius
-                r= (int) (r*sqrt2);//r=r*sqrt(2)
+                r = (int) (r * sqrt2);//r=r*sqrt(2)
                 return CanvasUtils.StandardPolyPath(cx, cy, r, 4, -((float) Math.PI * 3.f / 4.f));
             }
             case Hexagon:
@@ -204,24 +245,10 @@ public class FunnyDisplay extends View {
         return getDotPath(type, radius, radius, radius, pad);
     }
 
-
-
-    private int diameter = -1;
-    private final Paint paintBack = new Paint();
-    private Path screenPath=null;
-
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        long time=System.currentTimeMillis();
-        if(diameter<0) {
-            paintBack.setColor(Color.BLACK);
-            paintBack.setAntiAlias(true);
-            diameter = (getWidth() - 40) / mainSurface.getWidth();
-        }
-        if(screenPath==null){
-            screenPath=CanvasUtils.Rounded(0, 0, (float) getWidth(), (float) getHeight(), 30.f, 30.f);
-        }
+        //long time = System.currentTimeMillis();
         canvas.drawPath(screenPath, paintBack);
         //blt surface
         bltBack(canvas);
@@ -229,14 +256,6 @@ public class FunnyDisplay extends View {
         //Log.d("display render time ", "" + (System.currentTimeMillis() - time));
 
     }
-    //for reducing garbage collection
-    private int oldBackType=-1;
-    private int oldBackColor=-1;
-    private Bitmap previousBackBitmap=null;
-    private int oldType=-1;
-    private int oldColor=-1;
-    private Bitmap previousBitmap=null;
-
 
     private void bltBack(Canvas canvas) {
 
@@ -245,42 +264,41 @@ public class FunnyDisplay extends View {
 
                 FunnySurface.DotType d = mainSurface.getDotType(i, j);
                 if (d != FunnySurface.DotType.None) {
-                    int pad=11;
-                    int color=mainSurface.getDotColor(i, j).ordinal();
+                    int pad = 11;
+                    int color = mainSurface.getDotColor(i, j).ordinal();
 
-                    Bitmap b=null;
+                    Bitmap b = null;
 
                     //retrieve from previous
-                    if(d.ordinal()==oldBackType && color==oldBackColor && previousBackBitmap!=null){
-                        b=previousBackBitmap;
+                    if (d.ordinal() == oldBackType && color == oldBackColor && previousBackBitmap != null) {
+                        b = previousBackBitmap;
                     }
                     //retrieve from cache
-                    String key=null;
-                    if(b==null) {
+                    String key = null;
+                    if (b == null) {
                         //add to cache
                         key = "" + d.ordinal() + "_" + color;
-                        b =   bitmapCache.get(key);
+                        b = bitmapCache.get(key);
                     }
                     //generate and put into cache and save in previousBitmap
-                    if(b==null){
-                        Path path=getDotPath(d,  pad+diameter / 2,pad+  diameter / 2, diameter / 2,11);
-                        int w=2*pad+diameter;
-                        int h=2*pad+diameter;
+                    if (b == null) {
+                        Path path = outerPathList[d.ordinal()];
+                        int w = 2 * pad + diameter;
+                        int h = 2 * pad + diameter;
                         Bitmap.Config conf = Bitmap.Config.ARGB_4444;
                         b = Bitmap.createBitmap(w, h, conf);
                         Canvas bmpCanvas = new Canvas(b);
                         Paint p = outerColors[color];
                         bmpCanvas.drawPath(path, p);
-                        path=null;
                         bitmapCache.put(key, b);
-                        previousBackBitmap=b;
-                        Log.d("display bitmap cached ", key);
+                        previousBackBitmap = b;
+                        // Log.d("display bitmap cached ", key);
 
                     }
                     if (b != null) {
-                        int left=  20 + i * diameter +  pad  ;
-                        int top=  20 + j * diameter  +pad ;
-                        canvas.drawBitmap(b,left,top,null);
+                        int left = 20 + i * diameter + pad;
+                        int top = 20 + j * diameter + pad;
+                        canvas.drawBitmap(b, left, top, null);
                     }
                 }//need to draw
             }//for inner
@@ -293,61 +311,53 @@ public class FunnyDisplay extends View {
 
                 FunnySurface.DotType d = mainSurface.getDotType(i, j);
                 if (d != FunnySurface.DotType.None) {
-                    int pad=1;
-                    int color=mainSurface.getDotColor(i, j).ordinal();
-                    Bitmap b=null;
+                    int pad = 1;
+                    int color = mainSurface.getDotColor(i, j).ordinal();
+                    Bitmap b = null;
                     //retrieve from previous
-                    if(d.ordinal()==oldType && color==oldColor && previousBitmap!=null){
-                        b=previousBitmap;
+                    if (d.ordinal() == oldType && color == oldColor && previousBitmap != null) {
+                        b = previousBitmap;
                     }
                     //retrieve from cache
-                    String key=null;
-                    if(b==null) {
+                    String key = null;
+                    if (b == null) {
                         //add to cache
                         key = "inner" + d.ordinal() + "_" + color;
-                        b =  bitmapCache.get(key);
+                        b = bitmapCache.get(key);
                     }
 
-                    if(b==null){
-                        int w=2*pad+diameter;
-                        int h=2*pad+diameter;
+                    if (b == null) {
+                        int w = 2 * pad + diameter;
+                        int h = 2 * pad + diameter;
                         Bitmap.Config conf = Bitmap.Config.ARGB_4444;
                         b = Bitmap.createBitmap(w, h, conf);
                         Canvas bmpCanvas = new Canvas(b);
-                        Path path;//=pathList[d.ordinal()];
-                        path = getDotPath( d,  pad+diameter / 2,pad+  diameter / 2, diameter / 2,  1);
+                        Path path;
+                        path = centerPathList[d.ordinal()];
                         if (path != null) {
-                            Paint p = centerColors[mainSurface.getDotColor(i, j).ordinal()];
+                            Paint p = centerColors[color];
                             bmpCanvas.drawPath(path, p);
-                            if(diameter/2-5>3) {
-                                path=null;
-                                path = getDotPath(d,  pad+diameter / 2,pad+  diameter / 2, diameter / 2, -5);
-
+                            if (diameter / 2 - 5 > 3) {
+                                path = innerPathList[d.ordinal()];
                                 p = innerLight;
                                 bmpCanvas.drawPath(path, p);
-
-                                // getDotPath(d, 20 + i * diameter + diameter / 2, 20 + j * diameter + diameter / 2, diameter / 2, -4);
-                                p = realColors[mainSurface.getDotColor(i, j).ordinal()];
+                                p = realColors[color];
                                 bmpCanvas.drawPath(path, p);
-
                             }
                         }
-                        path=null;
                         //add to cache
                         bitmapCache.put(key, b);
-                        previousBitmap=b;
+                        previousBitmap = b;
                     }//b==null
                     if (b != null) {
-                        int left=  20 + i * diameter +  pad  ;
-                        int top=  20 + j * diameter  +pad ;
-                        canvas.drawBitmap(b,left,top,null);
+                        int left = 20 + i * diameter + pad;
+                        int top = 20 + j * diameter + pad;
+                        canvas.drawBitmap(b, left, top, null);
                     }
-                 }//need to draw
+                }//need to draw
             }//for inner
         }//for exit
     }
-
-
 
 
 }
