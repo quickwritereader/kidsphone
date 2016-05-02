@@ -6,24 +6,14 @@ package kidtoys.az.kidphone;
  * This class will be used as main block for drawings
  */
 public class FunnySurface {
-    private byte[] mem = null;
+    private static final DotColor[] supportedColors = DotColor.values();
+    private static final DotType[] supportedTypes = DotType.values();
+    private final static int maxColorSupport = supportedColors.length;
+    private final static int maxTypeSupport = supportedTypes.length;
     private final int width;
     private final int height;
-
-    private boolean locked=false;
-
-    public synchronized boolean tryLock(){
-        if(locked) return false;
-        locked=true;
-        return true;
-    }
-
-    public synchronized void unlock(){
-        locked=false;
-    }
-
-
-
+    private byte[] mem = null;
+    private boolean locked = false;
     /**
      * Create 1x1 blank surface
      */
@@ -47,6 +37,14 @@ public class FunnySurface {
         mem = new byte[width * height];
     }
 
+    public static int getMaxColorSupport() {
+        return maxColorSupport;
+    }
+
+    public static int getMaxTypeSupport() {
+        return maxTypeSupport;
+    }
+
     /**
      * Creates surface from specific color and dot
      * Can be used to get filled rectangles
@@ -65,6 +63,16 @@ public class FunnySurface {
             newS.mem[i] = c;
         }
         return newS;
+    }
+
+    public synchronized boolean tryLock() {
+        if (locked) return false;
+        locked = true;
+        return true;
+    }
+
+    public synchronized void unlock() {
+        locked = false;
     }
 
     public int getWidth() {
@@ -91,7 +99,7 @@ public class FunnySurface {
             byte a = mem[y * width + x];
             int index = a & 0xF;
             if (index >= 0 && index < DotColor.values().length) {
-                return DotColor.values()[index];
+                return supportedColors[index];
             }
 
         }
@@ -109,7 +117,7 @@ public class FunnySurface {
         if (x >= 0 && x < width && y >= 0 && y < height) {
             byte a = mem[y * width + x];
             int index = (a & 0xF0) >> 4;
-            return DotType.values()[index];
+            return supportedTypes[index];
 
         }
         return DotType.None;
@@ -183,11 +191,12 @@ public class FunnySurface {
     /**
      * Clear screen
      */
-    public void clear(){
+    public void clear() {
         for (int i = 0; i < mem.length; i++) {
-           mem[i] = 0;
+            mem[i] = 0;
         }
     }
+
     /**
      * Draw line  {@see https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm}
      * for Octants  Bresenham's algorithm
@@ -213,7 +222,7 @@ public class FunnySurface {
         if (deltaX == 0) {
             //horizontal
             int sign = y2 > y1 ? 1 : -1;
-            for (; y != y2+sign; y += sign) {
+            for (; y != y2 + sign; y += sign) {
                 if (x >= 0 && x < width && y >= 0 && y < height) {
                     mem[y * width + x] = c;
                 }
@@ -222,7 +231,7 @@ public class FunnySurface {
         } else if (deltaY == 0) {
             //vertical
             int sign = x2 > x1 ? 1 : -1;
-            for (; x != x2+sign; x += sign) {
+            for (; x != x2 + sign; x += sign) {
                 if (x >= 0 && x < width && y >= 0 && y < height) {
                     mem[y * width + x] = c;
                 }
@@ -231,7 +240,7 @@ public class FunnySurface {
             //diagonal;
             int signX = x2 > x1 ? 1 : -1;
             int signY = y2 > y1 ? 1 : -1;
-            for (; y != y2+signY; y += signY, x += signX) {
+            for (; y != y2 + signY; y += signY, x += signX) {
                 if (x >= 0 && x < width && y >= 0 && y < height) {
                     mem[y * width + x] = c;
                 }

@@ -2,6 +2,7 @@ package kidtoys.az.kidphone;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -34,9 +35,11 @@ public class FunnyButton extends View {
 
     public void setKeyMode(KeyMode bMode) {
         this.bMode = bMode;
+        hasChanges=true;
         invalidate();
     }
 
+    private boolean hasChanges=true;
     private String lettersText;
 
     private Paint innerP1;
@@ -44,8 +47,9 @@ public class FunnyButton extends View {
     private Paint outerP1;
     private Paint outerP2;
     private Paint centerTxtP;
-    private RectF rectF;
-
+    private RectF rectF = new RectF();
+    private RectF rectF2 = new RectF();
+    private Rect bounds = new Rect();
 
     public enum KeyMode {
         Normal,
@@ -96,7 +100,7 @@ public class FunnyButton extends View {
 
     public void setInnerShape(InnerShapeType innerShape) {
         this.innerShape = innerShape;
-        invalidate();
+        invalidate(); hasChanges=true;
     }
 
     public OuterShapeType getOuterShape() {
@@ -105,7 +109,7 @@ public class FunnyButton extends View {
 
     public void setOuterShape(OuterShapeType outerShape) {
         this.outerShape = outerShape;
-        invalidate();
+        invalidate(); hasChanges=true;
     }
 
     public int getInnerShapeColor() {
@@ -114,7 +118,7 @@ public class FunnyButton extends View {
 
     public void setInnerShapeColor(int innerShapeColor) {
         this.innerP1.setColor(innerShapeColor);
-        invalidate();
+        invalidate(); hasChanges=true;
     }
 
     public int getOuterShapeColor() {
@@ -123,7 +127,7 @@ public class FunnyButton extends View {
 
     public void setOuterShapeColor(int outerShapeColor) {
         this.outerShapeColor = outerShapeColor;
-        invalidate();
+        invalidate(); hasChanges=true;
     }
 
 
@@ -133,7 +137,7 @@ public class FunnyButton extends View {
 
     public void setTextColor(int TextColor) {
         this.centerTxtP.setColor(TextColor);
-        invalidate();
+        invalidate(); hasChanges=true;
     }
 
 
@@ -143,7 +147,7 @@ public class FunnyButton extends View {
 
     public void setTextSize(float TextSize) {
         this.centerTxtP.setTextSize(TextSize);
-        invalidate();
+        invalidate(); hasChanges=true;
     }
 
 
@@ -153,7 +157,7 @@ public class FunnyButton extends View {
 
     public void setNumbersText(String numbersText) {
         this.numbersText = numbersText;
-        invalidate();
+        invalidate(); hasChanges=true;
     }
 
 
@@ -202,7 +206,6 @@ public class FunnyButton extends View {
         centerTxtP.setTextSize(centerTextSize);
         centerTxtP.setAntiAlias(true);
         centerTxtP.setTextAlign(Paint.Align.CENTER);
-        rectF = new RectF();
         rectF.set(getPaddingLeft(), getPaddingTop(), getWidth() - getPaddingRight(), getHeight() - getPaddingBottom());
     }
 
@@ -231,8 +234,6 @@ public class FunnyButton extends View {
         float scaleDivision = 32 * 1.6f;
         int color = getOuterShapeColor();
         if (pressed) {
-            //darken our color
-            //outercolor
             color = getNewColor(color, -50);
             outerP1.setColor(color);
             scaleDivision = 32;
@@ -240,7 +241,6 @@ public class FunnyButton extends View {
             outerP1.setColor(color);
         }
         outerP2.setColor(getNewColor(color, -90));
-        RectF rectF2 = new RectF();
         float pad=rectF.height() / scaleDivision;
         if(pad>5)pad=5;
         rectF2.left = rectF.left + pad;
@@ -347,7 +347,6 @@ public class FunnyButton extends View {
 
     private void drawText(Canvas canvas, String text, Paint p) {
         if (text == null) return;
-        Rect bounds = new Rect();
         p.getTextBounds(text, 0, text.length(), bounds);
         float x = rectF.left + rectF.width() / 2.f;
         float y = rectF.top + rectF.height() / 2.f;
@@ -359,7 +358,7 @@ public class FunnyButton extends View {
     protected void onSizeChanged(int w, int h, int oldW, int oldH) {
         super.onSizeChanged(w, h, oldW, oldH);
         rectF.set(getPaddingLeft(), getPaddingTop(), getWidth() - getPaddingRight(), getHeight() - getPaddingBottom());
-        invalidate();
+        invalidate(); hasChanges=true;
     }
 
     @Override
@@ -370,10 +369,39 @@ public class FunnyButton extends View {
     }
 
     //draw will be implemented
+
+
+    Bitmap latestNormal=null;
+    Bitmap latestPressed=null;
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        drawOuter(canvas, isPressed());
+
+        if(hasChanges  ){
+            //re Init button look
+            hasChanges=false;
+            if(latestNormal!=null)latestNormal.recycle();
+            if(latestPressed!=null)latestPressed.recycle();
+            Bitmap.Config conf = Bitmap.Config.ARGB_4444;
+            latestNormal=  Bitmap.createBitmap(getWidth(),getHeight(), conf);
+            latestPressed=  Bitmap.createBitmap(getWidth(),getHeight(), conf);
+            Canvas c=new Canvas(latestNormal);
+            drawOnCanvas(c, false);
+            c.setBitmap(latestPressed);
+            drawOnCanvas(c,true);
+            c=null;
+        }
+
+        if(isPressed()){
+           if(latestPressed!=null) canvas.drawBitmap(latestPressed,0,0,null);
+        }else{
+            if(latestNormal!=null) canvas.drawBitmap(latestNormal,0,0,null);
+        }
+
+    }
+
+    private void drawOnCanvas(Canvas canvas,boolean pressed) {
+        drawOuter(canvas, pressed);
         if (bMode == KeyMode.Figures || bMode == KeyMode.Normal || bMode == KeyMode.System) {
             drawInner(canvas);
         }
@@ -386,7 +414,6 @@ public class FunnyButton extends View {
             }
             drawText(canvas, t, centerTxtP);
         }
-
     }
 
 }

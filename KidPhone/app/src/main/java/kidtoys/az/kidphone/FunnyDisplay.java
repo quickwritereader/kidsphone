@@ -25,7 +25,7 @@ public class FunnyDisplay extends View {
     private Paint[] realColors;
     private Paint[] centerColors;
     private Paint[] outerColors;
-    private LruCache<String, Bitmap> bitmapCache;
+    private LruCache<Integer, Bitmap> bitmapCache;
     private FunnySurface mainSurface;
     private int diameter = -1;
     private Path screenPath = null;
@@ -36,7 +36,6 @@ public class FunnyDisplay extends View {
     private int oldType = -1;
     private int oldColor = -1;
     private Bitmap previousBitmap = null;
-
     private Path[] outerPathList = null;
     private Path[] innerPathList = null;
     private Path[] centerPathList = null;
@@ -153,11 +152,11 @@ public class FunnyDisplay extends View {
             outerColors[i].setAntiAlias(true);
         }
         mainSurface = new FunnySurface(surfaceWidth, surfaceHeight);
-        bitmapCache = new LruCache<String, Bitmap>(12) {
+        bitmapCache = new LruCache<Integer, Bitmap>(12) {
 
 
             @Override
-            protected void entryRemoved(boolean evicted, String key, Bitmap oldValue, Bitmap newValue) {
+            protected void entryRemoved(boolean evicted, Integer key, Bitmap oldValue, Bitmap newValue) {
                 super.entryRemoved(evicted, key, oldValue, newValue);
                 //Log.d("display cache remove", key);
                 oldValue.recycle();
@@ -274,10 +273,11 @@ public class FunnyDisplay extends View {
                         b = previousBackBitmap;
                     }
                     //retrieve from cache
-                    String key = null;
+                    Integer key = null;
                     if (b == null) {
                         //add to cache
-                        key = "" + d.ordinal() + "_" + color;
+                        //use integer cache of java platform (-128 til 127 are in cache within Integer.valueof
+                        key = Integer.valueOf(-127+(d.ordinal()*FunnySurface.getMaxColorSupport()+color));
                         b = bitmapCache.get(key);
                     }
                     //generate and put into cache and save in previousBitmap
@@ -319,10 +319,11 @@ public class FunnyDisplay extends View {
                         b = previousBitmap;
                     }
                     //retrieve from cache
-                    String key = null;
+                    Integer key = null;
                     if (b == null) {
                         //add to cache
-                        key = "inner" + d.ordinal() + "_" + color;
+                        //use integer cache of java platform
+                        key = Integer.valueOf(d.ordinal()*FunnySurface.getMaxColorSupport()+color);
                         b = bitmapCache.get(key);
                     }
 
