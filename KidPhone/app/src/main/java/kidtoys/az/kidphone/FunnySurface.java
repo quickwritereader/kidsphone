@@ -6,8 +6,8 @@ package kidtoys.az.kidphone;
  * This class will be used as main block for drawings
  */
 public class FunnySurface {
-    private static final DotColor[] supportedColors = DotColor.values();
-    private static final DotType[] supportedTypes = DotType.values();
+    public static final DotColor[] supportedColors = DotColor.values();
+    public static final DotType[] supportedTypes = DotType.values();
     private final static int maxColorSupport = supportedColors.length;
     private final static int maxTypeSupport = supportedTypes.length;
     private final int width;

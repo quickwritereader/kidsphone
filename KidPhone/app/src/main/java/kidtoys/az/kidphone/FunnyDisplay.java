@@ -39,6 +39,9 @@ public class FunnyDisplay extends View {
     private Path[] outerPathList = null;
     private Path[] innerPathList = null;
     private Path[] centerPathList = null;
+    private int padOuter=11;
+    private int padInner=-5;
+    private int padCenter=1;
 
     /**
      * used as backbuffer
@@ -177,11 +180,13 @@ public class FunnyDisplay extends View {
             outerPathList = new Path[len];
             innerPathList = new Path[len];
             centerPathList = new Path[len];
+            padOuter=diameter/4;
+            padInner=0-diameter/5;
             for (int i = 0; i < len; i++) {
                 FunnySurface.DotType dType = dotTypes[i];
-                outerPathList[i] = getDotPath(dType, 11 + diameter / 2, 11 + diameter / 2, diameter / 2, 11);
+                outerPathList[i] = getDotPath(dType, padOuter + diameter / 2, padOuter + diameter / 2, diameter / 2, padOuter);
                 centerPathList[i] = getDotPath(dType, 1 + diameter / 2, 1 + diameter / 2, diameter / 2, 1);
-                innerPathList[i] = getDotPath(dType, 1 + diameter / 2, 1 + diameter / 2, diameter / 2, -5);
+                innerPathList[i] = getDotPath(dType, 1 + diameter / 2, 1 + diameter / 2, diameter / 2, padInner);
             }
         }
 
@@ -201,12 +206,12 @@ public class FunnyDisplay extends View {
     }
 
     public void drawChar(char l) {
-        Log.d("letter", "letter: " + l);
+        //Log.d("letter", "letter: " + l);
         mainSurface.clear();
-        int figureRandom = (int) (Math.random() * (FunnySurface.DotType.values().length - 1)) + 1;
-        int colorRandom = (int) (Math.random() * (FunnySurface.DotColor.values().length - 2)) + 1;//exclude white and black
-        FunnySurfaceUtils.drawChar(mainSurface, mainSurface.getWidth() / 2, 4, l, FunnySurface.DotColor.values()[colorRandom],
-                FunnySurface.DotType.values()[figureRandom], true);
+        int figureRandom = (int) (Math.random() * (FunnySurface.getMaxTypeSupport()- 1)) + 1;
+        int colorRandom = (int) (Math.random() * (FunnySurface.getMaxColorSupport() - 2)) + 1;//exclude white and black
+        FunnySurfaceUtils.drawChar(mainSurface, mainSurface.getWidth() / 2, 4, l, FunnySurface.supportedColors[colorRandom],
+                FunnySurface.supportedTypes[figureRandom], true);
         render();
     }
 
@@ -263,7 +268,7 @@ public class FunnyDisplay extends View {
 
                 FunnySurface.DotType d = mainSurface.getDotType(i, j);
                 if (d != FunnySurface.DotType.None) {
-                    int pad = 11;
+                    int pad = padOuter;
                     int color = mainSurface.getDotColor(i, j).ordinal();
 
                     Bitmap b = null;
@@ -338,7 +343,7 @@ public class FunnyDisplay extends View {
                         if (path != null) {
                             Paint p = centerColors[color];
                             bmpCanvas.drawPath(path, p);
-                            if (diameter / 2 - 5 > 3) {
+                            if (diameter / 2 + padInner > 3) {
                                 path = innerPathList[d.ordinal()];
                                 p = innerLight;
                                 bmpCanvas.drawPath(path, p);

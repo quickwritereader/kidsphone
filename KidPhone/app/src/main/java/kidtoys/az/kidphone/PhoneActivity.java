@@ -3,6 +3,7 @@ package kidtoys.az.kidphone;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -59,6 +60,15 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
         super.onPause();
         /*handler.deActivateDelay();*/
         if (mode != null) mode.onSave();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_HOME)) {
+            if (mode != null) mode.onSave();
+            handler.deActivateDelay();
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override

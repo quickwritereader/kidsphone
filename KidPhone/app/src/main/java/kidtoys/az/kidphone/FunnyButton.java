@@ -18,28 +18,13 @@ import android.view.View;
  */
 public class FunnyButton extends View {
 
+    View.OnClickListener clickListener;
+    Bitmap latestNormal = null;
+    Bitmap latestPressed = null;
+    Bitmap figure = null;
     private String numbersText;
-
-    public String getLettersText() {
-        return lettersText;
-    }
-
-    public void setLettersText(String lettersText) {
-        this.lettersText = lettersText;
-        invalidate();
-    }
-
-    public KeyMode getKeyMode() {
-        return bMode;
-    }
-
-    public void setKeyMode(KeyMode bMode) {
-        this.bMode = bMode;
-        hasChanges=true;
-        invalidate();
-    }
-
-    private boolean hasChanges=true;
+    private boolean hasChanges = true;
+    private boolean hasFigureChange = false;
     private String lettersText;
 
     private Paint innerP1;
@@ -50,116 +35,9 @@ public class FunnyButton extends View {
     private RectF rectF = new RectF();
     private RectF rectF2 = new RectF();
     private Rect bounds = new Rect();
-
-    public enum KeyMode {
-        Normal,
-        Figures,
-        Numbers,
-        Letters,
-        System
-    }
-
-    public enum InnerShapeType {
-        None,
-        Square,
-        Rectangle,
-        Circle,
-        Triangle,
-        Pentagon,
-        Star,
-        Trapes,
-        Ellipse,
-        Heart,
-        YesPhone,
-        NoPhone,
-        Sound,
-        Picture,
-        Hexagon
-    }
-
-    public enum OuterShapeType {
-        None,
-        Rounded,
-        BottomRounded,
-        YesButton,
-        NoButton,
-        Picture
-    }
-
     private InnerShapeType innerShape;
     private OuterShapeType outerShape;
     private KeyMode bMode;
-
-
-    View.OnClickListener clickListener;
-
-
-    public InnerShapeType getInnerShape() {
-        return innerShape;
-    }
-
-    public void setInnerShape(InnerShapeType innerShape) {
-        this.innerShape = innerShape;
-        invalidate(); hasChanges=true;
-    }
-
-    public OuterShapeType getOuterShape() {
-        return outerShape;
-    }
-
-    public void setOuterShape(OuterShapeType outerShape) {
-        this.outerShape = outerShape;
-        invalidate(); hasChanges=true;
-    }
-
-    public int getInnerShapeColor() {
-        return innerP1.getColor();
-    }
-
-    public void setInnerShapeColor(int innerShapeColor) {
-        this.innerP1.setColor(innerShapeColor);
-        invalidate(); hasChanges=true;
-    }
-
-    public int getOuterShapeColor() {
-        return this.outerShapeColor;
-    }
-
-    public void setOuterShapeColor(int outerShapeColor) {
-        this.outerShapeColor = outerShapeColor;
-        invalidate(); hasChanges=true;
-    }
-
-
-    public int getTextColor() {
-        return centerTxtP.getColor();
-    }
-
-    public void setTextColor(int TextColor) {
-        this.centerTxtP.setColor(TextColor);
-        invalidate(); hasChanges=true;
-    }
-
-
-    public float getTextSize() {
-        return centerTxtP.getTextSize();
-    }
-
-    public void setTextSize(float TextSize) {
-        this.centerTxtP.setTextSize(TextSize);
-        invalidate(); hasChanges=true;
-    }
-
-
-    public String getNumbersText() {
-        return numbersText;
-    }
-
-    public void setNumbersText(String numbersText) {
-        this.numbersText = numbersText;
-        invalidate(); hasChanges=true;
-    }
-
 
     public FunnyButton(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -209,8 +87,6 @@ public class FunnyButton extends View {
         rectF.set(getPaddingLeft(), getPaddingTop(), getWidth() - getPaddingRight(), getHeight() - getPaddingBottom());
     }
 
-
-
     private static int getNewColor(int color, int add) {
         int red = Color.red(color);
         int green = Color.green(color);
@@ -229,6 +105,93 @@ public class FunnyButton extends View {
         return color;
     }
 
+    public String getLettersText() {
+        return lettersText;
+    }
+
+    public void setLettersText(String lettersText) {
+        this.lettersText = lettersText;
+        invalidate();
+    }
+
+    public KeyMode getKeyMode() {
+        return bMode;
+    }
+
+    public void setKeyMode(KeyMode bMode) {
+        if (this.bMode != bMode) {
+            this.bMode = bMode;
+            invalidate();
+        }
+    }
+
+    public InnerShapeType getInnerShape() {
+        return innerShape;
+    }
+
+    public void setInnerShape(InnerShapeType innerShape) {
+        this.innerShape = innerShape;
+        invalidate();
+        hasFigureChange = true;
+    }
+
+    public OuterShapeType getOuterShape() {
+        return outerShape;
+    }
+
+    public void setOuterShape(OuterShapeType outerShape) {
+        this.outerShape = outerShape;
+        invalidate();
+        hasChanges = true;
+    }
+
+    public int getInnerShapeColor() {
+        return innerP1.getColor();
+    }
+
+    public void setInnerShapeColor(int innerShapeColor) {
+        this.innerP1.setColor(innerShapeColor);
+        invalidate();
+        hasFigureChange = true;
+    }
+
+    public int getOuterShapeColor() {
+        return this.outerShapeColor;
+    }
+
+    public void setOuterShapeColor(int outerShapeColor) {
+        this.outerShapeColor = outerShapeColor;
+        invalidate();
+        hasChanges = true;
+    }
+
+    public int getTextColor() {
+        return centerTxtP.getColor();
+    }
+
+    public void setTextColor(int TextColor) {
+        this.centerTxtP.setColor(TextColor);
+        invalidate();
+    }
+
+    public float getTextSize() {
+        return centerTxtP.getTextSize();
+    }
+
+    public void setTextSize(float TextSize) {
+        this.centerTxtP.setTextSize(TextSize);
+        invalidate();
+    }
+
+    public String getNumbersText() {
+        return numbersText;
+    }
+
+    public void setNumbersText(String numbersText) {
+        this.numbersText = numbersText;
+        invalidate();
+    }
+
     private void drawOuter(Canvas canvas, boolean pressed) {
 
         float scaleDivision = 32 * 1.6f;
@@ -241,8 +204,8 @@ public class FunnyButton extends View {
             outerP1.setColor(color);
         }
         outerP2.setColor(getNewColor(color, -90));
-        float pad=rectF.height() / scaleDivision;
-        if(pad>5)pad=5;
+        float pad = rectF.height() / scaleDivision;
+        if (pad > 5) pad = 5;
         rectF2.left = rectF.left + pad;
         rectF2.top = rectF.top + pad;
         rectF2.right = rectF.right - pad;
@@ -358,7 +321,8 @@ public class FunnyButton extends View {
     protected void onSizeChanged(int w, int h, int oldW, int oldH) {
         super.onSizeChanged(w, h, oldW, oldH);
         rectF.set(getPaddingLeft(), getPaddingTop(), getWidth() - getPaddingRight(), getHeight() - getPaddingBottom());
-        invalidate(); hasChanges=true;
+        invalidate();
+        hasChanges = true;
     }
 
     @Override
@@ -370,40 +334,39 @@ public class FunnyButton extends View {
 
     //draw will be implemented
 
-
-    Bitmap latestNormal=null;
-    Bitmap latestPressed=null;
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        if(hasChanges  ){
+        if (hasChanges) {
             //re Init button look
-            hasChanges=false;
-            if(latestNormal!=null)latestNormal.recycle();
-            if(latestPressed!=null)latestPressed.recycle();
+            hasChanges = false;
+            if (latestNormal != null) latestNormal.recycle();
+            if (latestPressed != null) latestPressed.recycle();
             Bitmap.Config conf = Bitmap.Config.ARGB_4444;
-            latestNormal=  Bitmap.createBitmap(getWidth(),getHeight(), conf);
-            latestPressed=  Bitmap.createBitmap(getWidth(),getHeight(), conf);
-            Canvas c=new Canvas(latestNormal);
+            latestNormal = Bitmap.createBitmap(getWidth(), getHeight(), conf);
+            latestPressed = Bitmap.createBitmap(getWidth(), getHeight(), conf);
+            Canvas c = new Canvas(latestNormal);
             drawOnCanvas(c, false);
             c.setBitmap(latestPressed);
-            drawOnCanvas(c,true);
-            c=null;
+            drawOnCanvas(c, true);
+            c = null;
         }
-
-        if(isPressed()){
-           if(latestPressed!=null) canvas.drawBitmap(latestPressed,0,0,null);
-        }else{
-            if(latestNormal!=null) canvas.drawBitmap(latestNormal,0,0,null);
+        if (isPressed()) {
+            if (latestPressed != null) canvas.drawBitmap(latestPressed, 0, 0, null);
+        } else {
+            if (latestNormal != null) canvas.drawBitmap(latestNormal, 0, 0, null);
         }
-
-    }
-
-    private void drawOnCanvas(Canvas canvas,boolean pressed) {
-        drawOuter(canvas, pressed);
         if (bMode == KeyMode.Figures || bMode == KeyMode.Normal || bMode == KeyMode.System) {
-            drawInner(canvas);
+            if (hasFigureChange || figure == null) {
+                if (figure != null) figure.recycle();
+                Bitmap.Config conf = Bitmap.Config.ARGB_4444;
+                figure = Bitmap.createBitmap(getWidth(), getHeight(), conf);
+                Canvas c = new Canvas(figure);
+                drawInner(c);
+                hasFigureChange = false;
+            }
+            if (figure != null) canvas.drawBitmap(figure, 0, 0, null);
         }
         if ((bMode != KeyMode.Figures && bMode != KeyMode.System) || bMode == KeyMode.Normal) {
             String t;
@@ -414,6 +377,46 @@ public class FunnyButton extends View {
             }
             drawText(canvas, t, centerTxtP);
         }
+
+    }
+
+    private void drawOnCanvas(Canvas canvas, boolean pressed) {
+        drawOuter(canvas, pressed);
+    }
+    public enum KeyMode {
+        Normal,
+        Figures,
+        Numbers,
+        Letters,
+        System
+    }
+
+
+    public enum InnerShapeType {
+        None,
+        Square,
+        Rectangle,
+        Circle,
+        Triangle,
+        Pentagon,
+        Star,
+        Trapes,
+        Ellipse,
+        Heart,
+        YesPhone,
+        NoPhone,
+        Sound,
+        Picture,
+        Hexagon
+    }
+
+    public enum OuterShapeType {
+        None,
+        Rounded,
+        BottomRounded,
+        YesButton,
+        NoButton,
+        Picture
     }
 
 }
