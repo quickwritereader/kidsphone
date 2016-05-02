@@ -10,7 +10,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:weightSum="1"
-    android:background="#0050FF"
+    android:background="@drawable/gradient"
     tools:context=".PhoneActivity">
     <kidtoys.az.kidphone.FunnyDisplay android:layout_height="@dimen/display_height"
         android:layout_width="@dimen/display_width"
