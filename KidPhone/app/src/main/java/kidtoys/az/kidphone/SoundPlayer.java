@@ -12,7 +12,7 @@ import android.media.SoundPool;
 public class SoundPlayer {
 
     public static final int[] wait_sounds = {R.raw.az_wait_1, R.raw.az_wait_2, R.raw.az_wait_3};
-    public MediaPlayer mediaPlayer;
+    public static MediaPlayer mediaPlayer;
     public Context context;
     public int poolAudio1;
     public int poolAudio2;
@@ -64,14 +64,12 @@ public class SoundPlayer {
                 break;
             case 'B':
                 this.PlayMp3(R.raw.az_b);
-                ;
                 break;
             case 'C':
                 this.PlayMp3(R.raw.az_c);
                 break;
             case 'Ç':
                 this.PlayMp3(R.raw.az_ch);
-                ;
                 break;
             case 'D':
                 this.PlayMp3(R.raw.az_d);
@@ -82,7 +80,6 @@ public class SoundPlayer {
             case 'Ə':
             case 'ə':
                 this.PlayMp3(R.raw.az_ee);
-                ;
                 break;
             case 'F':
                 this.PlayMp3(R.raw.az_f);
@@ -146,7 +143,6 @@ public class SoundPlayer {
                 break;
             case 'Ü':
                 this.PlayMp3(R.raw.az_uu);
-                ;
                 break;
             case 'V':
                 this.PlayMp3(R.raw.az_v);
@@ -287,6 +283,56 @@ public class SoundPlayer {
 
     public void playCallAnyOne() {
         this.PlayMp3(R.raw.az_gel_birine_zeng_edek);
+    }
+
+    public void playCall(final String number, final int callId) {
+        this.PlayMp3(R.raw.dial_tone);
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener(){
+            @Override
+            public void onCompletion(MediaPlayer player) {
+                switch (number) {
+                    case "000":
+                        if (callId == 1) {
+                            PlayMp3(R.raw.az_call_000_1);
+                        } else if (callId == 2) {
+                            PlayMp3(R.raw.az_call_000_2);
+                        }
+                        break;
+                    case "102":
+                        if (callId == 1) {
+                            PlayMp3(R.raw.az_call_102_1);
+                        } else if (callId == 2) {
+                            PlayMp3(R.raw.az_call_102_2);
+                        } else if (callId == 3) {
+                            PlayMp3(R.raw.az_call_102_3);
+                        }
+                        break;
+                    case "103":
+                        if (callId == 1) {
+                            PlayMp3(R.raw.az_call_103_1);
+                        }  else if (callId == 2) {
+                            PlayMp3(R.raw.az_call_103_2);
+                        }
+                        break;
+                    case "112":
+                        if (callId == 1) {
+                            PlayMp3(R.raw.az_call_112_1);
+                        }  else if (callId == 2) {
+                            PlayMp3(R.raw.az_call_112_2);
+                        }  else if (callId == 3) {
+                            PlayMp3(R.raw.az_call_112_3);
+                        }
+                        break;
+                    default:
+                        if (callId == 1) {
+                            PlayMp3(R.raw.az_incorrect_number_1);
+                        }  else if (callId == 2) {
+                            PlayMp3(R.raw.az_incorrect_number_2);
+                        }
+                }
+            }
+        });
+
     }
 
     public SoundPool getPool() {
