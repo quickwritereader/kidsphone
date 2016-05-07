@@ -81,6 +81,7 @@
                 android:id="@+id/KeysMode"
                 android:padding="@dimen/smallSpace2"
                 app:KeyMode="System"
+                app:InnerShapeProperty="Picture"
                 app:OuterShapeProperty="Rounded"
                 app:outerShapeColor="#00ff00" />
 
@@ -91,6 +92,9 @@
                 android:layout_weight="1"
                 android:padding="@dimen/smallSpace2"
                 app:KeyMode="System"
+                android:id="@+id/quizMode"
+                app:InnerShapeProperty="Picture"
+                app:pictureSrc="@drawable/question"
                 app:OuterShapeProperty="Rounded"
                 app:outerShapeColor="#00ff00" />
 
@@ -102,6 +106,8 @@
                 android:padding="@dimen/smallSpace2"
                 app:KeyMode="System"
                 android:id="@+id/gameMode"
+                app:InnerShapeProperty="Picture"
+                app:pictureSrc="@drawable/game"
                 app:OuterShapeProperty="Rounded"
                 app:outerShapeColor="#00ff00" />
         </LinearLayout>

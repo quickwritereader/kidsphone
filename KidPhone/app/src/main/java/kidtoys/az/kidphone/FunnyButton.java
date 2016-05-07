@@ -8,6 +8,8 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.res.ResourcesCompat;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -34,9 +36,21 @@ public class FunnyButton extends View {
     private Paint centerTxtP;
     private RectF rectF = new RectF();
     private RectF rectF2 = new RectF();
+
+    public Drawable getPicture() {
+        return picture;
+    }
+
+    public void setPicture(int id) {
+        this.picture = ResourcesCompat.getDrawable(getResources(),id,null);
+        hasFigureChange=true;
+        invalidate();
+    }
+
     private Rect bounds = new Rect();
     private InnerShapeType innerShape;
     private OuterShapeType outerShape;
+    private Drawable picture=null;
     private KeyMode bMode;
 
     public FunnyButton(Context context, AttributeSet attrs) {
@@ -55,6 +69,7 @@ public class FunnyButton extends View {
             centerTextSize = typedArray.getDimensionPixelSize(R.styleable.FunnyButton_TextSize, 14);
             innerShapeColor = typedArray.getColor(R.styleable.FunnyButton_innerShapeColor, 0);
             outerShapeColor = typedArray.getColor(R.styleable.FunnyButton_outerShapeColor, 0);
+            picture = typedArray.getDrawable(R.styleable.FunnyButton_pictureSrc);
             int ordinal = typedArray.getInt(R.styleable.FunnyButton_InnerShapeProperty, 0);
 
             if (ordinal >= 0 && ordinal < InnerShapeType.values().length) {
@@ -304,6 +319,17 @@ public class FunnyButton extends View {
                         right + pull, cy + radius, isNo), innerP1);
             }
             break;
+            case Picture:
+            {
+                if(picture!=null){
+                    radius+=10;
+                    picture.setBounds((int)(cx - radius), (int)(cy - radius),
+                            (int)(  cx + radius),(int) (cy + radius));
+                    picture.draw(canvas);
+                }
+            }
+            break;
+            default:
 
         }
     }
@@ -334,6 +360,7 @@ public class FunnyButton extends View {
 
     //draw will be implemented
 
+
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -362,10 +389,12 @@ public class FunnyButton extends View {
                 if (figure != null) figure.recycle();
                 Bitmap.Config conf = Bitmap.Config.ARGB_4444;
                 figure = Bitmap.createBitmap(getWidth(), getHeight(), conf);
+
                 Canvas c = new Canvas(figure);
                 drawInner(c);
                 hasFigureChange = false;
             }
+
             if (figure != null) canvas.drawBitmap(figure, 0, 0, null);
         }
         if ((bMode != KeyMode.Figures && bMode != KeyMode.System) || bMode == KeyMode.Normal) {
@@ -388,7 +417,8 @@ public class FunnyButton extends View {
         Figures,
         Numbers,
         Letters,
-        System
+        System ,
+        Gaming
     }
 
 

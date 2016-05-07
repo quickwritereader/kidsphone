@@ -4,7 +4,7 @@ import android.graphics.Matrix;
 import android.graphics.Path;
 
 /**
- * Created by abdurrauf on 3/5/16.
+ * Canavs Utils
  */
 public class CanvasUtils {
     public static Path StarPath(float cx, float cy, int spikes, float outerRadius, float innerRadius) {

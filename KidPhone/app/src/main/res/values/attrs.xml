@@ -33,6 +33,7 @@
         <enum name="Numbers" value="2"/>
         <enum name="Letters" value="3"/>
         <enum name="System" value="4"/>
+        <enum name="Gaming" value="5"/>
     </attr>
 
     <declare-styleable name="FunnyButton">
@@ -45,5 +46,7 @@
         <attr name="TextColor" format="reference|color"/>
         <attr name="innerShapeColor" format="reference|color" />
         <attr name="outerShapeColor" format="reference|color" />
+        <attr name="pictureSrc" format="reference"/>
+
     </declare-styleable>
 </resources>

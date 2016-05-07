@@ -20,6 +20,11 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
     private BaseMode mode = null;
 
     @Override
+    public View getViewById(int id) {
+        return findViewById(id);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,

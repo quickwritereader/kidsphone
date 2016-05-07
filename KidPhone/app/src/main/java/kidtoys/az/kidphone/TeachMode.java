@@ -12,6 +12,7 @@ public class TeachMode extends BaseMode{
     private int pressedTimes = 0;
     private SoundPlayer soundPlayer;
     private FunnyDisplay display;
+    private  FunnyButton modeButton=null;
 
     public TeachMode (Phone phone) throws Exception{
         super(phone);
@@ -19,6 +20,7 @@ public class TeachMode extends BaseMode{
         this.display=phone.getDisplay();
         FunnyButton.KeyMode mode=(FunnyButton.KeyMode)  getState(STATE);
         if(mode!=null) keysMode=mode;
+        modeButton= (FunnyButton) phone.getViewById(R.id.KeysMode);
         openKeyMode(keysMode);
     }
 
@@ -101,17 +103,41 @@ public class TeachMode extends BaseMode{
         }
     }
 
+    public void changeModeButton(boolean switched){
+        if(modeButton!=null){
+            int ret=R.drawable.figure;
+            FunnyButton.KeyMode inMode=switched==true?switchMode(keysMode):keysMode;
+            switch ( inMode ){
+                case Letters:
+                    ret=R.drawable.alphabet;
+                    break;
+                case Numbers:
+                    ret=R.drawable.numbers;
+                    break;
+                case Figures:
+                    ret=R.drawable.figure;
+                    break;
+
+            }
+
+            modeButton.setPicture(ret);
+        }
+    }
+
+
     /**
      * Change keys' Mode while pressing KeysMode
      */
     private void changeKeyMode() {
         keysMode = switchMode(keysMode);
         openKeyMode(keysMode);
+
     }
 
     private void openKeyMode(FunnyButton.KeyMode mode) {
         playMode(mode);
         phone.changeKeys(mode);
+        changeModeButton(true);
         //clear screen
         display.clear();
     }
@@ -120,10 +146,13 @@ public class TeachMode extends BaseMode{
         lastPressed="";
         pressedTimes=0;
         changeKeyMode();
+        changeModeButton(true);
     }
 
     public   void onSave(){
         putState(STATE,keysMode);
+        changeModeButton(false);
+        //change button for old
     }
 
 }
