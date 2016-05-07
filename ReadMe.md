@@ -5,7 +5,7 @@
 
 Picture of the toy Program: 
 
-![screen1.jpg](https://bytebucket.org/overflowzero/kidsprogram/raw/9c648e1ffa73b756a86bb282e1fddfcdeea66d1b/screen1.jpeg?token=2a629e9169054d6efd2683f955b870bf979fd573)
+![screen1.png](https://bytebucket.org/overflowzero/kidsprogram/raw/90fcc351a81701e1c70783e575b4d91e7d4995db/screen1.png?token=45b627c1e9fbae169f7b8bd8736d3c92c36d1d2e)
  
 
 ##Development##
@@ -25,6 +25,7 @@ Picture of the toy Program:
   
 
 ###Project Schedule:###
+See [Issue List](https://bitbucket.org/overflowzero/kidsprogram/issues)
 
 Start Date	|Task	|Time Required| Current State
 :------|:-----|:------|:------
@@ -59,3 +60,4 @@ Start Date	|Task	|Time Required| Current State
 * Total estimated development costs:
 
 #Building and Installing ReadMe
+Download and open with Android Studio
