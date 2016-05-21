@@ -51,7 +51,7 @@ public class GameMode extends BaseMode {
     @Override
     public void onRefresh() {
         //deactivate delay
-        ((UiHandler) phone.getHandler()).deActivateDelay();
+        phone.deActivateDelay();
         phone.changeKeys(FunnyButton.KeyMode.Numbers);
         if (snakeGame != null) {
             if (snakeGame.isStopped()) {
@@ -74,7 +74,7 @@ public class GameMode extends BaseMode {
             snakeGame.interrupt();
         }
         //reactivate delay
-        ((UiHandler) phone.getHandler()).activateDelay();
+        phone.activateDelay();
     }
 
     private void playDead() {

@@ -159,18 +159,35 @@ public class FunnySurface {
      */
     public void putSurface(FunnySurface surface, int x, int y) {
         //find copyable areas
+        //if above surface area
         if (x > this.width) return;
         if (y > this.height) return;
-        int drawWidth = this.width > x + surface.width ? surface.width : (surface.width - x);
-        int drawHeight = this.height > y + surface.height ? surface.height : surface.height - y;
+        int offsetSurfX=0;
+        int offsetSurfY=0;
+        int drawWidth= surface.width ;
+        int drawHeight=surface.height ;
+        if(x<0) {
+            offsetSurfX = -x;
+            drawWidth=drawWidth-offsetSurfX;
+        }
+        if(y<0) {
+            offsetSurfY=-y;
+            drawHeight=drawHeight-offsetSurfY;
+        }
         //lets blt naive way
+        if(x<0)x=0;
+        if(y<0)y=0;
+        int remain=this.width-x;
+        drawWidth=remain>drawWidth?drawWidth:remain;
+         remain=this.height-y;
+        drawHeight=remain>drawHeight ?drawHeight :remain;
 
         for (int j = 0; j < drawHeight; j++) {
             for (int i = 0; i < drawWidth; i++) {
-                int ind = (y + j) * width + x + i;
-                int surfInd = j * surface.width + i;
-                this.mem[ind] = surface.mem[surfInd];
-            }
+                    int ind = (y + j) * width + x + i;
+                    int surfInd = (j+offsetSurfY) * surface.width + offsetSurfX+i;
+                    this.mem[ind] = surface.mem[surfInd];
+                }
         }
 
     }

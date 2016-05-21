@@ -5,19 +5,48 @@ import android.media.MediaPlayer;
 /**
  * Phone calls for kids
  */
-public class CallMode extends BaseMode implements  CallModeInterface{
+public class CallMode extends BaseMode implements SoundCallBack {
 
-    public static String callNumber;
-    public static int id_call000 = 1;
-    public static int id_call102 = 1;
-    public static int id_call103 = 1;
-    public static int id_call112 = 1;
-    public static int id_callwrong = 1;
+    public static String dialedNumber;
+    public int lastDialedIndex=0;
+
+    public static int[] callPositions={0,0,0,0,0,0,0,0};
+    FunnySurface surface;
+    private static int [] callAny ={R.raw.az_gel_birine_zeng_edek };
+    private static int [] callWho ={R.raw.az_kimin_nomresin_yigmaq_isteyirsen};
+    private static int [] call000Arr={R.raw.az_call_000_1,R.raw.az_call_000_2};
+    private static int [] call102Arr={R.raw.az_call_102_1,R.raw.az_call_102_2,R.raw.az_call_102_3};
+    private static int [] call103Arr={R.raw.az_call_103_1,R.raw.az_call_103_2};
+    private static int [] call112Arr={R.raw.az_call_112_1,R.raw.az_call_112_2,R.raw.az_call_112_3};
+    private static int [] callIncorret={R.raw.az_incorrect_number_1,R.raw.az_incorrect_number_2};
+
+    public int[] getCallSoundArray(int index){
+        switch (index) {
+            case 1:
+                return call000Arr;
+            case 2:
+                return call102Arr;
+            case 3:
+                return call103Arr;
+            case 4:
+                return call112Arr;
+            case 5:
+                return callAny;
+            case 6:
+                return callWho;
+            case 7:
+                return callIncorret;
+            default:
+                return callWho;
+        }
+    }
+
+    private SoundPlayer audio;
 
     public CallMode(Phone phone) throws Exception {
         super(phone);
+        surface=new FunnySurface(phone.getDisplay().surfaceWidth,phone.getDisplay().surfaceHeight);
         onRefresh();
-        callNumber = "";
     }
     private boolean handleKeys=true;
 
@@ -28,50 +57,50 @@ public class CallMode extends BaseMode implements  CallModeInterface{
         if (funnyButton.getKeyMode() == FunnyButton.KeyMode.Numbers) {
             String number = funnyButton.getNumbersText();
             if (number.length() > 0 && handleKeys) {
-                callNumber = callNumber + number;
-                if(callNumber.length()>=3) handleKeys=false;
-                phone.getAudio().playKeypadTones(number.charAt(0));
+                dialedNumber = dialedNumber + number;
+                //if first time change wait to who
+                if(dialedNumber.length()==1){
+                    phone.deActivateDelay();
+                    callModeWait(0);
+                }
+                else if(dialedNumber.length()>=3){
+                    phone.deActivateDelay();
+                    handleKeys=false;
+                }
+
+                audio.playKeypadTones(number.charAt(0));
+                draw(dialedNumber);
                 SoundPlayer.mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                     @Override
                     public void onCompletion(MediaPlayer mp) {
-                        if (callNumber.length() >= 3) {
-                            switch (callNumber) {
+                        if (dialedNumber.length() >= 3) {
+                            int index=0;
+                            switch (dialedNumber) {
                                 case "000":
-                                    Call(callNumber, id_call000,callMode);
-                                    if (id_call000 == 2) {
-                                        id_call000 = 0;
-                                    }
-                                    id_call000++;
+                                   index=1;
                                     break;
                                 case "102":
-                                    Call(callNumber, id_call102,callMode);
-                                    if (id_call102 == 3) {
-                                        id_call102 = 0;
-                                    }
-                                    id_call102++;
+                                    index=2;
                                     break;
                                 case "103":
-                                    Call(callNumber, id_call103,callMode);
-                                    if (id_call103 == 2) {
-                                        id_call103 = 0;
-                                    }
-                                    id_call103++;
+                                    index=3;
                                     break;
                                 case "112":
-                                    Call(callNumber, id_call112,callMode);
-                                    if (id_call112 == 3) {
-                                        id_call112 = 0;
-                                    }
-                                    id_call112++;
+                                   index=4;
                                     break;
                                 default:
-                                    Call(callNumber, id_callwrong,callMode);
-                                    if (id_callwrong == 2) {
-                                        id_callwrong = 0;
-                                    }
-                                    id_callwrong++;
+                                    index=7;
                             }
-                            callNumber = "";
+                            int [] arr= getCallSoundArray(index);
+                            lastDialedIndex=index;
+                            int position=callPositions[index];
+                            callPositions[index]=callPositions[index]+1;
+                            if(callPositions[index]>=arr.length){
+                                callPositions[index]=0;
+                            }
+                            audio.playCall( arr[position],callMode);
+
+                            dialedNumber = "";
                         }
                     }
                 });
@@ -80,26 +109,57 @@ public class CallMode extends BaseMode implements  CallModeInterface{
         }
     }
 
+    private void draw(String dialedNumber) {
+        if(dialedNumber==null || dialedNumber.length()<1)return;
+        int figureRandom = (int) (Math.random() * (FunnySurface.getMaxTypeSupport()- 1)) + 1;
+        int colorRandom = (int) (Math.random() * (FunnySurface.getMaxColorSupport() - 2)) + 1;//exclude white and black
+        if(dialedNumber.length()==1) {
+            surface.clear();
+        }
+        int i=dialedNumber.length()-1;
+        char Char=dialedNumber.charAt(dialedNumber.length()-1);
+        int length=dialedNumber.length()*7;
+        FunnySurfaceUtils.drawChar(surface, i*7 , 0, dialedNumber.charAt(i), FunnySurface.supportedColors[colorRandom],
+                    FunnySurface.supportedTypes[figureRandom], false);
+        phone.getDisplay().clear();
+
+        phone.getDisplay().getMainSurface().putSurface(surface,(surface.getWidth() -length)/2,4);
+        phone.getDisplay().render();
+    }
+
     @Override
     public void onRefresh() {
-        phone.getAudio().playCallAnyOne();
+        audio=phone.getAudio();
+        handleKeys=false ;
+        phone.deActivateDelay();
+        audio.PlayMp3(R.raw.az_gel_birine_zeng_edek,this);
         phone.changeKeys(FunnyButton.KeyMode.Numbers);
         phone.getDisplay().clear();
-        handleKeys=true;
-        callNumber = "";
+        phone.deActivateDelay();
+        lastDialedIndex=0;
+        dialedNumber = "";
     }
 
     @Override
     public void onSave() {
-        //putState("key",object);
+        //change delay to standard
+        phone.deActivateDelay();
+        phone.activateDelay();
+
     }
 
-    public void Call(String number, int callId ,CallModeInterface callback) {
-        phone.getAudio().playCall(number, callId,callback);
-    }
+
 
     @Override
-    public void finished() {
+    public void soundPlayFinished() {
+        callModeWait(lastDialedIndex);
         handleKeys=true;
+    }
+
+    private void callModeWait(int dialedIndex) {
+        UiHandler.DelayObject obj;
+        if(dialedIndex==7)dialedIndex=0;
+        obj=new UiHandler.DelayObject(getCallSoundArray(dialedIndex),callPositions[dialedIndex]);
+        phone.activateDelay(obj,5000);
     }
 }

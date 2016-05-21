@@ -18,6 +18,14 @@ public interface Phone {
 
     View getViewById(int id);
 
+    void activateDelay();
+
+    void activateDelay(UiHandler.DelayObject object,long delay);
+
+    public void deActivateDelay();
+
+    public void refreshActiveTime(int forwardDelay);
+
 
 
 }

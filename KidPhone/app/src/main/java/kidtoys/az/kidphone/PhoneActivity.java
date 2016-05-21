@@ -11,7 +11,6 @@ import android.view.WindowManager;
 public class PhoneActivity extends AppCompatActivity implements Phone, View.OnClickListener {
 
 
-    public long userActivityTime;
     private SoundPlayer soundPlayer;
     private FunnyDisplay display;
     private FunnyButton.KeyMode lastKeyMode = null;
@@ -22,6 +21,26 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
     @Override
     public View getViewById(int id) {
         return findViewById(id);
+    }
+
+    @Override
+    public void activateDelay() {
+        handler.activateDelay();
+    }
+
+    @Override
+    public void activateDelay(UiHandler.DelayObject object, long delay) {
+       handler.activateDelay(object, delay);
+    }
+
+    @Override
+    public void deActivateDelay() {
+      handler.deActivateDelay();
+    }
+
+    @Override
+    public void refreshActiveTime(int forwardDelay) {
+        handler.refreshActiveTime(forwardDelay);
     }
 
     @Override
@@ -40,21 +59,26 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
         button.setOnClickListener(this);
         display = (FunnyDisplay) findViewById(R.id.display);
         keysGroup = (ViewGroup) findViewById(R.id.KeysGroup);
-
-        userActivityTime = System.currentTimeMillis();
         handler = new UiHandler(this);
 
 
     }
 
+    int started=0;
     @Override
     protected void onStart() {
         super.onStart();
-        soundPlayer.playPhoneOpenMode();
+        handler.deActivateDelay();
+        handler.activateDelay(UiHandler.TIME_DELAY );
         try {
-            TeachMode teachMode= new TeachMode(this,false);
-            mode =teachMode;
-            teachMode.setPlaySound(true);
+            if(started==0) {
+                started=1;
+                int duration=soundPlayer.playPhoneOpenMode();
+                refreshActiveTime(duration);
+                TeachMode teachMode = new TeachMode(this, false);
+                mode = teachMode;
+                teachMode.setPlaySound(true);
+            }
             //finally, we can set mode
           //  drawAny();;
         } catch (Exception e) {
@@ -65,7 +89,6 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
     @Override
     public void onResume() {
         super.onResume();
-        handler.activateDelay(UiHandler.TIME_DELAY * 2);
         if (mode != null && mode instanceof GameMode) {
             mode.onRefresh();
         }
@@ -83,6 +106,7 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
         if ((keyCode == KeyEvent.KEYCODE_HOME)) {
             if (mode != null) mode.onSave();
             handler.deActivateDelay();
+            started=0;
         }
         return super.onKeyDown(keyCode, event);
     }
@@ -91,6 +115,7 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
     public void onBackPressed() {
         handler.deActivateDelay();
         this.soundPlayer.playPhoneCloseMode();
+        started=0;
         super.onBackPressed();
     }
 
@@ -110,7 +135,7 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
 
     @Override
     public void onClick(View v) {
-        userActivityTime = System.currentTimeMillis();
+        handler.refreshActiveTime();
         try {
             switch (v.getId()) {
                 case R.id.KeysMode:
@@ -147,7 +172,7 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
                     }
             }//switch end
         } catch (Exception ignored) {
-
+           ignored.printStackTrace();
         }
 
     }
@@ -183,9 +208,7 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
         return this.soundPlayer;
     }
 
-    public void playWait(int index) {
-        this.soundPlayer.playWait(index);
-    }
+
 
     public Handler getHandler() {
         return this.handler;

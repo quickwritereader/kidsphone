@@ -3,7 +3,7 @@ package kidtoys.az.kidphone;
 /**
  * on TeachMode kid will learn basics
  */
-public class TeachMode extends BaseMode{
+public class TeachMode extends BaseMode implements  SoundCallBack{
 
 
     private static final String STATE = "keyMode";
@@ -83,7 +83,8 @@ public class TeachMode extends BaseMode{
      */
     private void draw_play(char l) {
         phone.getDisplay().drawChar(l);
-        phone.getAudio().playChar(l);
+        int duration=phone.getAudio().playChar(l);
+        phone.refreshActiveTime(duration);
     }
 
     private FunnyButton.KeyMode switchMode(FunnyButton.KeyMode old){
@@ -107,20 +108,20 @@ public class TeachMode extends BaseMode{
         return retMode;
     }
 
-    private void playMode(FunnyButton.KeyMode mode){
+    private void playMode(FunnyButton.KeyMode mode,SoundCallBack callback){
         switch (mode) {
             case Normal:
             case Numbers:
-                soundPlayer.play_NumbersMode();
+                soundPlayer.play_NumbersMode(callback);
                 break;
             case Letters:
-                soundPlayer.play_LettersMode();
+                soundPlayer.play_LettersMode(callback);
                 break;
             case Figures:
-                soundPlayer.play_FiguresMode();
+                soundPlayer.play_FiguresMode(callback);
                 break;
             default:
-                soundPlayer.play_LettersMode();
+                soundPlayer.play_LettersMode(callback);
         }
     }
 
@@ -155,9 +156,10 @@ public class TeachMode extends BaseMode{
 
     }
 
-    private void openKeyMode(FunnyButton.KeyMode mode) {
+    private void openKeyMode(FunnyButton.KeyMode mode ) {
         if(isPlaySound()) {
-            playMode(mode);
+            phone.deActivateDelay();
+            playMode(mode,this);
         }
         phone.changeKeys(mode);
         changeModeButton(true);
@@ -178,4 +180,8 @@ public class TeachMode extends BaseMode{
         //change button for old
     }
 
+    @Override
+    public void soundPlayFinished() {
+        phone.activateDelay();
+    }
 }

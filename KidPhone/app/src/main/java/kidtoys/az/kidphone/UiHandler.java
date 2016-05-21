@@ -10,85 +10,169 @@ import java.lang.ref.WeakReference;
 /**
  * UiHandler use for handling messages sent from another threads
  */
-public class UiHandler extends Handler {
+public class UiHandler extends Handler implements SoundCallBack {
 
-    private static  final String TAG="UiHandler";
-
+    public static final long TIME_DELAY = 10000;
+    private static final String TAG = "UiHandler";
     /**
      * DELAy_MSG will be used to constantly inform about inactivity
      */
-    private static final int DELAY_MSG=1;
-    public static final long TIME_DELAY=20000;
-    private static int wait_signal=0;
-    private boolean active=false;
-
-
+    private static final int DELAY_MSG = 1;
+    private static int wait_signal = 0;
     private final WeakReference<PhoneActivity> phoneRef;
+    Message reSendMsg = null;
+    private long timeDelay = TIME_DELAY;
+    private long userActivity = System.currentTimeMillis();
+    private boolean active = false;
+    private DelayObject standard = new DelayObject(SoundPlayer.wait_sounds, 0);
 
-    public UiHandler(PhoneActivity phone){
-        this.phoneRef= new WeakReference<>(phone);
+
+    public UiHandler(PhoneActivity phone) {
+        this.phoneRef = new WeakReference<>(phone);
     }
 
-    private void sendDelay(long delay) {
+    @Override
+    public void soundPlayFinished() {
+        if (reSendMsg != null) {
+            Log.d(TAG,"audio soundPlayFinished. resend delay");
+            sendMsg(reSendMsg, timeDelay);
+        }
+    }
+
+    private void sendStandardDelay(long delay) {
         this.active = true;
         Message msg = Message.obtain();
         msg.what = UiHandler.DELAY_MSG;
+        msg.obj = standard;
         sendMessageDelayed(msg, delay);
     }
 
-
-    public synchronized void activateDelay(long delay){
-        if(!this.active) {
-            Log.d(TAG,"activateDelay");
-            sendDelay(delay);
-        }
-    }
-    private synchronized void reSendDelay(long delay){
-        if(this.active) {
-            sendDelay(delay);
-        }
+    /**
+     * refresh userActivity time to current
+     */
+    public synchronized  void refreshActiveTime() {
+            userActivity=System.currentTimeMillis();
+            Log.d(TAG,"current active time "+userActivity);
     }
 
+    /**
+     * refresh userActivity time to current+ forwarding
+     * @param forward will forward as if user pressed later
+     */
+    public synchronized  void refreshActiveTime(int forward) {
+        userActivity = System.currentTimeMillis()+forward;
+        Log.d(TAG,"current active time "+userActivity);
+    }
 
     /**
      * Activate delay message
      */
-    public void activateDelay(){
+    public void activateDelay() {
         activateDelay(UiHandler.TIME_DELAY);
     }
 
-    public synchronized  void deActivateDelay(){
-        active=false;
+    public synchronized void activateDelay(long delay) {
+        if (!this.active) {
+            Log.d(TAG, "activateDelay");
+            timeDelay = TIME_DELAY;
+            sendStandardDelay(delay);
+            userActivity = System.currentTimeMillis();
+        }
+    }
+
+    public synchronized void activateDelay(DelayObject object, long delay) {
+        if (!this.active) {
+            timeDelay = delay;
+            Log.d(TAG, "activateDelay");
+            this.active = true;
+            Message msg = Message.obtain();
+            msg.what = UiHandler.DELAY_MSG;
+            msg.obj = object;
+            sendMessageDelayed(msg, delay);
+            userActivity = System.currentTimeMillis();
+        }
+    }
+
+    private synchronized void sendMsg(Message msg, long delay) {
+        if (this.active) {
+            sendMessageDelayed(msg, delay);
+        }
+    }
+
+    public synchronized void deActivateDelay() {
+        active = false;
         removeMessages(UiHandler.DELAY_MSG);
         Log.d(TAG, "deActivateDelay");
     }
 
-
     @Override
-    public void handleMessage(Message inputMessage){
+    public void handleMessage(Message inputMessage) {
 
-        if(inputMessage.what==DELAY_MSG && active){
-            PhoneActivity phone=phoneRef.get();
-            if(phone!=null){
-                long current=System.currentTimeMillis();
-                long difference=current-phone.userActivityTime;
-                long new_delay=TIME_DELAY;
-                if(difference>=TIME_DELAY){
-                    phone.playWait(wait_signal);
-                    wait_signal+=1;
-                    if(wait_signal>Integer.MAX_VALUE-2) {
-                        wait_signal = 0;
+        if (active) {
+            PhoneActivity phone = phoneRef.get();
+            if (phone != null) {
+
+                //clone message for sending
+                reSendMsg = Message.obtain();
+                reSendMsg.what = inputMessage.what;
+                reSendMsg.obj = inputMessage.obj;
+
+                long current = System.currentTimeMillis();
+                long difference = current - userActivity;
+                long new_delay = timeDelay;
+                if (difference >= timeDelay) {
+                    if (inputMessage.what == DELAY_MSG) {
+                        DelayObject object = (DelayObject) inputMessage.obj;
+                        int sound = object.getWaitSound();
+                        int ret=object.increment();
+                        if(ret==0){
+                            //if ret=0 it means it reached end
+                            //so we will say only this without resending message
+                            reSendMsg=null;
+                            Log.d(TAG,"say this and end delay packet");
+                            phone.getAudio().PlayMp3(sound);
+                        }else {
+                            phone.getAudio().PlayMp3(sound, this);
+                        }
                     }
-                } else{
-                    new_delay=TIME_DELAY-difference;
+                } else {
+                    new_delay = timeDelay - difference;
+                    //send again
+                    sendMsg(reSendMsg, new_delay);
+                    reSendMsg = null;//nullify
                 }
-                Log.d(TAG, " dif:"+difference+" delay: "+new_delay);
-                //send again
-                reSendDelay(new_delay);
+                Log.d(TAG, " dif:" + difference + " delay: " + new_delay);
+
             }
         }//if delay
     }
 
+    public static class DelayObject {
+        private int[] soundIds = null;
+        private int position = 0;
+
+
+        public DelayObject(int[] SoundIds, int position) {
+            if (SoundIds != null) {
+                soundIds = SoundIds;
+                if (position < 0) position = soundIds.length - 1;
+                if (position >= soundIds.length) position = 0;
+            }
+        }
+
+        public int getWaitSound() {
+            if (soundIds != null) {
+                return soundIds[position];
+            }
+            return -1;
+        }
+
+        public int increment() {
+            position += 1;
+            if (position >= soundIds.length) position = 0;
+            return position;
+        }
+    }
 
 
 }

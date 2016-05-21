@@ -22,12 +22,27 @@ public class SoundPlayer {
         this.context = ct;
     }
 
-    public void PlayMp3(int fileId) {
+    public int PlayMp3(int fileId) {
         if (mediaPlayer != null) {
             this.StopMp3();
         }
         mediaPlayer = MediaPlayer.create(context, fileId);
         mediaPlayer.start();
+        return  mediaPlayer.getDuration();
+    }
+
+    public void PlayMp3(int fileId,final SoundCallBack callback) {
+        if (mediaPlayer != null) {
+            this.StopMp3();
+        }
+        mediaPlayer = MediaPlayer.create(context, fileId);
+        mediaPlayer.start();
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                if (callback != null) callback.soundPlayFinished();
+            }
+        });
     }
 
     public void StopMp3() {
@@ -36,207 +51,150 @@ public class SoundPlayer {
         mediaPlayer = null;
     }
 
-    public void play_LettersMode() {
-        this.PlayMp3(R.raw.az_letters_mode);
+    public void play_LettersMode(SoundCallBack callback) {
+        this.PlayMp3(R.raw.az_letters_mode,callback);
     }
 
-    public void play_NumbersMode() {
-        this.PlayMp3(R.raw.az_numbers_mode);
+    public void play_NumbersMode(SoundCallBack callback) {
+        this.PlayMp3(R.raw.az_numbers_mode,callback);
     }
 
-    public void play_FiguresMode() {
-        this.PlayMp3(R.raw.az_figures_mode);
+    public void play_FiguresMode(SoundCallBack callback) {
+        this.PlayMp3(R.raw.az_figures_mode,callback);
     }
 
-    public void playPhoneOpenMode() {
-        this.PlayMp3(R.raw.az_open_ringtone);
+    public int playPhoneOpenMode() {
+        return this.PlayMp3(R.raw.az_open_ringtone);
     }
 
-    public void playPhoneCloseMode() {
-        this.PlayMp3(R.raw.az_close);
+    public int playPhoneCloseMode() {
+        return this.PlayMp3(R.raw.az_close);
     }
 
     /*play*/
-    public void playChar(char Letter) {
+    public int playChar(char Letter) {
         switch (Letter) {
             case 'A':
-                this.PlayMp3(R.raw.az_a);
-                break;
+                return this.PlayMp3(R.raw.az_a);
             case 'B':
-                this.PlayMp3(R.raw.az_b);
-                break;
+                return this.PlayMp3(R.raw.az_b);
             case 'C':
-                this.PlayMp3(R.raw.az_c);
-                break;
+                return this.PlayMp3(R.raw.az_c);
             case 'Ç':
-                this.PlayMp3(R.raw.az_ch);
-                break;
+                return this.PlayMp3(R.raw.az_ch);
             case 'D':
-                this.PlayMp3(R.raw.az_d);
-                break;
+                return this.PlayMp3(R.raw.az_d);
             case 'E':
-                this.PlayMp3(R.raw.az_e);
-                break;
+                return this.PlayMp3(R.raw.az_e);
             case 'Ə':
             case 'ə':
-                this.PlayMp3(R.raw.az_ee);
-                break;
+                return this.PlayMp3(R.raw.az_ee);
             case 'F':
-                this.PlayMp3(R.raw.az_f);
-                break;
+                return this.PlayMp3(R.raw.az_f);
             case 'G':
-                this.PlayMp3(R.raw.az_g);
-                break;
+                return this.PlayMp3(R.raw.az_g);
             case 'Ğ':
-                this.PlayMp3(R.raw.az_gh);
-                break;
+                return this.PlayMp3(R.raw.az_gh);
             case 'H':
-                this.PlayMp3(R.raw.az_h);
-                break;
+                return this.PlayMp3(R.raw.az_h);
             case 'I':
-                this.PlayMp3(R.raw.az_ii);
-                break;
+                return this.PlayMp3(R.raw.az_ii);
             case 'İ':
-                this.PlayMp3(R.raw.az_i);
-                break;
+                return this.PlayMp3(R.raw.az_i);
             case 'J':
-                this.PlayMp3(R.raw.az_j);
-                break;
+                return this.PlayMp3(R.raw.az_j);
             case 'K':
-                this.PlayMp3(R.raw.az_k);
-                break;
+                return this.PlayMp3(R.raw.az_k);
             case 'Q':
-                this.PlayMp3(R.raw.az_q);
-                break;
+                return this.PlayMp3(R.raw.az_q);
             case 'L':
-                this.PlayMp3(R.raw.az_l);
-                break;
+                return this.PlayMp3(R.raw.az_l);
             case 'M':
-                this.PlayMp3(R.raw.az_m);
-                break;
+                return this.PlayMp3(R.raw.az_m);
             case 'N':
-                this.PlayMp3(R.raw.az_n);
-                break;
+                return this.PlayMp3(R.raw.az_n);
             case 'O':
-                this.PlayMp3(R.raw.az_o);
-                break;
+                return this.PlayMp3(R.raw.az_o);
             case 'Ö':
-                this.PlayMp3(R.raw.az_oo);
-                break;
+                return this.PlayMp3(R.raw.az_oo);
             case 'P':
-                this.PlayMp3(R.raw.az_p);
-                break;
+                return this.PlayMp3(R.raw.az_p);
             case 'R':
-                this.PlayMp3(R.raw.az_r);
-                break;
+                return this.PlayMp3(R.raw.az_r);
             case 'S':
-                this.PlayMp3(R.raw.az_s);
-                break;
+                return this.PlayMp3(R.raw.az_s);
             case 'Ş':
-                this.PlayMp3(R.raw.az_sh);
-                break;
+                return this.PlayMp3(R.raw.az_sh);
             case 'T':
-                this.PlayMp3(R.raw.az_t);
-                break;
+                return this.PlayMp3(R.raw.az_t);
             case 'U':
-                this.PlayMp3(R.raw.az_u);
-                break;
+                return this.PlayMp3(R.raw.az_u);
             case 'Ü':
-                this.PlayMp3(R.raw.az_uu);
-                break;
+                return this.PlayMp3(R.raw.az_uu);
             case 'V':
-                this.PlayMp3(R.raw.az_v);
-                break;
+                return this.PlayMp3(R.raw.az_v);
             case 'Y':
-                this.PlayMp3(R.raw.az_y);
-                break;
+                return this.PlayMp3(R.raw.az_y);
             case 'X':
-                this.PlayMp3(R.raw.az_x);
-                break;
+                return this.PlayMp3(R.raw.az_x);
             case 'Z':
-                this.PlayMp3(R.raw.az_z);
-                break;
+                return this.PlayMp3(R.raw.az_z);
             case '0':
-                this.PlayMp3(R.raw.az_0);
-                break;
+                return this.PlayMp3(R.raw.az_0);
             case '1':
-                this.PlayMp3(R.raw.az_1);
-                break;
+                return this.PlayMp3(R.raw.az_1);
             case '2':
-                this.PlayMp3(R.raw.az_2);
-                break;
+                return this.PlayMp3(R.raw.az_2);
             case '3':
-                this.PlayMp3(R.raw.az_3);
-                break;
+                return this.PlayMp3(R.raw.az_3);
             case '4':
-                this.PlayMp3(R.raw.az_4);
-                break;
+                return this.PlayMp3(R.raw.az_4);
             case '5':
-                this.PlayMp3(R.raw.az_5);
-                break;
+                return this.PlayMp3(R.raw.az_5);
             case '6':
-                this.PlayMp3(R.raw.az_6);
-                break;
+                return this.PlayMp3(R.raw.az_6);
             case '7':
-                this.PlayMp3(R.raw.az_7);
-                break;
+                return this.PlayMp3(R.raw.az_7);
             case '8':
-                this.PlayMp3(R.raw.az_8);
-                break;
+                return this.PlayMp3(R.raw.az_8);
             case '9':
-                this.PlayMp3(R.raw.az_9);
-                break;
+                return this.PlayMp3(R.raw.az_9);
             default:
+                return 0;
         }
     }
 
-    /**
-     * Play wait sound
-     *
-     * @param index
-     */
-    public void playWait(int index) {
-        this.PlayMp3(wait_sounds[index % wait_sounds.length]);
-    }
+
 
     /**
      * Play figures
      *
      * @param innerShapeType
      */
-    public void playFigures(FunnyButton.InnerShapeType innerShapeType) {
+    public int playFigures(FunnyButton.InnerShapeType innerShapeType) {
         switch (innerShapeType) {
             case Circle:
-                this.PlayMp3(R.raw.az_daire);
-                break;
+                return this.PlayMp3(R.raw.az_daire);
             case Square:
-                this.PlayMp3(R.raw.az_kvadrat);
-                break;
+                return this.PlayMp3(R.raw.az_kvadrat);
             case Triangle:
-                this.PlayMp3(R.raw.az_ucbucaq);
-                break;
+                return this.PlayMp3(R.raw.az_ucbucaq);
             case Rectangle:
-                this.PlayMp3(R.raw.az_duzbucaq);
-                break;
+                return this.PlayMp3(R.raw.az_duzbucaq);
             case Trapes:
-                this.PlayMp3(R.raw.az_trapesiya);
-                break;
+                return this.PlayMp3(R.raw.az_trapesiya);
             case Heart:
-                this.PlayMp3(R.raw.az_urek);
-                break;
+                return this.PlayMp3(R.raw.az_urek);
             case Star:
-                this.PlayMp3(R.raw.az_ulduz);
-                break;
+                return this.PlayMp3(R.raw.az_ulduz);
             case Pentagon:
-                this.PlayMp3(R.raw.az_beshbucaq);
-                break;
+                return this.PlayMp3(R.raw.az_beshbucaq);
             case Ellipse:
-                this.PlayMp3(R.raw.az_elips);
-                break;
+                return this.PlayMp3(R.raw.az_elips);
             case Hexagon:
-                this.PlayMp3(R.raw.az_altibucaq);
-                break;
+                return this.PlayMp3(R.raw.az_altibucaq);
             default:
+                return 0;
         }
     }
 
@@ -245,97 +203,41 @@ public class SoundPlayer {
      *
      * @param keypad
      */
-    public void playKeypadTones(char keypad) {
+    public int playKeypadTones(char keypad) {
         switch (keypad) {
             case '0':
-                this.PlayMp3(R.raw.keypad_0);
-                break;
+                return this.PlayMp3(R.raw.keypad_0);
             case '1':
-                this.PlayMp3(R.raw.keypad_1);
-                break;
+                return this.PlayMp3(R.raw.keypad_1);
             case '2':
-                this.PlayMp3(R.raw.keypad_2);
-                break;
+                return this.PlayMp3(R.raw.keypad_2);
             case '3':
-                this.PlayMp3(R.raw.keypad_3);
-                break;
+                return this.PlayMp3(R.raw.keypad_3);
             case '4':
-                this.PlayMp3(R.raw.keypad_4);
-                break;
+                return this.PlayMp3(R.raw.keypad_4);
             case '5':
-                this.PlayMp3(R.raw.keypad_5);
-                break;
+                return this.PlayMp3(R.raw.keypad_5);
             case '6':
-                this.PlayMp3(R.raw.keypad_6);
-                break;
+                return  this.PlayMp3(R.raw.keypad_6);
             case '7':
-                this.PlayMp3(R.raw.keypad_7);
-                break;
+                return  this.PlayMp3(R.raw.keypad_7);
             case '8':
-                this.PlayMp3(R.raw.keypad_8);
-                break;
+                return  this.PlayMp3(R.raw.keypad_8);
             case '9':
-                this.PlayMp3(R.raw.keypad_9);
-                break;
+                return  this.PlayMp3(R.raw.keypad_9);
             default:
+                return 0;
         }
     }
 
-    public void playCallAnyOne() {
-        this.PlayMp3(R.raw.az_gel_birine_zeng_edek);
-    }
 
-    public void playCall(final String number, final int callId, final CallModeInterface callback) {
+
+    public void playCall(final int soundId, final SoundCallBack callback) {
         this.PlayMp3(R.raw.dial_tone);
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener(){
             @Override
             public void onCompletion(MediaPlayer player) {
-                switch (number) {
-                    case "000":
-                        if (callId == 1) {
-                            PlayMp3(R.raw.az_call_000_1);
-                        } else   {
-                            PlayMp3(R.raw.az_call_000_2);
-                        }
-                        break;
-                    case "102":
-                        if (callId == 1) {
-                            PlayMp3(R.raw.az_call_102_1);
-                        } else if (callId == 2) {
-                            PlayMp3(R.raw.az_call_102_2);
-                        } else {
-                            PlayMp3(R.raw.az_call_102_3);
-                        }
-                        break;
-                    case "103":
-                        if (callId == 1) {
-                            PlayMp3(R.raw.az_call_103_1);
-                        }  else  {
-                            PlayMp3(R.raw.az_call_103_2);
-                        }
-                        break;
-                    case "112":
-                        if (callId == 1) {
-                            PlayMp3(R.raw.az_call_112_1);
-                        }  else if (callId == 2) {
-                            PlayMp3(R.raw.az_call_112_2);
-                        }  else   {
-                            PlayMp3(R.raw.az_call_112_3);
-                        }
-                        break;
-                    default:
-                        if (callId == 1) {
-                            PlayMp3(R.raw.az_incorrect_number_1);
-                        }  else  {
-                            PlayMp3(R.raw.az_incorrect_number_2);
-                        }
-                }
-                mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                    @Override
-                    public void onCompletion(MediaPlayer mp) {
-                        if(callback!=null) callback.finished();
-                    }
-                });
+                PlayMp3(soundId, callback);
             }
         });
 
