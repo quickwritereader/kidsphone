@@ -192,7 +192,7 @@ public class FunnyDisplay extends View {
 
     }
 
-    private void render() {
+    public void render() {
         invalidate();
     }
 

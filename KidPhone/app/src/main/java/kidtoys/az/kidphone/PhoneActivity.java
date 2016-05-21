@@ -40,12 +40,23 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
         button.setOnClickListener(this);
         display = (FunnyDisplay) findViewById(R.id.display);
         keysGroup = (ViewGroup) findViewById(R.id.KeysGroup);
-        soundPlayer.playPhoneOpenMode();
+
         userActivityTime = System.currentTimeMillis();
         handler = new UiHandler(this);
-        //finally, we can set mode
+
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        soundPlayer.playPhoneOpenMode();
         try {
-            mode = new TeachMode(this);
+            TeachMode teachMode= new TeachMode(this,false);
+            mode =teachMode;
+            teachMode.setPlaySound(true);
+            //finally, we can set mode
+          //  drawAny();;
         } catch (Exception e) {
             //should not happen
         }
@@ -180,5 +191,14 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
         return this.handler;
     }
 
+//    public void drawAny(){
+//        FunnySurface surface=display.getMainSurface();
+//        surface.clear();
+//        surface.putDot(1,1, FunnySurface.DotColor.Blue, FunnySurface.DotType.Star);
+//        FunnySurface surface1=FunnySurface.createSurface(3,3, FunnySurface.DotColor.Blue, FunnySurface.DotType.Heart);
+//        surface.putSurface(surface1,2,2);
+//        surface.drawLine(1,1,6,6, FunnySurface.DotColor.Red, FunnySurface.DotType.Star);
+//        display.render();
+//    }
 
 }

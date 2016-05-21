@@ -14,6 +14,27 @@ public class TeachMode extends BaseMode{
     private FunnyDisplay display;
     private  FunnyButton modeButton=null;
 
+    private boolean playSound=true;
+
+    public boolean isPlaySound() {
+        return playSound;
+    }
+
+    public void setPlaySound(boolean playSound) {
+        this.playSound = playSound;
+    }
+
+    public TeachMode (Phone phone,boolean playSound) throws Exception{
+        super(phone);
+        this.playSound=playSound;
+        this.soundPlayer=phone.getAudio();
+        this.display=phone.getDisplay();
+        FunnyButton.KeyMode mode=(FunnyButton.KeyMode)  getState(STATE);
+        if(mode!=null) keysMode=mode;
+        modeButton= (FunnyButton) phone.getViewById(R.id.KeysMode);
+        openKeyMode(keysMode);
+    }
+
     public TeachMode (Phone phone) throws Exception{
         super(phone);
         this.soundPlayer=phone.getAudio();
@@ -135,7 +156,9 @@ public class TeachMode extends BaseMode{
     }
 
     private void openKeyMode(FunnyButton.KeyMode mode) {
-        playMode(mode);
+        if(isPlaySound()) {
+            playMode(mode);
+        }
         phone.changeKeys(mode);
         changeModeButton(true);
         //clear screen

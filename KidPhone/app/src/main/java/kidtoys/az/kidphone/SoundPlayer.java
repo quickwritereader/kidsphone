@@ -285,7 +285,7 @@ public class SoundPlayer {
         this.PlayMp3(R.raw.az_gel_birine_zeng_edek);
     }
 
-    public void playCall(final String number, final int callId) {
+    public void playCall(final String number, final int callId, final CallModeInterface callback) {
         this.PlayMp3(R.raw.dial_tone);
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener(){
             @Override
@@ -294,7 +294,7 @@ public class SoundPlayer {
                     case "000":
                         if (callId == 1) {
                             PlayMp3(R.raw.az_call_000_1);
-                        } else if (callId == 2) {
+                        } else   {
                             PlayMp3(R.raw.az_call_000_2);
                         }
                         break;
@@ -303,14 +303,14 @@ public class SoundPlayer {
                             PlayMp3(R.raw.az_call_102_1);
                         } else if (callId == 2) {
                             PlayMp3(R.raw.az_call_102_2);
-                        } else if (callId == 3) {
+                        } else {
                             PlayMp3(R.raw.az_call_102_3);
                         }
                         break;
                     case "103":
                         if (callId == 1) {
                             PlayMp3(R.raw.az_call_103_1);
-                        }  else if (callId == 2) {
+                        }  else  {
                             PlayMp3(R.raw.az_call_103_2);
                         }
                         break;
@@ -319,17 +319,23 @@ public class SoundPlayer {
                             PlayMp3(R.raw.az_call_112_1);
                         }  else if (callId == 2) {
                             PlayMp3(R.raw.az_call_112_2);
-                        }  else if (callId == 3) {
+                        }  else   {
                             PlayMp3(R.raw.az_call_112_3);
                         }
                         break;
                     default:
                         if (callId == 1) {
                             PlayMp3(R.raw.az_incorrect_number_1);
-                        }  else if (callId == 2) {
+                        }  else  {
                             PlayMp3(R.raw.az_incorrect_number_2);
                         }
                 }
+                mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
+                        if(callback!=null) callback.finished();
+                    }
+                });
             }
         });
 

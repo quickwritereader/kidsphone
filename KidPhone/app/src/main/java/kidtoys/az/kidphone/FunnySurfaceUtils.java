@@ -249,7 +249,12 @@ public class FunnySurfaceUtils {
     }
 
     private static void draw0(FunnySurface surface, int x, int y, int charWidth, int charHeight, FunnySurface.DotColor color, FunnySurface.DotType figure) {
-
+        int bottom=y+charHeight-1;
+        int right=x+charWidth-1;
+        surface.drawLine(x,bottom-1,x,y+1,color,figure);
+        surface.drawLine(x+1,y,right-1,y,color,figure);
+        surface.drawLine(right,y+1,right,bottom-1,color,figure);
+        surface.drawLine( right-1,bottom,x+1,bottom,color,figure);
     }
     private static void draw1(FunnySurface surface, int x, int y, int charWidth, int charHeight, FunnySurface.DotColor color, FunnySurface.DotType figure) {
 
@@ -295,8 +300,8 @@ public class FunnySurfaceUtils {
         switch (Letter) {
             case 'A':
             case 'a':
-                if(center) x=x-standardWidth/2;
-                drawA(surface, x, y, standardWidth,standardHeight, color, figure);
+                if(center) x=x-standardWidth/2-1;
+                drawA(surface, x, y, standardWidth+1,standardHeight, color, figure);
                 break;
             case 'B':
             case 'b':
@@ -441,7 +446,7 @@ public class FunnySurfaceUtils {
                 break;
             case '0':
                 if(center) x=x-standardHeight/2;
-                draw0(surface, x, y, standardHeight,standardHeight, color, figure);
+                draw0(surface, x, y, standardWidth,standardHeight, color, figure);
                 break;
             case '1':
                 if(center) x=x-standardHeight/2;
