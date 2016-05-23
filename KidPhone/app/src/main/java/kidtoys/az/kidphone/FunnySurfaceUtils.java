@@ -50,7 +50,7 @@ public class FunnySurfaceUtils {
         surface.drawLine(right, y, x, y, color, figure);
         surface.drawLine(x, y, x, bottom, color, figure);
         surface.drawLine(x, bottom, right, bottom, color, figure);
-        surface.drawLine(x, y + centerOffset + 1, x + centerOffset, y + centerOffset + 1, color, figure);
+        surface.drawLine(x, y + centerOffset + 1, x + centerOffset+1, y + centerOffset + 1, color, figure);
 
     }
 
@@ -117,7 +117,7 @@ public class FunnySurfaceUtils {
         int right = x + charWidth - 1;
         surface.drawLine(right, y, x, y, color, figure);
         surface.drawLine(x, y, x, bottom, color, figure);
-        surface.drawLine(x, y + centerOffset + 1, x + centerOffset, y + centerOffset + 1, color, figure);
+        surface.drawLine(x, y + centerOffset + 1, x + centerOffset+1, y + centerOffset + 1, color, figure);
     }
 
     private static void drawX(FunnySurface surface, int x, int y, int charWidth, int charHeight, FunnySurface.DotColor color, FunnySurface.DotType figure) {
@@ -180,11 +180,25 @@ public class FunnySurfaceUtils {
     }
 
     private static void drawC(FunnySurface surface, int x, int y, int charWidth, int charHeight, FunnySurface.DotColor color, FunnySurface.DotType figure) {
-
+        int bottom = y + charHeight - 1;
+        int right = x + charWidth - 1;
+        surface.putDot(bottom+1,y+1,color, figure);
+        surface.drawLine(x + 1, y, right - 1, y, color, figure);
+        surface.drawLine(x, bottom - 1, x, y + 1, color, figure);
+        surface.drawLine(right - 1, bottom, x + 1, bottom, color, figure);
+        surface.putDot(bottom+1,bottom-1,color, figure);
     }
 
     private static void drawCh(FunnySurface surface, int x, int y, int charWidth, int charHeight, FunnySurface.DotColor color, FunnySurface.DotType figure) {
-
+        int bottom = y + charHeight - 1;
+        int right = x + charWidth - 1;
+        surface.putDot(bottom+1,y+1,color, figure);
+        surface.drawLine(x + 1, y, right - 1, y, color, figure);
+        surface.drawLine(x, bottom - 1, x, y + 1, color, figure);
+        surface.drawLine(right - 1, bottom, x + 1, bottom, color, figure);
+        surface.putDot(bottom+1,bottom-1,color, figure);
+        surface.putDot(bottom-1,bottom-1,color, figure);
+        surface.putDot(bottom-1,bottom+1,color, figure);
     }
 
     private static void drawD(FunnySurface surface, int x, int y, int charWidth, int charHeight, FunnySurface.DotColor color, FunnySurface.DotType figure) {
@@ -201,20 +215,61 @@ public class FunnySurfaceUtils {
     }
 
     private static void drawG(FunnySurface surface, int x, int y, int charWidth, int charHeight, FunnySurface.DotColor color, FunnySurface.DotType figure) {
+        int centerOffset = (int) Math.ceil(charWidth / 2.0) - 1;
+        int bottom = y + charHeight - 1;
+        int right = x + charWidth - 1;
 
+        surface.drawLine(x+1, y, right, y, color, figure);
+        surface.drawLine(x, bottom - 2, x, y + 1, color, figure);
+        surface.putDot(x+1,bottom-1,color,figure);
+        surface.drawLine(right, bottom, x+2 , bottom, color, figure);
+        surface.drawLine(right, y + 4, right, bottom - 1, color, figure);
+        surface.drawLine(x+3, y + centerOffset + 1, x + centerOffset+3, y + centerOffset + 1, color, figure);
     }
 
     private static void drawGH(FunnySurface surface, int x, int y, int charWidth, int charHeight, FunnySurface.DotColor color, FunnySurface.DotType figure) {
+        int centerOffset = (int) Math.ceil(charWidth / 2.0) - 1;
+        int bottom = y + charHeight - 1;
+        int right = x + charWidth - 1;
 
+        surface.drawLine(x+1, y, right, y, color, figure);
+        surface.drawLine(x, bottom - 2, x, y + 1, color, figure);
+        surface.putDot(x+1,bottom-1,color,figure);
+        surface.drawLine(right, bottom, x+2 , bottom, color, figure);
+        surface.drawLine(right, y + 4, right, bottom - 1, color, figure);
+        surface.drawLine(x+3, y + centerOffset + 1, x + centerOffset+3, y + centerOffset + 1, color, figure);
+
+        surface.putDot(8,2,color,figure);
+        surface.putDot(9,3,color,figure);
+        surface.putDot(10,3,color,figure);
+        surface.putDot(11,2,color,figure);
     }
 
 
     private static void drawJ(FunnySurface surface, int x, int y, int charWidth, int charHeight, FunnySurface.DotColor color, FunnySurface.DotType figure) {
+        int bottom = y + charHeight - 1;
+        int right = x + charWidth - 1;
 
+        surface.drawLine(x , y + 4, x, bottom-1, color, figure);
+        surface.drawLine(right - 1, bottom, x + 1, bottom, color, figure);
+        surface.drawLine(right, bottom-1, right, y, color, figure);
     }
 
     private static void drawQ(FunnySurface surface, int x, int y, int charWidth, int charHeight, FunnySurface.DotColor color, FunnySurface.DotType figure) {
+        int centerOffset = (int) Math.ceil(charWidth / 2.0) - 1;
+        int bottom = y + charHeight - 1;
+        int right = x + charWidth - 1;
+        surface.drawLine(x, bottom - 2, x, y + 2, color, figure);
+        surface.drawLine(x, y + centerOffset-1, x + centerOffset-1, y, color, figure);
+        surface.drawLine(x + 2, y, right - 2, y, color, figure);
+        surface.drawLine(right, y + centerOffset, right-1, bottom-1, color, figure);
+        surface.drawLine(right, y + 2, right, bottom - 2, color, figure);
+        surface.drawLine(right - centerOffset, y, right-1, y + centerOffset-2, color, figure);
+        surface.drawLine(right - 2, bottom, x + 2, bottom, color, figure);
+        surface.drawLine(x, bottom - centerOffset, x + centerOffset-2, bottom-1, color, figure);
 
+        surface.putDot(12, 10, color, figure);
+        surface.putDot(10, 8, color, figure);
     }
 
     private static void drawO(FunnySurface surface, int x, int y, int charWidth, int charHeight, FunnySurface.DotColor color, FunnySurface.DotType figure) {
@@ -232,15 +287,39 @@ public class FunnySurfaceUtils {
     }
 
     private static void drawOO(FunnySurface surface, int x, int y, int charWidth, int charHeight, FunnySurface.DotColor color, FunnySurface.DotType figure) {
-
+        int centerOffset = (int) Math.ceil(charWidth / 2.0) - 1;
+        int bottom = y + charHeight - 1;
+        int right = x + charWidth - 1;
+        surface.drawLine(x, bottom - 2, x, y + 2, color, figure);
+        surface.drawLine(x, y + centerOffset-1, x + centerOffset-1, y, color, figure);
+        surface.drawLine(x + 2, y, right - 2, y, color, figure);
+        surface.drawLine(right, y + centerOffset, right-1, bottom-1, color, figure);
+        surface.drawLine(right, y + 2, right, bottom - 2, color, figure);
+        surface.drawLine(right - centerOffset, y, right-1, y + centerOffset-2, color, figure);
+        surface.drawLine(right - 2, bottom, x + 2, bottom, color, figure);
+        surface.drawLine(x, bottom - centerOffset, x + centerOffset-2, bottom-1, color, figure);
+        surface.putDot(bottom-1, centerOffset, color,figure);
+        surface.putDot(bottom+1, centerOffset, color,figure);
     }
 
     private static void drawP(FunnySurface surface, int x, int y, int charWidth, int charHeight, FunnySurface.DotColor color, FunnySurface.DotType figure) {
-
+        int bottom = y + charHeight - 1;
+        int right = x + charWidth - 1;
+        surface.drawLine(x, bottom, x, y, color, figure);
+        surface.drawLine(x + 1, y, right - 1, y, color, figure);
+        surface.drawLine(right, y + 1, right, bottom - 4, color, figure);
+        surface.drawLine(x, y + charHeight / 2, right-1, y + charHeight / 2, color, figure);
     }
 
     private static void drawR(FunnySurface surface, int x, int y, int charWidth, int charHeight, FunnySurface.DotColor color, FunnySurface.DotType figure) {
-
+        int bottom = y + charHeight - 1;
+        int right = x + charWidth - 1;
+        surface.drawLine(x, bottom, x, y, color, figure);
+        surface.drawLine(x + 1, y, right - 1, y, color, figure);
+        surface.drawLine(right, y + 1, right, bottom - 4, color, figure);
+        surface.drawLine(x, y + charHeight / 2, right-1, y + charHeight / 2, color, figure);
+        surface.drawLine(x, y+2, right-1, bottom, color, figure);
+        surface.drawLine(right, y + 6, right, bottom, color, figure);
     }
 
     private static void drawS(FunnySurface surface, int x, int y, int charWidth, int charHeight, FunnySurface.DotColor color, FunnySurface.DotType figure) {
@@ -252,11 +331,23 @@ public class FunnySurfaceUtils {
     }
 
     private static void drawU(FunnySurface surface, int x, int y, int charWidth, int charHeight, FunnySurface.DotColor color, FunnySurface.DotType figure) {
+        int bottom = y + charHeight - 1;
+        int right = x + charWidth - 1;
 
+        surface.drawLine(x, bottom-1, x, y, color, figure);
+        surface.drawLine(right - 1, bottom, x + 1, bottom, color, figure);
+        surface.drawLine(right, bottom-1, right, y, color, figure);
     }
 
     private static void drawUU(FunnySurface surface, int x, int y, int charWidth, int charHeight, FunnySurface.DotColor color, FunnySurface.DotType figure) {
-
+        int centerOffset = (int) Math.ceil(charWidth / 2.0) - 1;
+        int bottom = y + charHeight - 1;
+        int right = x + charWidth - 1;
+        surface.drawLine(x, bottom-1, x, y, color, figure);
+        surface.drawLine(right - 1, bottom, x + 1, bottom, color, figure);
+        surface.drawLine(right, bottom-1, right, y, color, figure);
+        surface.putDot(8, centerOffset, color,figure);
+        surface.putDot(10, centerOffset, color,figure);
     }
 
     private static void drawZ(FunnySurface surface, int x, int y, int charWidth, int charHeight, FunnySurface.DotColor color, FunnySurface.DotType figure) {
@@ -395,10 +486,12 @@ public class FunnySurfaceUtils {
                 break;
             case 'C':
             case 'c':
+                if (center) x = x - standardWidth / 2 - 1;
                 drawC(surface, x, y, standardWidth, standardHeight, color, figure);
                 break;
             case 'Ç':
             case 'ç':
+                if (center) x = x - standardWidth / 2 - 1;
                 drawCh(surface, x, y, standardWidth, standardHeight, color, figure);
                 break;
             case 'D':
@@ -422,11 +515,13 @@ public class FunnySurfaceUtils {
                 break;
             case 'G':
             case 'g':
-                drawG(surface, x, y, standardWidth, standardHeight, color, figure);
+                if (center) x = x - standardWidth / 2 - 1;
+                drawG(surface, x, y, standardWidth+1, standardHeight, color, figure);
                 break;
             case 'Ğ':
             case 'ğ':
-                drawGH(surface, x, y, standardWidth, standardHeight, color, figure);
+                if (center) x = x - standardWidth / 2 - 1;
+                drawGH(surface, x, y, standardWidth+1, standardHeight, color, figure);
                 break;
             case 'H':
             case 'h':
@@ -445,6 +540,7 @@ public class FunnySurfaceUtils {
                 break;
             case 'J':
             case 'j':
+                if (center) x = x - standardWidth / 2;
                 drawJ(surface, x, y, standardWidth, standardHeight, color, figure);
                 break;
             case 'K':
@@ -454,6 +550,7 @@ public class FunnySurfaceUtils {
                 break;
             case 'Q':
             case 'q':
+                if (center) x = x - standardHeight / 2-1;
                 drawQ(surface, x, y, standardHeight, standardHeight, color, figure);
                 break;
             case 'L':
@@ -479,15 +576,18 @@ public class FunnySurfaceUtils {
                 break;
             case 'Ö':
             case 'ö':
-                drawOO(surface, x, y, standardWidth, standardHeight, color, figure);
+                if (center) x = x - standardHeight / 2;
+                drawOO(surface, x, y, standardWidth+2, standardHeight, color, figure);
                 break;
             case 'P':
             case 'p':
-                drawP(surface, x, y, standardWidth, standardHeight, color, figure);
+                if (center) x = x - standardWidth / 2 - 1;
+                drawP(surface, x, y, standardWidth+1, standardHeight, color, figure);
                 break;
             case 'R':
             case 'r':
-                drawR(surface, x, y, standardWidth, standardHeight, color, figure);
+                if (center) x = x - standardWidth / 2 - 1;
+                drawR(surface, x, y, standardWidth+1, standardHeight, color, figure);
                 break;
             case 'S':
             case 's':
@@ -499,17 +599,17 @@ public class FunnySurfaceUtils {
                 break;
             case 'T':
             case 't':
-                if (center) x = x - standardWidth / 2;
-                drawT(surface, x, y, standardWidth, standardHeight, color, figure);
+                if (center) x = x - standardWidth / 2 - 1;
+                drawT(surface, x, y, standardWidth+2, standardHeight, color, figure);
                 break;
             case 'U':
             case 'u':
-                if (center) x = x - standardWidth / 2;
+                if (center) x = x - standardWidth / 2 - 1;
                 drawU(surface, x, y, standardWidth, standardHeight, color, figure);
                 break;
             case 'Ü':
             case 'ü':
-                if (center) x = x - standardWidth / 2;
+                if (center) x = x - standardWidth / 2 - 1;
                 drawUU(surface, x, y, standardWidth, standardHeight, color, figure);
                 break;
             case 'V':
