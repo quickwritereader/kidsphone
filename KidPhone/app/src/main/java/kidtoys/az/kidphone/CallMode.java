@@ -130,12 +130,13 @@ public class CallMode extends BaseMode implements SoundCallBack {
     @Override
     public void onRefresh() {
         audio=phone.getAudio();
-        handleKeys=false ;
+        handleKeys=true ;
         phone.deActivateDelay();
-        audio.PlayMp3(R.raw.az_gel_birine_zeng_edek,this);
+        int duration=audio.PlayMp3(R.raw.az_gel_birine_zeng_edek );
+        phone.activateDelay(new UiHandler.DelayObject(getCallSoundArray(0),callPositions[0]), 5000);
+        phone.refreshActiveTime(duration);//forward user timing
         phone.changeKeys(FunnyButton.KeyMode.Numbers);
         phone.getDisplay().clear();
-        phone.deActivateDelay();
         lastDialedIndex=0;
         dialedNumber = "";
     }

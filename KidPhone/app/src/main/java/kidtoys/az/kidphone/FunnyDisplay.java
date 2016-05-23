@@ -21,7 +21,7 @@ public class FunnyDisplay extends View {
     int surfaceHeight = 15;
     private int width = -1;
     private int height = -1;
-    private Paint innerLight;
+    //private Paint innerLight;
     private Paint[] realColors;
     private Paint[] centerColors;
     private Paint[] outerColors;
@@ -38,7 +38,7 @@ public class FunnyDisplay extends View {
     private Bitmap previousBitmap = null;
     private Path[] outerPathList = null;
     private Path[] innerPathList = null;
-    private Path[] centerPathList = null;
+   // private Path[] centerPathList = null;
     private int padOuter=11;
     private int padInner=-5;
     private int padCenter=1;
@@ -126,10 +126,10 @@ public class FunnyDisplay extends View {
 
     private void init() {
         FunnySurface.DotColor dotColors[] = FunnySurface.DotColor.values();
-        innerLight = new Paint();
-        innerLight.setColor(Color.WHITE);
-        innerLight.setAntiAlias(true);
-        innerLight.setStyle(Paint.Style.FILL);
+//        innerLight = new Paint();
+//        innerLight.setColor(Color.WHITE);
+//        innerLight.setAntiAlias(true);
+//        innerLight.setStyle(Paint.Style.FILL);
         centerColors = new Paint[dotColors.length];
         outerColors = new Paint[dotColors.length];
         realColors = new Paint[dotColors.length];
@@ -138,13 +138,13 @@ public class FunnyDisplay extends View {
             outerColors[i] = new Paint();
             realColors[i] = new Paint();
             int real = realColorFromDotColor(dotColors[i]);
-            int blend1 = blend(real, Color.WHITE, 0.375f);
-            int blend2 = blend(blend1, Color.BLACK, 0.225f);
+            int blend1 = blend(real, Color.WHITE, 0.08f);
+            int blend2 = blend(real, Color.BLACK, 0.345f);
 
             realColors[i].setColor(real);
             realColors[i].setAntiAlias(true);
             realColors[i].setStyle(Paint.Style.STROKE);
-            realColors[i].setStrokeWidth(1);
+             realColors[i].setStrokeWidth(2);
 
             centerColors[i].setColor(blend1);
             centerColors[i].setAntiAlias(true);
@@ -179,13 +179,13 @@ public class FunnyDisplay extends View {
             int len = dotTypes.length;
             outerPathList = new Path[len];
             innerPathList = new Path[len];
-            centerPathList = new Path[len];
+            //centerPathList = new Path[len];
             padOuter=diameter/4;
-            padInner=0-diameter/5;
+            padInner=-3;//0-diameter/8;
             for (int i = 0; i < len; i++) {
                 FunnySurface.DotType dType = dotTypes[i];
                 outerPathList[i] = getDotPath(dType, padOuter + diameter / 2, padOuter + diameter / 2, diameter / 2, padOuter);
-                centerPathList[i] = getDotPath(dType, 1 + diameter / 2, 1 + diameter / 2, diameter / 2, 1);
+                //centerPathList[i] = getDotPath(dType, 1 + diameter / 2, 1 + diameter / 2, diameter / 2, 0);
                 innerPathList[i] = getDotPath(dType, 1 + diameter / 2, 1 + diameter / 2, diameter / 2, padInner);
             }
         }
@@ -303,8 +303,8 @@ public class FunnyDisplay extends View {
 
                     }
                     if (b != null) {
-                        int left = 20 + i * diameter + pad;
-                        int top = 20 + j * diameter + pad;
+                        int left = 20 + i * diameter -padOuter+1 ;
+                        int top = 20 + j * diameter -padOuter+1;
                         canvas.drawBitmap(b, left, top, null);
                     }
                 }//need to draw
@@ -341,16 +341,17 @@ public class FunnyDisplay extends View {
                         b = Bitmap.createBitmap(w, h, conf);
                         Canvas bmpCanvas = new Canvas(b);
                         Path path;
-                        path = centerPathList[d.ordinal()];
+                       // path = centerPathList[d.ordinal()];
+                        path = innerPathList[d.ordinal()];
                         if (path != null) {
-                            Paint p = centerColors[color];
+                            Paint p = realColors[color];
                             bmpCanvas.drawPath(path, p);
                             if (diameter / 2 + padInner > 3) {
-                                path = innerPathList[d.ordinal()];
-                                p = innerLight;
+                               // path = innerPathList[d.ordinal()];
+                                p = centerColors[color];
                                 bmpCanvas.drawPath(path, p);
-                                p = realColors[color];
-                                bmpCanvas.drawPath(path, p);
+//                                p = realColors[color];
+//                                bmpCanvas.drawPath(path, p);
                             }
                         }
                         //add to cache
