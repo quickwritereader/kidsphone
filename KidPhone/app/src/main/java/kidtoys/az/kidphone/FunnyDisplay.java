@@ -210,8 +210,10 @@ public class FunnyDisplay extends View {
         mainSurface.clear();
         int figureRandom = (int) (Math.random() * (FunnySurface.getMaxTypeSupport()- 1)) + 1;
         int colorRandom = (int) (Math.random() * (FunnySurface.getMaxColorSupport() - 2)) + 1;//exclude white and black
+        /*FunnySurfaceUtils.drawChar(mainSurface, mainSurface.getWidth() / 2, 4, l, FunnySurface.supportedColors[colorRandom],
+                FunnySurface.supportedTypes[figureRandom], true);*/
         FunnySurfaceUtils.drawChar(mainSurface, mainSurface.getWidth() / 2, 4, l, FunnySurface.supportedColors[colorRandom],
-                FunnySurface.supportedTypes[figureRandom], true);
+                FunnySurface.DotType.Circle, true);
         render();
     }
 
