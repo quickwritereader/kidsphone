@@ -61,7 +61,7 @@ public class UiHandler extends Handler implements SoundCallBack {
      */
     public synchronized  void refreshActiveTime(int forward) {
         userActivity = System.currentTimeMillis()+forward;
-        Log.d(TAG,"current active time "+userActivity);
+       // Log.d(TAG,"current active time "+userActivity);
     }
 
     /**
