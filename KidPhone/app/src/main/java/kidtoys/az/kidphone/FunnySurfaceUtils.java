@@ -480,6 +480,93 @@ public class FunnySurfaceUtils {
         surface.drawLine(right-1, bottom ,x+1,bottom , color, figure);
     }
 
+    private static void drawCircle(FunnySurface surface, int x, int y, int charWidth, int charHeight, FunnySurface.DotColor color, FunnySurface.DotType figure) {
+        int centerOffset = (int) Math.ceil(charWidth / 2.0) - 1;
+        int bottom = y + charHeight - 1;
+        int right = x + charWidth - 1;
+        surface.drawLine(x, bottom - 2, x, y + 2, color, figure);
+        surface.drawLine(x, y + centerOffset-1, x + centerOffset-1, y, color, figure);
+        surface.drawLine(x + 2, y, right - 2, y, color, figure);
+        surface.drawLine(right, y + centerOffset, right-1, bottom-1, color, figure);
+        surface.drawLine(right, y + 2, right, bottom - 2, color, figure);
+        surface.drawLine(right - centerOffset, y, right-1, y + centerOffset-2, color, figure);
+        surface.drawLine(right - 2, bottom, x + 2, bottom, color, figure);
+        surface.drawLine(x, bottom - centerOffset, x + centerOffset-2, bottom-1, color, figure);
+    }
+
+    private static void drawSquare(FunnySurface surface, int x, int y, int charWidth, int charHeight, FunnySurface.DotColor color, FunnySurface.DotType figure) {
+        int bottom = y + charHeight - 1;
+        int right = x + charWidth - 1;
+        surface.drawLine(x, bottom, x, y, color, figure);
+        surface.drawLine(x, y, right, y, color, figure);
+        surface.drawLine(right, y, right, bottom, color, figure);
+        surface.drawLine(right, bottom, x, bottom, color, figure);
+    }
+
+    private static void drawTriangle(FunnySurface surface, int x, int y, int charWidth, int charHeight, FunnySurface.DotColor color, FunnySurface.DotType figure) {
+        int bottom = y + charHeight - 1;
+        int right = x + charWidth - 1;
+
+        surface.drawLine(4, 9, 10, 3, color, figure);
+        surface.drawLine(10, 3,right, bottom-1, color, figure);
+        surface.drawLine(right+1, bottom, x-1, bottom, color, figure);
+    }
+
+    private static void drawRectangle(FunnySurface surface, int x, int y, int charWidth, int charHeight, FunnySurface.DotColor color, FunnySurface.DotType figure) {
+        int bottom = y + charHeight - 1;
+        int right = x + charWidth - 1;
+        surface.drawLine(x, bottom, x, y, color, figure);
+        surface.drawLine(x, y, right, y, color, figure);
+        surface.drawLine(right, y, right, bottom, color, figure);
+        surface.drawLine(right, bottom, x, bottom, color, figure);
+    }
+
+    private static void drawTrapes(FunnySurface surface, int x, int y, int charWidth, int charHeight, FunnySurface.DotColor color, FunnySurface.DotType figure) {
+        int bottom = y + charHeight - 1;
+        int right = x + charWidth - 1;
+        surface.drawLine(x, bottom, x, y, color, figure);
+        surface.drawLine(x, y, right-6, y, color, figure);
+        surface.drawLine(right-5, y+1, right, bottom, color, figure);
+        surface.drawLine(right, bottom, x, bottom, color, figure);
+    }
+
+    public static void drawFigure(FunnySurface surface, int x, int y, FunnyButton.InnerShapeType innerShapeType, FunnySurface.DotColor color, FunnySurface.DotType figure, boolean center) {
+        int standardWidth = 5;
+        int standardHeight = 7;
+        switch (innerShapeType) {
+            case Circle:
+                if (center) x = x - standardWidth / 2 - 1;
+                FunnySurfaceUtils.drawCircle(surface, x, y, standardWidth + 2, standardHeight, color, figure);
+                break;
+            case Square:
+                if (center) x = x - standardWidth / 2 - 1;
+                FunnySurfaceUtils.drawSquare(surface, x, y, standardWidth + 2, standardHeight, color, figure);
+                break;
+            case Triangle:
+                if (center) x = x - standardWidth / 2 - 4;
+                FunnySurfaceUtils.drawTriangle(surface, x, y, standardWidth+8, standardHeight, color, figure);
+                break;
+            case Rectangle:
+                if (center) x = x - standardWidth / 2 - 3;
+                FunnySurfaceUtils.drawRectangle(surface, x, y, standardWidth+5, standardHeight, color, figure);
+                break;
+            case Trapes:
+                if (center) x = x - standardWidth / 2 - 2;
+                FunnySurfaceUtils.drawTrapes(surface, x, y, standardWidth+6, standardHeight, color, figure);
+                break;
+            case Heart:
+                break;
+            case Star:
+                break;
+            case Pentagon:
+                break;
+            case Ellipse:
+                break;
+            case Hexagon:
+                break;
+            default:
+        }
+    }
     /**
      * Draw [6x8 sized] character on surface
      *

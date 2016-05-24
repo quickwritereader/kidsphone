@@ -205,6 +205,17 @@ public class FunnyDisplay extends View {
         render();
     }
 
+    public void drawFigure(FunnyButton.InnerShapeType innerShapeType) {
+        mainSurface.clear();
+        int figureRandom = (int) (Math.random() * (FunnySurface.getMaxTypeSupport()- 1)) + 1;
+        int colorRandom = (int) (Math.random() * (FunnySurface.getMaxColorSupport() - 2)) + 1;//exclude white and black
+        /*FunnySurfaceUtils.drawFigure(mainSurface, mainSurface.getWidth() / 2, 4, l, FunnySurface.supportedColors[colorRandom],
+                FunnySurface.supportedTypes[figureRandom], true);*/
+        FunnySurfaceUtils.drawFigure(mainSurface, mainSurface.getWidth() / 2, 4, innerShapeType, FunnySurface.supportedColors[colorRandom],
+                FunnySurface.DotType.Circle, true);
+        render();
+    }
+
     public void drawChar(char l) {
         //Log.d("letter", "letter: " + l);
         mainSurface.clear();

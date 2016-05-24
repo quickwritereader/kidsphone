@@ -72,8 +72,20 @@ public class TeachMode extends BaseMode implements  SoundCallBack{
             }
         } else if (funnyButton.getKeyMode() == FunnyButton.KeyMode.Figures) {
             FunnyButton.InnerShapeType innerShapeType = funnyButton.getInnerShape();
-            phone.getAudio().playFigures(innerShapeType);
+            draw_play_figure(innerShapeType);
         }
+    }
+
+
+    /**
+     * draw char and play at the same time
+     *
+     * @param innerShapeType
+     */
+    private void draw_play_figure(FunnyButton.InnerShapeType innerShapeType) {
+        phone.getDisplay().drawFigure(innerShapeType);
+        int duration = phone.getAudio().playFigures(innerShapeType);
+        phone.refreshActiveTime(duration);
     }
 
     /**
