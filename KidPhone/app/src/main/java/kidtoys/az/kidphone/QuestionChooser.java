@@ -31,6 +31,10 @@ public class QuestionChooser implements Comparator<QuestionChooser.Question> {
         public int correctAnswerButtonId;
         public int totalQuestion;
         public int correctAnswers;
+        public Question (int soundId,int buttonId){
+            this.questionSoundId=soundId;
+            this.correctAnswerButtonId=buttonId;
+        }
     }
 
     public List<Question> questionList=new ArrayList<>();
@@ -70,6 +74,7 @@ public class QuestionChooser implements Comparator<QuestionChooser.Question> {
                 questions.add(questionList.get(i));
             }
             q=questions.poll();
+            q.totalQuestion++;
 
         }
 
