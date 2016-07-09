@@ -1,5 +1,7 @@
 package kidtoys.az.kidphone;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -16,31 +18,37 @@ public class QuestionChooser implements Comparator<QuestionChooser.Question> {
 
     @Override
     public int compare(Question question, Question t1) {
-        float percentageCorrect1=(float)(question.correctAnswers)/(float)question.totalQuestion;
-        float percentageCorrect2=(float)(t1.correctAnswers)/(float)t1.totalQuestion;
+        float percentageCorrect1=0;
+        if(question.totalQuestion>0)percentageCorrect1=(float)(question.correctAnswers)/(float)question.totalQuestion;
+        float percentageCorrect2=0;
+        if(t1.totalQuestion>0)percentageCorrect2=(float)(t1.correctAnswers)/(float)t1.totalQuestion;
+        //Log.d("question","q1 "+percentageCorrect1+ " q2 "+percentageCorrect2);
         if(lastFound){
-
-            return  percentageCorrect1>percentageCorrect2?-1:1;
-        }else{
             return  percentageCorrect1<percentageCorrect2?-1:1;
+        }else{
+            return  percentageCorrect1>percentageCorrect2?-1:1;
         }
     }
 
     public static class Question{
         public int questionSoundId;
-        public int correctAnswerButtonId;
+        public int questionId;
         public int totalQuestion;
         public int correctAnswers;
-        public Question (int soundId,int buttonId){
+        public Question (int soundId,int questionId){
             this.questionSoundId=soundId;
-            this.correctAnswerButtonId=buttonId;
+            this.questionId=questionId;
         }
     }
 
     public List<Question> questionList=new ArrayList<>();
 
     public boolean lastFound=false;
-    public Question currentQuestion=null;
+    private Question currentQuestion=null;
+
+    public  Question getCurrentQuestion(){
+        return  currentQuestion;
+    }
 
     /**
      * Add question. Warning: Make sure it is distinct  yourself
@@ -57,7 +65,22 @@ public class QuestionChooser implements Comparator<QuestionChooser.Question> {
         if(currentQuestion!=null){
             currentQuestion.correctAnswers++;
             lastFound=true;
+        }else{
+            lastFound=false;
         }
+        currentQuestion=null;
+    }
+
+    public void markWronglyFound(){
+        lastFound=false;
+        currentQuestion=null;
+    }
+
+    public void markSkipped(){
+        if(currentQuestion!=null){
+            if(currentQuestion.totalQuestion>0) currentQuestion.totalQuestion--;
+        }
+        currentQuestion=null;
     }
 
     public Question getNewQuestion(){
@@ -71,7 +94,9 @@ public class QuestionChooser implements Comparator<QuestionChooser.Question> {
             //choose form 1/4 best match
             PriorityQueue<Question> questions=new PriorityQueue<>(count,this);
             for(int i=0;i<count;i++){
-                questions.add(questionList.get(i));
+                Question x=questionList.get(i);
+               // Log.d("question","c: "+x.correctAnswers+ " t: "+x.totalQuestion);
+                questions.add(x);
             }
             q=questions.poll();
             q.totalQuestion++;

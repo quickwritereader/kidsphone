@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <attr name="InnerShapeProperty" format="enum">
+
         <enum name="None" value="0"/>
         <enum name="Square" value="1"/>
         <enum name="Rectangle" value="2"/>
@@ -10,12 +11,12 @@
         <enum name="Star" value="6"/>
         <enum name="Trapes" value="7"/>
         <enum name="Ellipse" value="8"/>
-        <enum name="Heart" value="9"/>
-        <enum name="YesPhone" value="10"/>
-        <enum name="NoPhone" value="11"/>
-        <enum name="Sound" value="12"/>
-        <enum name="Picture" value="13"/>
-        <enum name="Hexagon" value="14"/>
+        <enum name="Hexagon" value="9"/>
+        <enum name="Heart" value="10"/>
+        <enum name="YesPhone" value="11"/>
+        <enum name="NoPhone" value="12"/>
+        <enum name="Sound" value="13"/>
+        <enum name="Picture" value="14"/>
     </attr>
 
     <attr name="OuterShapeProperty" format="enum">

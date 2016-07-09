@@ -57,6 +57,8 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
         button.setOnClickListener(this);
         button = findViewById(R.id.buttonYes);
         button.setOnClickListener(this);
+        button = findViewById(R.id.quizMode);
+        button.setOnClickListener(this);
         display = (FunnyDisplay) findViewById(R.id.display);
         keysGroup = (ViewGroup) findViewById(R.id.KeysGroup);
         handler = new UiHandler(this);
@@ -145,6 +147,15 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
                         if (mode != null) mode.onSave();
                         mode = null;
                         mode = new TeachMode(this);
+                    }
+                    break;
+                case R.id.quizMode:
+                    if (mode != null && mode instanceof QuestionMode) {
+                        mode.onRefresh();
+                    } else {
+                        if (mode != null) mode.onSave();
+                        mode = null;
+                        mode = new QuestionMode(this);
                     }
                     break;
                 case R.id.buttonYes:

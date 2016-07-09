@@ -568,6 +568,19 @@ public class FunnySurfaceUtils {
         surface.drawLine( x+4,y  ,x+6,bottom-4,color,figure);
     }
 
+    public static void drawCorrect(FunnySurface surface, int x, int y,   boolean center) {
+        int charWidth = 10;
+        int charHeight = 7;
+        if (center) x = x - charWidth / 2 ;
+        int bottom = y + charHeight - 1;
+        int right = x + charWidth - 1;
+        FunnySurface.DotColor color= FunnySurface.DotColor.Green;
+
+        surface.drawLine(x, bottom-3, x+3, bottom, color, FunnySurface.DotType.Romb);
+        surface.drawLine(x+4, bottom-1,  right,y, color,  FunnySurface.DotType.Romb);
+
+    }
+
     public static void drawFigure(FunnySurface surface, int x, int y, FunnyButton.InnerShapeType innerShapeType, FunnySurface.DotColor color, FunnySurface.DotType figure, boolean center) {
         int standardWidth = 5;
         int standardHeight = 7;

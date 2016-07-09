@@ -288,7 +288,7 @@ public class FunnyButton extends View {
                         innerP1);
                 break;
             case Hexagon:
-                canvas.drawPath(CanvasUtils.StandardPolyPath(cx, cy, radius, 6),
+                canvas.drawPath(CanvasUtils.StandardPolyPath(cx, cy, radius, 6,-(float) (Math.PI )),
                         innerP1);
                 break;
             case Pentagon:
@@ -432,12 +432,12 @@ public class FunnyButton extends View {
         Star,
         Trapes,
         Ellipse,
+        Hexagon,
         Heart,
         YesPhone,
         NoPhone,
         Sound,
-        Picture,
-        Hexagon
+        Picture
     }
 
     public enum OuterShapeType {

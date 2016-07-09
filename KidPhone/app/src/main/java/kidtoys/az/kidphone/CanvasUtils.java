@@ -33,7 +33,7 @@ public class CanvasUtils {
     public static Path TrapesPath(float left, float top, float right, float bottom) {
         Path path = new Path();
         path.moveTo(left, top);
-        path.lineTo(right - (right - left) / 4.f, top);
+        path.lineTo(right - (right - left) /2.f, top);
         path.lineTo(right, bottom);
         path.lineTo(left, bottom);
         path.close();
