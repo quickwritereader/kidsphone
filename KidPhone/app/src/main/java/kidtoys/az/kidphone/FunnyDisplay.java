@@ -201,30 +201,45 @@ public class FunnyDisplay extends View {
     }
 
     public void clear() {
-        mainSurface.clear();
+        mainSurface.lock();
+        try {
+            mainSurface.clear();
+        }finally {
+            mainSurface.unlock();
+        }
         render();
     }
 
     public void drawFigure(FunnyButton.InnerShapeType innerShapeType) {
-        mainSurface.clear();
-        int figureRandom = (int) (Math.random() * (FunnySurface.getMaxTypeSupport()- 1)) + 1;
-        int colorRandom = (int) (Math.random() * (FunnySurface.getMaxColorSupport() - 2)) + 1;//exclude white and black
-        /*FunnySurfaceUtils.drawFigure(mainSurface, mainSurface.getWidth() / 2, 4, l, FunnySurface.supportedColors[colorRandom],
-                FunnySurface.supportedTypes[figureRandom], true);*/
-        FunnySurfaceUtils.drawFigure(mainSurface, mainSurface.getWidth() / 2, 4, innerShapeType, FunnySurface.supportedColors[colorRandom],
-                FunnySurface.DotType.Circle, true);
-        render();
+        mainSurface.lock();
+        try {
+            mainSurface.clear();
+            int figureRandom = (int) (Math.random() * (FunnySurface.getMaxTypeSupport()- 1)) + 1;
+            int colorRandom = (int) (Math.random() * (FunnySurface.getMaxColorSupport() - 2)) + 1;//exclude white and black
+            /*FunnySurfaceUtils.drawFigure(mainSurface, mainSurface.getWidth() / 2, 4, l, FunnySurface.supportedColors[colorRandom],
+                    FunnySurface.supportedTypes[figureRandom], true);*/
+            FunnySurfaceUtils.drawFigure(mainSurface, mainSurface.getWidth() / 2, 4, innerShapeType, FunnySurface.supportedColors[colorRandom],
+                    FunnySurface.DotType.Circle, true);
+            render();
+        } finally {
+            mainSurface.unlock();
+        }
     }
 
     public void drawChar(char l) {
         //Log.d("letter", "letter: " + l);
-        mainSurface.clear();
-        int figureRandom = (int) (Math.random() * (FunnySurface.getMaxTypeSupport()- 1)) + 1;
-        int colorRandom = (int) (Math.random() * (FunnySurface.getMaxColorSupport() - 2)) + 1;//exclude white and black
+        mainSurface.lock();
+        try {
+            mainSurface.clear();
+            int figureRandom = (int) (Math.random() * (FunnySurface.getMaxTypeSupport() - 1)) + 1;
+            int colorRandom = (int) (Math.random() * (FunnySurface.getMaxColorSupport() - 2)) + 1;//exclude white and black
         /*FunnySurfaceUtils.drawChar(mainSurface, mainSurface.getWidth() / 2, 4, l, FunnySurface.supportedColors[colorRandom],
                 FunnySurface.supportedTypes[figureRandom], true);*/
-        FunnySurfaceUtils.drawChar(mainSurface, mainSurface.getWidth() / 2, 4, l, FunnySurface.supportedColors[colorRandom],
-                FunnySurface.DotType.Circle, true);
+            FunnySurfaceUtils.drawChar(mainSurface, mainSurface.getWidth() / 2, 4, l, FunnySurface.supportedColors[colorRandom],
+                    FunnySurface.DotType.Circle, true);
+        }finally {
+            mainSurface.unlock();
+        }
         render();
     }
 

@@ -17,6 +17,7 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
     private UiHandler handler;
     private ViewGroup keysGroup;
     private BaseMode mode = null;
+    private BaseAnimation localSpeaker;
 
     @Override
     public View getViewById(int id) {
@@ -44,6 +45,25 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
     }
 
     @Override
+    public void startSpeaker() {
+        localSpeaker.start();
+    }
+
+    @Override
+    public void startSpeaker(int duration) {
+        localSpeaker.start(duration);
+    }
+
+    @Override
+    public void stopSpeaker() {
+        localSpeaker.stop(true);
+    }
+    @Override
+    public void stopSpeaker(boolean force) {
+       localSpeaker.stop(force);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -62,7 +82,7 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
         display = (FunnyDisplay) findViewById(R.id.display);
         keysGroup = (ViewGroup) findViewById(R.id.KeysGroup);
         handler = new UiHandler(this);
-
+        localSpeaker=new SpeakerAnimation(display);
 
     }
 
@@ -75,7 +95,9 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
         try {
             if(started==0) {
                 started=1;
+
                 int duration=soundPlayer.playPhoneOpenMode();
+                startSpeaker(duration);
                 refreshActiveTime(duration);
                 TeachMode teachMode = new TeachMode(this, false);
                 mode = teachMode;

@@ -1,6 +1,9 @@
 package kidtoys.az.kidphone;
 
 
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 /**
  * Created by abdurrauf on 3/5/16.
  * This class will be used as main block for drawings
@@ -13,7 +16,9 @@ public class FunnySurface {
     private final int width;
     private final int height;
     private byte[] mem = null;
-    private boolean locked = false;
+
+
+    private Lock locker=new ReentrantLock();
     /**
      * Create 1x1 blank surface
      */
@@ -65,14 +70,16 @@ public class FunnySurface {
         return newS;
     }
 
-    public synchronized boolean tryLock() {
-        if (locked) return false;
-        locked = true;
-        return true;
+    public   void lock(){
+        locker.lock();
     }
 
-    public synchronized void unlock() {
-        locked = false;
+    public   boolean tryLock() {
+        return locker.tryLock();
+    }
+
+    public   void unlock() {
+        locker.unlock();
     }
 
     public int getWidth() {

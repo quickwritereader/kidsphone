@@ -9,7 +9,6 @@ public class CallMode extends BaseMode implements SoundCallBack {
 
     public static String dialedNumber;
     public int lastDialedIndex=0;
-
     public static int[] callPositions={0,0,0,0,0,0,0,0};
     FunnySurface surface;
     private static int [] callAny ={R.raw.az_gel_birine_zeng_edek };
@@ -57,6 +56,7 @@ public class CallMode extends BaseMode implements SoundCallBack {
         if (funnyButton.getKeyMode() == FunnyButton.KeyMode.Numbers) {
             String number = funnyButton.getNumbersText();
             if (number.length() > 0 && handleKeys) {
+                phone.stopSpeaker();
                 dialedNumber = dialedNumber + number;
                 //if first time change wait to who
                 if(dialedNumber.length()==1){
@@ -98,6 +98,7 @@ public class CallMode extends BaseMode implements SoundCallBack {
                             if(callPositions[index]>=arr.length){
                                 callPositions[index]=0;
                             }
+                            phone.startSpeaker();
                             audio.playCall( arr[position],callMode);
 
                             dialedNumber = "";
@@ -133,6 +134,7 @@ public class CallMode extends BaseMode implements SoundCallBack {
         handleKeys=true ;
         phone.deActivateDelay();
         int duration=audio.PlayMp3(R.raw.az_gel_birine_zeng_edek );
+        phone.startSpeaker(duration);
         phone.activateDelay(new UiHandler.DelayObject(getCallSoundArray(0),callPositions[0]), 5000);
         phone.refreshActiveTime(duration);//forward user timing
         phone.changeKeys(FunnyButton.KeyMode.Numbers);
@@ -146,6 +148,7 @@ public class CallMode extends BaseMode implements SoundCallBack {
         //change delay to standard
         phone.deActivateDelay();
         phone.activateDelay();
+        phone.stopSpeaker();
 
     }
 
@@ -154,6 +157,7 @@ public class CallMode extends BaseMode implements SoundCallBack {
     @Override
     public void soundPlayFinished() {
         callModeWait(lastDialedIndex);
+        phone.stopSpeaker(false);
         handleKeys=true;
     }
 

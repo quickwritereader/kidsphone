@@ -12,6 +12,7 @@ public class QuestionMode extends BaseMode implements  SoundCallBack{
     private int [] wrongs={R.raw.az_wrong_1,R.raw.az_wrong_2,R.raw.az_wrong_3};
     private int correctCount=0;
     private int wrongCount=0;
+
     public QuestionMode (Phone phone) throws Exception{
         super(phone);
         quizGiver=new QuestionChooser();
@@ -101,12 +102,15 @@ public class QuestionMode extends BaseMode implements  SoundCallBack{
 
 
     private void play_figure(FunnyButton.InnerShapeType innerShapeType) {
+
+        phone.getDisplay().drawFigure(innerShapeType);
         int duration = phone.getAudio().playFigures(innerShapeType);
         phone.refreshActiveTime(duration);
     }
 
 
     private void play(char l) {
+        phone.getDisplay().drawChar(l) ;
         int duration=phone.getAudio().playChar(l);
         phone.refreshActiveTime(duration);
     }
@@ -116,32 +120,35 @@ public class QuestionMode extends BaseMode implements  SoundCallBack{
         switch(x.questionSoundId){
             case R.raw.az_question_alphabet: {
                 phone.changeKeys(FunnyButton.KeyMode.Letters);
-                phone.getDisplay().drawChar(letters.charAt(x.questionId));
                 phone.getAudio().PlayMp3(x.questionSoundId,this);
 
             }
                 break;
             case R.raw.az_question_number: {
                 phone.changeKeys(FunnyButton.KeyMode.Numbers);
-                phone.getDisplay().drawChar(numbers.charAt(x.questionId));
                 phone.getAudio().PlayMp3(x.questionSoundId,this);
             }
                 break;
             case R.raw.az_question_figure:{
                 phone.changeKeys(FunnyButton.KeyMode.Figures);
-                phone.getDisplay().drawFigure(FunnyButton.InnerShapeType.values()[x.questionId]);
                 phone.getAudio().PlayMp3(x.questionSoundId,this);
             }
                 break;
         }
+        phone.startSpeaker();
     }
 
     @Override
-    public void onSave(){}
+    public void onSave(){
+        phone.stopSpeaker();
+        phone.getAudio().StopMp3();
+
+    }
 
     @Override
     public void soundPlayFinished() {
         QuestionChooser.Question x=quizGiver.getCurrentQuestion();
+        phone.stopSpeaker();
         if(x!=null){
             switch(x.questionSoundId){
                 case R.raw.az_question_alphabet: {

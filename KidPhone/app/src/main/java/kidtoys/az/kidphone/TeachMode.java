@@ -13,7 +13,6 @@ public class TeachMode extends BaseMode implements  SoundCallBack{
     private SoundPlayer soundPlayer;
     private FunnyDisplay display;
     private  FunnyButton modeButton=null;
-
     private boolean playSound=true;
 
     public boolean isPlaySound() {
@@ -48,6 +47,7 @@ public class TeachMode extends BaseMode implements  SoundCallBack{
     @Override
     public void onClick(FunnyButton funnyButton) {
         if (funnyButton.getKeyMode() == FunnyButton.KeyMode.Letters) {
+            phone.stopSpeaker();
             String letters = funnyButton.getLettersText();
             pressedTimes = lastPressed.equals(letters) ? pressedTimes : 0;
             lastPressed = letters;
@@ -66,11 +66,13 @@ public class TeachMode extends BaseMode implements  SoundCallBack{
 
             }
         } else if (funnyButton.getKeyMode() == FunnyButton.KeyMode.Numbers) {
+            phone.stopSpeaker();
             String number = funnyButton.getNumbersText();
             if (number.length() > 0) {
                 draw_play(number.charAt(0));
             }
         } else if (funnyButton.getKeyMode() == FunnyButton.KeyMode.Figures) {
+            phone.stopSpeaker();
             FunnyButton.InnerShapeType innerShapeType = funnyButton.getInnerShape();
             draw_play_figure(innerShapeType);
         }
@@ -121,6 +123,7 @@ public class TeachMode extends BaseMode implements  SoundCallBack{
     }
 
     private void playMode(FunnyButton.KeyMode mode,SoundCallBack callback){
+        phone.startSpeaker();
         switch (mode) {
             case Normal:
             case Numbers:
@@ -189,11 +192,14 @@ public class TeachMode extends BaseMode implements  SoundCallBack{
     public   void onSave(){
         putState(STATE,keysMode);
         changeModeButton(false);
+        phone.stopSpeaker();
+        phone.getAudio().StopMp3();
         //change button for old
     }
 
     @Override
     public void soundPlayFinished() {
         phone.activateDelay();
+        phone.stopSpeaker(false);
     }
 }

@@ -26,6 +26,12 @@ public interface Phone {
 
     public void refreshActiveTime(int forwardDelay);
 
+    public void startSpeaker();
 
+    public void startSpeaker(int duration);
+
+    public  void stopSpeaker();
+
+    public void stopSpeaker(boolean force) ;
 
 }

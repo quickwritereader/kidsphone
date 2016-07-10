@@ -301,8 +301,11 @@ public class GameMode extends BaseMode {
             if (gameRun) {
                 FunnySurface mainSurface = display.getMainSurface();
                 if (mainSurface.tryLock()) {
-                    mainSurface.putSurface(map, 0, 0);
-                    mainSurface.unlock();
+                    try {
+                        mainSurface.putSurface(map, 0, 0);
+                    }finally {
+                        mainSurface.unlock();
+                    }
                 }
                 display.postInvalidate();
             }

@@ -46,8 +46,10 @@ public class SoundPlayer {
     }
 
     public void StopMp3() {
-        mediaPlayer.stop();
-        mediaPlayer.release();
+        if(mediaPlayer!=null) {
+            mediaPlayer.stop();
+            mediaPlayer.release();
+        }
         mediaPlayer = null;
     }
 

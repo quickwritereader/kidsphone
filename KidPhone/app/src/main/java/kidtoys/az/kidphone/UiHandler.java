@@ -35,6 +35,10 @@ public class UiHandler extends Handler implements SoundCallBack {
     public void soundPlayFinished() {
         if (reSendMsg != null) {
             Log.d(TAG,"audio soundPlayFinished. resend delay");
+            PhoneActivity phone = phoneRef.get();
+            if (phone != null) {
+              phone.stopSpeaker(false);
+            }
             sendMsg(reSendMsg, timeDelay);
         }
     }
@@ -129,9 +133,11 @@ public class UiHandler extends Handler implements SoundCallBack {
                             //if ret=0 it means it reached end
                             //so we will say only this without resending message
                             reSendMsg=null;
-                            Log.d(TAG,"say this and end delay packet");
-                            phone.getAudio().PlayMp3(sound);
+                            Log.d(TAG, "say this and end delay packet");
+                            int duration=phone.getAudio().PlayMp3(sound);
+                            phone.startSpeaker(duration);
                         }else {
+                            phone.startSpeaker();
                             phone.getAudio().PlayMp3(sound, this);
                         }
                     }
