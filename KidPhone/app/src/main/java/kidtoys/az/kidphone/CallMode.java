@@ -18,6 +18,10 @@ public class CallMode extends BaseMode implements SoundCallBack {
     private static int [] call103Arr={R.raw.az_call_103_1,R.raw.az_call_103_2};
     private static int [] call112Arr={R.raw.az_call_112_1,R.raw.az_call_112_2,R.raw.az_call_112_3};
     private static int [] callIncorret={R.raw.az_incorrect_number_1,R.raw.az_incorrect_number_2};
+    BaseAnimation callAnimation;
+    BaseAnimation callNoAnimation;
+    boolean  isNoActive=false;
+
 
     public int[] getCallSoundArray(int index){
         switch (index) {
@@ -45,6 +49,8 @@ public class CallMode extends BaseMode implements SoundCallBack {
     public CallMode(Phone phone) throws Exception {
         super(phone);
         surface=new FunnySurface(phone.getDisplay().surfaceWidth,phone.getDisplay().surfaceHeight);
+        callAnimation=new CallAnimation(phone.getDisplay());
+        callNoAnimation=new CallNoButtonAnim(phone.getDisplay());
         onRefresh();
     }
     private boolean handleKeys=true;
@@ -53,10 +59,26 @@ public class CallMode extends BaseMode implements SoundCallBack {
 
     @Override
     public void onClick(FunnyButton funnyButton) {
+        if(funnyButton.getId()==R.id.buttonNo && isNoActive){
+            isNoActive=false;
+            phone.stopSpeaker(true);
+            callNoAnimation.start();
+            audio.PlayMp3(R.raw.dial_tone, new SoundCallBack() {
+                @Override
+                public void soundPlayFinished() {
+                    callNoAnimation.stop(true);
+                    isNoActive=true;
+                    phone.startSpeaker();
+                    audio.PlayMp3(R.raw.az_incorrect_number_2, callMode);
+                }
+            });
+            return;
+        }
         if (funnyButton.getKeyMode() == FunnyButton.KeyMode.Numbers) {
             String number = funnyButton.getNumbersText();
             if (number.length() > 0 && handleKeys) {
                 phone.stopSpeaker();
+                isNoActive=false;
                 dialedNumber = dialedNumber + number;
                 //if first time change wait to who
                 if(dialedNumber.length()==1){
@@ -91,15 +113,27 @@ public class CallMode extends BaseMode implements SoundCallBack {
                                 default:
                                     index=7;
                             }
-                            int [] arr= getCallSoundArray(index);
+                             int [] arr= getCallSoundArray(index);
                             lastDialedIndex=index;
-                            int position=callPositions[index];
+                            final int position=callPositions[index];
                             callPositions[index]=callPositions[index]+1;
                             if(callPositions[index]>=arr.length){
                                 callPositions[index]=0;
                             }
-                            phone.startSpeaker();
-                            audio.playCall( arr[position],callMode);
+                            final int audio_id=arr[position];
+                           // phone.startSpeaker();
+                            //audio.playCall( arr[position],callMode);
+                            final boolean useNoButton=index!=7;
+                            callAnimation.start();
+                            audio.PlayMp3(R.raw.dial_tone, new SoundCallBack() {
+                                @Override
+                                public void soundPlayFinished() {
+                                    callAnimation.stop(true);
+                                    isNoActive=useNoButton;
+                                    phone.startSpeaker();
+                                    audio.PlayMp3(audio_id, callMode);
+                                }
+                            });
 
                             dialedNumber = "";
                         }
@@ -131,6 +165,7 @@ public class CallMode extends BaseMode implements SoundCallBack {
     @Override
     public void onRefresh() {
         audio=phone.getAudio();
+        isNoActive=false;
         handleKeys=true ;
         phone.deActivateDelay();
         int duration=audio.PlayMp3(R.raw.az_gel_birine_zeng_edek );
@@ -149,13 +184,15 @@ public class CallMode extends BaseMode implements SoundCallBack {
         phone.deActivateDelay();
         phone.activateDelay();
         phone.stopSpeaker();
-
+        callAnimation.stop(true);
+        callNoAnimation.stop(true);
     }
 
 
 
     @Override
     public void soundPlayFinished() {
+
         callModeWait(lastDialedIndex);
         phone.stopSpeaker(false);
         handleKeys=true;

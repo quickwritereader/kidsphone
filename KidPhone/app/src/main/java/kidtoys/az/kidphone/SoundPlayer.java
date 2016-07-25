@@ -245,6 +245,7 @@ public class SoundPlayer {
 
     }
 
+
     public SoundPool getPool() {
         if (pool == null) {
             pool = new SoundPool(0, AudioManager.STREAM_MUSIC, 0);
