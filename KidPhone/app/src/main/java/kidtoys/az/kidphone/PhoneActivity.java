@@ -45,6 +45,16 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
     }
 
     @Override
+    public void startSpeaker(boolean restoreOld) {
+        localSpeaker.start(-1,restoreOld);
+    }
+
+    @Override
+    public void startSpeaker(int duration,boolean restoreOld) {
+        localSpeaker.start(duration,restoreOld);
+    }
+
+    @Override
     public void startSpeaker() {
         localSpeaker.start();
     }
@@ -58,6 +68,7 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
     public void stopSpeaker() {
         localSpeaker.stop(true);
     }
+
     @Override
     public void stopSpeaker(boolean force) {
        localSpeaker.stop(force);

@@ -135,9 +135,9 @@ public class UiHandler extends Handler implements SoundCallBack {
                             reSendMsg=null;
                             Log.d(TAG, "say this and end delay packet");
                             int duration=phone.getAudio().PlayMp3(sound);
-                            phone.startSpeaker(duration);
+                            phone.startSpeaker(duration,true);
                         }else {
-                            phone.startSpeaker();
+                            phone.startSpeaker(true);
                             phone.getAudio().PlayMp3(sound, this);
                         }
                     }

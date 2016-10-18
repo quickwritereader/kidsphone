@@ -169,6 +169,8 @@ public class CallMode extends BaseMode implements SoundCallBack {
         handleKeys=true ;
         phone.deActivateDelay();
         int duration=audio.PlayMp3(R.raw.az_gel_birine_zeng_edek );
+        callAnimation.stop(true);
+        callNoAnimation.stop(true);
         phone.startSpeaker(duration);
         phone.activateDelay(new UiHandler.DelayObject(getCallSoundArray(0),callPositions[0]), 5000);
         phone.refreshActiveTime(duration);//forward user timing

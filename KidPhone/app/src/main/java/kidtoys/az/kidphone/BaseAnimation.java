@@ -17,7 +17,13 @@ public abstract class BaseAnimation {
 
     public void start(int duration){
         stop(true);
-        anim=new AnimThread(this,display,duration);
+        anim=new AnimThread(this,display,duration,false);
+        anim.start();
+    }
+
+    public void start(int duration,boolean restoreOld){
+        stop(true);
+        anim=new AnimThread(this,display,duration,restoreOld);
         anim.start();
     }
 
@@ -46,10 +52,10 @@ public abstract class BaseAnimation {
         private final FunnyDisplay display;
         private FunnySurface surface;
         private BaseAnimation baseAnimation;
-
+        private FunnySurface prevSurface;
         private boolean animRun=true;
         private boolean immediate=false;
-
+        private boolean restoreOld=false;
         public synchronized  boolean isAnimRun() {
             return animRun;
         }
@@ -59,14 +65,16 @@ public abstract class BaseAnimation {
             this.immediate=immediate;
         }
 
-        public AnimThread(BaseAnimation animation,FunnyDisplay display) {
+        public AnimThread(BaseAnimation animation,FunnyDisplay display,boolean restoreOld) {
             this.display=display;
             this.surface=new FunnySurface(display.surfaceWidth,display.surfaceHeight);
+            this.restoreOld=restoreOld;
             this.baseAnimation=animation;
         }
-        public AnimThread(BaseAnimation animation,FunnyDisplay display,int duration) {
+        public AnimThread(BaseAnimation animation,FunnyDisplay display,int duration,boolean restoreOld) {
             this.duration=duration;
             this.display=display;
+            this.restoreOld=restoreOld;
             this.surface=new FunnySurface(display.surfaceWidth,display.surfaceHeight);
             this.baseAnimation=animation;
         }
@@ -77,9 +85,20 @@ public abstract class BaseAnimation {
         public void run() {
             long startTime=System.currentTimeMillis();
             boolean forced=false;
+            if(restoreOld){
+                this.prevSurface=new FunnySurface(display.surfaceWidth,display.surfaceHeight);
+                FunnySurface mainSurface = display.getMainSurface();
+                if (mainSurface.tryLock() ) {
+                    try {
+                        prevSurface.putSurface(mainSurface,0,0); 
+                    }finally {
+                        mainSurface.unlock();
+                    }
+                }
+            }
             while (isAnimRun()){
                    if(baseAnimation.onDraw(surface)) {
-                       draw();
+                       draw( );
                    }
                 try {
                     Thread.sleep(20);
@@ -94,12 +113,30 @@ public abstract class BaseAnimation {
                 }
             }
             if(!forced & !immediate){
-                draw();
+                if(restoreOld){
+                    restoreOldDisplay();
+                }else{
+                    draw( );
+                }
+
+
             }
 
         }
 
-        private void draw() {
+        private  void restoreOldDisplay(){
+            FunnySurface mainSurface = display.getMainSurface();
+            if (mainSurface.tryLock() ) {
+                try {
+                    if(prevSurface!=null) mainSurface.putSurface(prevSurface, 0, 0);
+                    else mainSurface.clear();
+                }finally {
+                    mainSurface.unlock();
+                }
+                display.postInvalidate();
+            }
+        }
+        private void draw( ) {
             FunnySurface mainSurface = display.getMainSurface();
             if (mainSurface.tryLock() ) {
                 try {

@@ -30,6 +30,10 @@ public interface Phone {
 
     public void startSpeaker(int duration);
 
+    public void startSpeaker( boolean restoreOld);
+
+    public void startSpeaker(int duration,boolean restoreOld);
+
     public  void stopSpeaker();
 
     public void stopSpeaker(boolean force) ;
