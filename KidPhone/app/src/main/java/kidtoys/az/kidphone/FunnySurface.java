@@ -9,6 +9,11 @@ import java.util.concurrent.locks.ReentrantLock;
  * This class will be used as main block for drawings
  */
 public class FunnySurface {
+
+    public interface CallbackDraw{
+        boolean dotHasDrawn();
+    }
+
     public static final DotColor[] supportedColors = DotColor.values();
     public static final DotType[] supportedTypes = DotType.values();
     private final static int maxColorSupport = supportedColors.length;
@@ -143,6 +148,17 @@ public class FunnySurface {
         }
     }
 
+
+    public void putDot(int x, int y, DotColor color, DotType type,CallbackDraw clbk) {
+        if (x >= 0 && x < width && y >= 0 && y < height) {
+            mem[y * width + x] = (byte) (color.ordinal() | (type.ordinal() << 4));
+            if(clbk!=null){
+                if(!clbk.dotHasDrawn()){
+                    return;
+                }
+            }
+        }
+    }
     /**
      * Put Dot data into surface
      *
@@ -221,6 +237,10 @@ public class FunnySurface {
         }
     }
 
+    public void drawLine(int x1, int y1, int x2, int y2, DotColor color, DotType type){
+        drawLine(  x1,   y1,   x2,   y2, color,   type,null);
+    }
+
     /**
      * Draw line  {@see https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm}
      * for Octants  Bresenham's algorithm
@@ -234,7 +254,7 @@ public class FunnySurface {
      * @param color
      * @param type
      */
-    public void drawLine(int x1, int y1, int x2, int y2, DotColor color, DotType type) {
+    public void drawLine(int x1, int y1, int x2, int y2, DotColor color, DotType type,CallbackDraw clbk) {
 
         int deltaX = Math.abs(x2 - x1);
         int deltaY = Math.abs(y2 - y1);
@@ -242,13 +262,23 @@ public class FunnySurface {
         int x = x1;
         int cInt = color.ordinal() | type.ordinal() << 4;
         byte c = (byte) (cInt);
+        if(clbk!=null){
+            if(!clbk.dotHasDrawn()) {
+                return;
+            }
 
+        }
         if (deltaX == 0) {
             //horizontal
             int sign = y2 > y1 ? 1 : -1;
             for (; y != y2 + sign; y += sign) {
                 if (x >= 0 && x < width && y >= 0 && y < height) {
                     mem[y * width + x] = c;
+                    if(clbk!=null){
+                        if(!clbk.dotHasDrawn()){
+                            return;
+                        }
+                    }
                 }
             }
 
@@ -258,6 +288,11 @@ public class FunnySurface {
             for (; x != x2 + sign; x += sign) {
                 if (x >= 0 && x < width && y >= 0 && y < height) {
                     mem[y * width + x] = c;
+                    if(clbk!=null){
+                        if(!clbk.dotHasDrawn()){
+                            return;
+                        }
+                    }
                 }
             }
         } else if (deltaX == deltaY) {
@@ -267,6 +302,11 @@ public class FunnySurface {
             for (; y != y2 + signY; y += signY, x += signX) {
                 if (x >= 0 && x < width && y >= 0 && y < height) {
                     mem[y * width + x] = c;
+                    if(clbk!=null){
+                        if(!clbk.dotHasDrawn()){
+                            return;
+                        }
+                    }
                 }
             }
         } else {
@@ -283,6 +323,11 @@ public class FunnySurface {
                 for (; ; ) {
                     if (x1 >= 0 && x1 < width && y1 >= 0 && y1 < height) {
                         mem[y1 * width + x1] = c;
+                        if(clbk!=null){
+                            if(!clbk.dotHasDrawn()){
+                                return;
+                            }
+                        }
                     }
                     if (x1 == x2)
                         break;
@@ -298,6 +343,11 @@ public class FunnySurface {
                     //plot(g, x1, y1);
                     if (x1 >= 0 && x1 < width && y1 >= 0 && y1 < height) {
                         mem[y1 * width + x1] = c;
+                        if(clbk!=null){
+                            if(!clbk.dotHasDrawn()){
+                                return;
+                            }
+                        }
                     }
                     if (y1 == y2)
                         break;

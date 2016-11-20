@@ -5,8 +5,14 @@ package kidtoys.az.kidphone;
  */
 public abstract class BaseAnimation {
 
+    public interface RenderClbk{
+        public void RenderSurfaceOnMain();
+    }
+
     private  AnimThread anim;
     private  final FunnyDisplay display;
+
+
     public BaseAnimation(FunnyDisplay display) {
         this.display=display;
     }
@@ -17,13 +23,13 @@ public abstract class BaseAnimation {
 
     public void start(int duration){
         stop(true);
-        anim=new AnimThread(this,display,duration,false);
+        anim=new AnimThread(this,display,duration,false,isLooped());
         anim.start();
     }
 
     public void start(int duration,boolean restoreOld){
         stop(true);
-        anim=new AnimThread(this,display,duration,restoreOld);
+        anim=new AnimThread(this,display,duration,restoreOld,isLooped());
         anim.start();
     }
 
@@ -45,8 +51,10 @@ public abstract class BaseAnimation {
 
     protected abstract boolean onDraw(FunnySurface surface);
 
+    protected abstract boolean isLooped( );
+     protected abstract boolean onLoopDraw(FunnySurface surface,RenderClbk renderClbk);
 
-    private static class AnimThread extends  Thread
+    private static class AnimThread extends  Thread implements RenderClbk
     {
         private int duration=-1;
         private final FunnyDisplay display;
@@ -56,6 +64,7 @@ public abstract class BaseAnimation {
         private boolean animRun=true;
         private boolean immediate=false;
         private boolean restoreOld=false;
+        private boolean isLoopBased=false;
         public synchronized  boolean isAnimRun() {
             return animRun;
         }
@@ -71,12 +80,21 @@ public abstract class BaseAnimation {
             this.restoreOld=restoreOld;
             this.baseAnimation=animation;
         }
-        public AnimThread(BaseAnimation animation,FunnyDisplay display,int duration,boolean restoreOld) {
+
+        public AnimThread(BaseAnimation animation,FunnyDisplay display,boolean restoreOld,boolean isLoop) {
+            this.display=display;
+            this.surface=new FunnySurface(display.surfaceWidth,display.surfaceHeight);
+            this.restoreOld=restoreOld;
+            this.baseAnimation=animation;
+            isLoopBased=isLoop;
+        }
+        public AnimThread(BaseAnimation animation,FunnyDisplay display,int duration,boolean restoreOld,boolean isLoop) {
             this.duration=duration;
             this.display=display;
             this.restoreOld=restoreOld;
             this.surface=new FunnySurface(display.surfaceWidth,display.surfaceHeight);
             this.baseAnimation=animation;
+            isLoopBased=isLoop;
         }
 
 
@@ -97,8 +115,13 @@ public abstract class BaseAnimation {
                 }
             }
             while (isAnimRun()){
-                   if(baseAnimation.onDraw(surface)) {
-                       draw( );
+                   if(isLoopBased){
+                       baseAnimation.onLoopDraw(surface,this);
+                       animRun=false;
+                   }else {
+                       if (baseAnimation.onDraw(surface)) {
+                           draw();
+                       }
                    }
                 try {
                     Thread.sleep(20);
@@ -147,6 +170,11 @@ public abstract class BaseAnimation {
                 }
                 display.postInvalidate();
             }
+        }
+
+        @Override
+        public void RenderSurfaceOnMain() {
+            if(isAnimRun())draw();
         }
     }
 

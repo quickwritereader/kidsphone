@@ -166,7 +166,137 @@ public class SoundPlayer {
         }
     }
 
-
+    /*play*/
+    public void playChar(char Letter,SoundCallBack soundDone) {
+        switch (Letter) {
+            case 'A':
+                  this.PlayMp3(R.raw.az_a,soundDone);break;
+            case 'B':
+                  this.PlayMp3(R.raw.az_b,soundDone);break;
+            case 'C':
+                  this.PlayMp3(R.raw.az_c,soundDone);break;
+            case 'Ç':
+                  this.PlayMp3(R.raw.az_ch,soundDone);
+                break;
+            case 'D':
+                  this.PlayMp3(R.raw.az_d,soundDone);
+                break;
+            case 'E':
+                  this.PlayMp3(R.raw.az_e,soundDone);
+                break;
+            case 'Ə':
+            case 'ə':
+                  this.PlayMp3(R.raw.az_ee,soundDone);
+                break;
+            case 'F':
+                  this.PlayMp3(R.raw.az_f,soundDone);
+                break;
+            case 'G':
+                  this.PlayMp3(R.raw.az_g,soundDone);
+                break;
+            case 'Ğ':
+                  this.PlayMp3(R.raw.az_gh,soundDone);
+                break;
+            case 'H':
+                  this.PlayMp3(R.raw.az_h,soundDone);
+                break;
+            case 'I':
+                  this.PlayMp3(R.raw.az_ii,soundDone);
+                break;
+            case 'İ':
+                  this.PlayMp3(R.raw.az_i,soundDone);
+                break;
+            case 'J':
+                  this.PlayMp3(R.raw.az_j,soundDone);
+                break;
+            case 'K':
+                  this.PlayMp3(R.raw.az_k,soundDone);
+                break;
+            case 'Q':
+                  this.PlayMp3(R.raw.az_q,soundDone);
+                break;
+            case 'L':
+                  this.PlayMp3(R.raw.az_l,soundDone);
+                break;
+            case 'M':
+                  this.PlayMp3(R.raw.az_m,soundDone);
+                break;
+            case 'N':
+                  this.PlayMp3(R.raw.az_n,soundDone);
+                break;
+            case 'O':
+                  this.PlayMp3(R.raw.az_o,soundDone);
+                break;
+            case 'Ö':
+                  this.PlayMp3(R.raw.az_oo,soundDone);
+                break;
+            case 'P':
+                  this.PlayMp3(R.raw.az_p,soundDone);
+                break;
+            case 'R':
+                  this.PlayMp3(R.raw.az_r,soundDone);
+                break;
+            case 'S':
+                  this.PlayMp3(R.raw.az_s,soundDone);
+                break;
+            case 'Ş':
+                  this.PlayMp3(R.raw.az_sh,soundDone);
+                break;
+            case 'T':
+                  this.PlayMp3(R.raw.az_t,soundDone);
+                break;
+            case 'U':
+                  this.PlayMp3(R.raw.az_u,soundDone);
+                break;
+            case 'Ü':
+                  this.PlayMp3(R.raw.az_uu,soundDone);
+                break;
+            case 'V':
+                  this.PlayMp3(R.raw.az_v,soundDone);
+                break;
+            case 'Y':
+                  this.PlayMp3(R.raw.az_y,soundDone);
+                break;
+            case 'X':
+                  this.PlayMp3(R.raw.az_x,soundDone);
+                break;
+            case 'Z':
+                  this.PlayMp3(R.raw.az_z,soundDone);
+                break;
+            case '0':
+                  this.PlayMp3(R.raw.az_0,soundDone);
+                break;
+            case '1':
+                  this.PlayMp3(R.raw.az_1,soundDone);
+                break;
+            case '2':
+                  this.PlayMp3(R.raw.az_2,soundDone);
+                break;
+            case '3':
+                  this.PlayMp3(R.raw.az_3,soundDone);
+                break;
+            case '4':
+                  this.PlayMp3(R.raw.az_4,soundDone);
+                break;
+            case '5':
+                  this.PlayMp3(R.raw.az_5,soundDone);
+                break;
+            case '6':
+                  this.PlayMp3(R.raw.az_6,soundDone);
+                break;
+            case '7':
+                  this.PlayMp3(R.raw.az_7,soundDone);
+                break;
+            case '8':
+                  this.PlayMp3(R.raw.az_8,soundDone);
+                break;
+            case '9':
+                  this.PlayMp3(R.raw.az_9,soundDone);
+                break;
+            default:
+                return  ;
+        }
+    }
 
     /**
      * Play figures
@@ -197,6 +327,38 @@ public class SoundPlayer {
                 return this.PlayMp3(R.raw.az_altibucaq);
             default:
                 return 0;
+        }
+    }
+
+    /**
+     * Play figures
+     *
+     * @param innerShapeType
+     */
+    public void playFigures(FunnyButton.InnerShapeType innerShapeType,SoundCallBack soundDone) {
+        switch (innerShapeType) {
+            case Circle:
+                  this.PlayMp3(R.raw.az_daire,soundDone);break;
+            case Square:
+                  this.PlayMp3(R.raw.az_kvadrat,soundDone);break;
+            case Triangle:
+                  this.PlayMp3(R.raw.az_ucbucaq,soundDone);break;
+            case Rectangle:
+                  this.PlayMp3(R.raw.az_duzbucaq,soundDone);break;
+            case Trapes:
+                  this.PlayMp3(R.raw.az_trapesiya,soundDone);break;
+            case Heart:
+                  this.PlayMp3(R.raw.az_urek,soundDone);break;
+            case Star:
+                  this.PlayMp3(R.raw.az_ulduz,soundDone);break;
+            case Pentagon:
+                  this.PlayMp3(R.raw.az_beshbucaq,soundDone);break;
+            case Ellipse:
+                  this.PlayMp3(R.raw.az_elips,soundDone);break;
+            case Hexagon:
+                  this.PlayMp3(R.raw.az_altibucaq,soundDone);break;
+            default:
+                break  ;
         }
     }
 

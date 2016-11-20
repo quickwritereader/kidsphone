@@ -42,4 +42,14 @@ public class SpeakerAnimation extends BaseAnimation {
         }
         return  drawn;
     }
+
+    @Override
+    protected boolean isLooped() {
+        return false;
+    }
+
+    @Override
+    protected boolean onLoopDraw(FunnySurface surface, RenderClbk renderClbk) {
+        return false;
+    }
 }

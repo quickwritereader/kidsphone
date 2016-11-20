@@ -14,7 +14,8 @@ public class TeachMode extends BaseMode implements  SoundCallBack{
     private FunnyDisplay display;
     private  FunnyButton modeButton=null;
     private boolean playSound=true;
-
+    private  LetterAnimation letterAnimation=null;
+    boolean drawLetterFigureAnime =false;
     public boolean isPlaySound() {
         return playSound;
     }
@@ -32,6 +33,7 @@ public class TeachMode extends BaseMode implements  SoundCallBack{
         if(mode!=null) keysMode=mode;
         modeButton= (FunnyButton) phone.getViewById(R.id.KeysMode);
         openKeyMode(keysMode);
+        letterAnimation=new LetterAnimation(this.display);
     }
 
     public TeachMode (Phone phone) throws Exception{
@@ -42,10 +44,15 @@ public class TeachMode extends BaseMode implements  SoundCallBack{
         if(mode!=null) keysMode=mode;
         modeButton= (FunnyButton) phone.getViewById(R.id.KeysMode);
         openKeyMode(keysMode);
+        letterAnimation=new LetterAnimation(this.display);
     }
 
     @Override
     public void onClick(FunnyButton funnyButton) {
+        if(letterAnimation!=null){
+            letterAnimation.stop(true);
+            drawLetterFigureAnime =false;
+        }
         if (funnyButton.getKeyMode() == FunnyButton.KeyMode.Letters) {
             phone.stopSpeaker();
             String letters = funnyButton.getLettersText();
@@ -85,10 +92,16 @@ public class TeachMode extends BaseMode implements  SoundCallBack{
      * @param innerShapeType
      */
     private void draw_play_figure(FunnyButton.InnerShapeType innerShapeType) {
+        drawLetterFigureAnime =true;
+        phone.deActivateDelay();
+        if(letterAnimation!=null){
+            letterAnimation.stop(true);
+            letterAnimation.setInnerShapeType(innerShapeType);
+        }
         phone.getDisplay().drawFigure(innerShapeType);
-        int duration = phone.getAudio().playFigures(innerShapeType);
-        phone.refreshActiveTime(duration);
+         phone.getAudio().playFigures(innerShapeType,this);
     }
+
 
     /**
      * draw char and play at the same time
@@ -96,9 +109,20 @@ public class TeachMode extends BaseMode implements  SoundCallBack{
      * @param l
      */
     private void draw_play(char l) {
+        drawLetterFigureAnime =true;
+        phone.deActivateDelay();
+        if(letterAnimation!=null){
+            letterAnimation.stop(true);
+            letterAnimation.setLetter(l);
+        }
         phone.getDisplay().drawChar(l);
-        int duration=phone.getAudio().playChar(l);
-        phone.refreshActiveTime(duration);
+//        int duration=phone.getAudio().playChar(l);
+//        phone.refreshActiveTime(duration);
+
+
+        phone.getAudio().playChar(l,this);
+
+
     }
 
     private FunnyButton.KeyMode switchMode(FunnyButton.KeyMode old){
@@ -187,6 +211,9 @@ public class TeachMode extends BaseMode implements  SoundCallBack{
         pressedTimes=0;
         changeKeyMode();
         changeModeButton(true);
+        if(letterAnimation!=null){
+            letterAnimation.stop(true);
+        }
     }
 
     public   void onSave(){
@@ -194,6 +221,9 @@ public class TeachMode extends BaseMode implements  SoundCallBack{
         changeModeButton(false);
         phone.stopSpeaker();
         phone.getAudio().StopMp3();
+        if(letterAnimation!=null){
+            letterAnimation.stop(true);
+        }
         //change button for old
     }
 
@@ -201,5 +231,9 @@ public class TeachMode extends BaseMode implements  SoundCallBack{
     public void soundPlayFinished() {
         phone.activateDelay();
         phone.stopSpeaker(false);
+        if(drawLetterFigureAnime){
+            if(letterAnimation!=null)letterAnimation.start(-1,true);
+            phone.refreshActiveTime(5000);
+        }
     }
 }
