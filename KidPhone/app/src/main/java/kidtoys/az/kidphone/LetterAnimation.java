@@ -4,14 +4,13 @@ package kidtoys.az.kidphone;
  * Created by ramil on 2016-11-20.
  */
 
-public class LetterAnimation extends BaseAnimation implements  FunnySurface.CallbackDraw{
+public class LetterAnimation extends BaseAnimation implements FunnySurface.CallbackDraw {
 
 
-
-    private char Letter=' ';
-    private boolean isLetter=true;
-    private FunnyButton.InnerShapeType innerShapeType=null;
-    private RenderClbk currentClbk=null;
+    private char Letter = ' ';
+    private boolean isLetter = true;
+    private FunnyButton.InnerShapeType innerShapeType = null;
+    private RenderClbk currentClbk = null;
 
     public LetterAnimation(FunnyDisplay display) {
         super(display);
@@ -19,14 +18,13 @@ public class LetterAnimation extends BaseAnimation implements  FunnySurface.Call
 
     public void setInnerShapeType(FunnyButton.InnerShapeType innerShapeType) {
         this.innerShapeType = innerShapeType;
-        isLetter=false;
+        isLetter = false;
     }
+
     public void setLetter(char letter) {
         Letter = letter;
-        isLetter=true;
+        isLetter = true;
     }
-
-
 
 
     @Override
@@ -39,18 +37,18 @@ public class LetterAnimation extends BaseAnimation implements  FunnySurface.Call
         return true;
     }
 
-    private boolean timeAndRender(int time){
-        try{
+    private boolean timeAndRender(int time) {
+        try {
 
-            if(currentClbk!=null){
+            if (currentClbk != null) {
                 currentClbk.RenderSurfaceOnMain();
             }
-            long startime=System.currentTimeMillis();
-            while(startime+time>System.currentTimeMillis()){
+            long startime = System.currentTimeMillis();
+            while (startime + time > System.currentTimeMillis()) {
                 Thread.sleep(10);
             }
-        }catch (InterruptedException ex){
-            currentClbk=null;
+        } catch (InterruptedException ex) {
+            currentClbk = null;
             return false;
         }
         return true;
@@ -58,27 +56,27 @@ public class LetterAnimation extends BaseAnimation implements  FunnySurface.Call
 
     @Override
     protected boolean onLoopDraw(FunnySurface surface, RenderClbk renderClbk) {
-        this.currentClbk=renderClbk;
+        this.currentClbk = renderClbk;
         surface.clear();
-        if(!timeAndRender(200)){
+        if (!timeAndRender(200)) {
             return false;
         }
-        if(isLetter) {
+        if (isLetter) {
             int figureRandom = (int) (Math.random() * (FunnySurface.getMaxTypeSupport() - 1)) + 1;
             int colorRandom = (int) (Math.random() * (FunnySurface.getMaxColorSupport() - 2)) + 1;//exclude white and black
 
             FunnySurfaceUtils.drawChar(surface, surface.getWidth() / 2, 4, Letter, FunnySurface.supportedColors[colorRandom],
                     FunnySurface.DotType.Circle, true, this);
-        }else{
-            int figureRandom = (int) (Math.random() * (FunnySurface.getMaxTypeSupport()- 1)) + 1;
+        } else {
+            int figureRandom = (int) (Math.random() * (FunnySurface.getMaxTypeSupport() - 1)) + 1;
             int colorRandom = (int) (Math.random() * (FunnySurface.getMaxColorSupport() - 2)) + 1;//exclude white and black
             /*FunnySurfaceUtils.drawFigure(mainSurface, mainSurface.getWidth() / 2, 4, l, FunnySurface.supportedColors[colorRandom],
                     FunnySurface.supportedTypes[figureRandom], true);*/
             FunnySurfaceUtils.drawFigure(surface, surface.getWidth() / 2, 4, innerShapeType, FunnySurface.supportedColors[colorRandom],
-                    FunnySurface.DotType.Circle, true,this);
+                    FunnySurface.DotType.Circle, true, this);
         }
         surface.clear();
-        if(!timeAndRender(200)){
+        if (!timeAndRender(200)) {
             return false;
         }
         return false;
@@ -87,6 +85,6 @@ public class LetterAnimation extends BaseAnimation implements  FunnySurface.Call
     @Override
     public boolean dotHasDrawn() {
 
-        return   timeAndRender(200) ;
+        return timeAndRender(200);
     }
 }
