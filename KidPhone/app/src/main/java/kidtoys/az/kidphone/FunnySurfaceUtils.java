@@ -129,10 +129,10 @@ public class FunnySurfaceUtils {
     private static void drawI(FunnySurface surface, int x, int y, int charWidth, int charHeight, FunnySurface.DotColor color, FunnySurface.DotType figure, FunnySurface.CallbackDraw clbk) {
         int centerOffset = (int) Math.ceil(charWidth / 2.0) - 1;
         int bottom = y + charHeight - 1;
-        surface.drawLine(x + centerOffset - 1, y + 2, x + centerOffset + 1, y + 2, color, figure, clbk);
-        surface.drawLine(x + centerOffset, y + 2, x + centerOffset, bottom, color, figure, clbk);
+        surface.drawLine(x + centerOffset - 1, y, x + centerOffset + 1, y, color, figure, clbk);
+        surface.drawLine(x + centerOffset, y, x + centerOffset, bottom, color, figure, clbk);
         surface.drawLine(x + centerOffset - 1, bottom, x + centerOffset + 1, bottom, color, figure, clbk);
-        surface.putDot(x + centerOffset, y, color, figure, clbk);
+        surface.putDot(x + centerOffset, y - 2, color, figure, clbk);
     }
 
     private static void drawT(FunnySurface surface, int x, int y, int charWidth, int charHeight, FunnySurface.DotColor color, FunnySurface.DotType figure, FunnySurface.CallbackDraw clbk) {
@@ -261,47 +261,53 @@ public class FunnySurfaceUtils {
 
     private static void drawQ(FunnySurface surface, int x, int y, int charWidth, int charHeight, FunnySurface.DotColor color, FunnySurface.DotType figure, FunnySurface.CallbackDraw clbk) {
         int centerOffset = (int) Math.ceil(charWidth / 2.0) - 1;
-        int bottom = y + charHeight - 1;
-        int right = x + charWidth - 1;
+        int leftCorner = x + centerOffset - 1;
+        int rightCorner = x + centerOffset + 1;
+        int topCorner = y + centerOffset - 3;
+        int bottomCorner = y + centerOffset + 4;
+        surface.drawLine(rightCorner, topCorner,rightCorner + 2, topCorner + 2,  color, figure, clbk);
+        surface.drawLine(rightCorner + 2, bottomCorner - 4,rightCorner + 2, bottomCorner - 3,  color, figure, clbk);
+        surface.drawLine(rightCorner + 2, bottomCorner - 2,rightCorner, bottomCorner,  color, figure, clbk);
+        surface.drawLine(rightCorner - 1, bottomCorner,leftCorner + 1, bottomCorner,  color, figure, clbk);
+        surface.drawLine( leftCorner, bottomCorner,leftCorner - 2, bottomCorner - 2, color, figure, clbk);
+        surface.drawLine( leftCorner - 2, bottomCorner - 3,leftCorner - 2, bottomCorner - 4, color, figure, clbk);
+        surface.drawLine(leftCorner - 2, topCorner + 2, leftCorner, topCorner, color, figure, clbk);
+        surface.drawLine(leftCorner + 1, topCorner, rightCorner - 1, topCorner, color, figure, clbk);
+        surface.drawLine(rightCorner, bottomCorner - 2, rightCorner + 3, bottomCorner + 1, color, figure, clbk);
 
-        surface.drawLine(right - 2, y, x + 2, y, color, figure, clbk);
-        surface.drawLine(x + centerOffset - 1, y, x, y + centerOffset - 1, color, figure, clbk);
-        surface.drawLine(x, y + 2, x, bottom - 2, color, figure, clbk);
-        surface.drawLine(x, bottom - centerOffset, x + centerOffset - 2, bottom - 1, color, figure, clbk);
-        surface.drawLine(x + 2, bottom, right - 2, bottom, color, figure, clbk);
-        surface.drawLine(right, y + centerOffset, right - 1, bottom - 1, color, figure, clbk);
-        surface.drawLine(right, y + 2, right, bottom - 2, color, figure, clbk);
-        surface.drawLine(right - centerOffset, y, right - 1, y + centerOffset - 2, color, figure, clbk);
-        surface.putDot(12, 10, color, figure, clbk);
-        surface.putDot(10, 8, color, figure, clbk);
     }
 
     private static void drawO(FunnySurface surface, int x, int y, int charWidth, int charHeight, FunnySurface.DotColor color, FunnySurface.DotType figure, FunnySurface.CallbackDraw clbk) {
         int centerOffset = (int) Math.ceil(charWidth / 2.0) - 1;
-        int bottom = y + charHeight - 1;
-        int right = x + charWidth - 1;
-        surface.drawLine(x, bottom - 2, x, y + 2, color, figure, clbk);
-        surface.drawLine(x, y + centerOffset - 1, x + centerOffset - 1, y, color, figure, clbk);
-        surface.drawLine(x + 2, y, right - 2, y, color, figure, clbk);
-        surface.drawLine(right, y + centerOffset, right - 1, bottom - 1, color, figure, clbk);
-        surface.drawLine(right, y + 2, right, bottom - 2, color, figure, clbk);
-        surface.drawLine(right - centerOffset, y, right - 1, y + centerOffset - 2, color, figure, clbk);
-        surface.drawLine(right - 2, bottom, x + 2, bottom, color, figure, clbk);
-        surface.drawLine(x, bottom - centerOffset, x + centerOffset - 2, bottom - 1, color, figure, clbk);
+        int leftCorner = x + centerOffset-1  ;
+        int rightCorner = x + centerOffset + 1;
+        int topCorner = y + centerOffset - 3;
+        int bottomCorner = y + centerOffset + 4;
+        surface.drawLine(rightCorner, topCorner,rightCorner + 2, topCorner + 2,  color, figure, clbk);
+        surface.drawLine(rightCorner + 2, bottomCorner - 4,rightCorner + 2, bottomCorner - 3,  color, figure, clbk);
+        surface.drawLine(rightCorner + 2, bottomCorner - 2,rightCorner, bottomCorner,  color, figure, clbk);
+        surface.drawLine(rightCorner - 1, bottomCorner,leftCorner + 1, bottomCorner,  color, figure, clbk);
+        surface.drawLine( leftCorner, bottomCorner,leftCorner - 2, bottomCorner - 2, color, figure, clbk);
+        surface.drawLine( leftCorner - 2, bottomCorner - 3,leftCorner - 2, bottomCorner - 4, color, figure, clbk);
+        surface.drawLine(leftCorner - 2, topCorner + 2, leftCorner, topCorner, color, figure, clbk);
+        surface.drawLine(leftCorner + 1, topCorner, rightCorner - 1, topCorner, color, figure, clbk);
     }
 
     private static void drawOO(FunnySurface surface, int x, int y, int charWidth, int charHeight, FunnySurface.DotColor color, FunnySurface.DotType figure, FunnySurface.CallbackDraw clbk) {
         int centerOffset = (int) Math.ceil(charWidth / 2.0) - 1;
-        int bottom = y + charHeight - 1;
-        int right = x + charWidth - 1;
-        surface.drawLine(x, bottom - 2, x, y + 2, color, figure, clbk);
-        surface.drawLine(x, y + centerOffset - 1, x + centerOffset - 1, y, color, figure, clbk);
-        surface.drawLine(x + 2, y, right - 2, y, color, figure, clbk);
-        surface.drawLine(right, y + centerOffset, right - 1, bottom - 1, color, figure, clbk);
-        surface.drawLine(right, y + 2, right, bottom - 2, color, figure, clbk);
-        surface.drawLine(right - centerOffset, y, right - 1, y + centerOffset - 2, color, figure, clbk);
-        surface.drawLine(right - 2, bottom, x + 2, bottom, color, figure, clbk);
-        surface.drawLine(x, bottom - centerOffset, x + centerOffset - 2, bottom - 1, color, figure, clbk);
+        int leftCorner = x + centerOffset - 1;
+        int rightCorner = x + centerOffset + 1;
+        int topCorner = y + centerOffset - 3;
+        int bottomCorner = y + centerOffset + 4;
+        surface.drawLine(rightCorner, topCorner,rightCorner + 2, topCorner + 2,  color, figure, clbk);
+        surface.drawLine(rightCorner + 2, bottomCorner - 4,rightCorner + 2, bottomCorner - 3,  color, figure, clbk);
+        surface.drawLine(rightCorner + 2, bottomCorner - 2,rightCorner, bottomCorner,  color, figure, clbk);
+        surface.drawLine(rightCorner - 1, bottomCorner,leftCorner + 1, bottomCorner,  color, figure, clbk);
+        surface.drawLine( leftCorner, bottomCorner,leftCorner - 2, bottomCorner - 2, color, figure, clbk);
+        surface.drawLine( leftCorner - 2, bottomCorner - 3,leftCorner - 2, bottomCorner - 4, color, figure, clbk);
+        surface.drawLine(leftCorner - 2, topCorner + 2, leftCorner, topCorner, color, figure, clbk);
+        surface.drawLine( leftCorner + 1, topCorner,rightCorner - 1, topCorner, color, figure, clbk);
+
         surface.putDot(x + centerOffset - 1, y - 2, color, figure, clbk);
         surface.putDot(x + centerOffset + 1, y - 2, color, figure, clbk);
     }
@@ -482,37 +488,6 @@ public class FunnySurfaceUtils {
         surface.drawLine(right - 1, bottom, x + 1, bottom, color, figure, clbk);
     }
 
-    private static void drawCircle(FunnySurface surface, int x, int y, int charWidth, int charHeight, FunnySurface.DotColor color, FunnySurface.DotType figure, FunnySurface.CallbackDraw clbk) {
-        int centerOffset = (int) Math.ceil(charWidth / 2.0) - 1;
-        int bottom = y + charHeight - 1;
-        int right = x + charWidth - 1;
-        surface.drawLine(x, bottom - 2, x, y + 2, color, figure, clbk);
-        surface.drawLine(x, y + centerOffset - 1, x + centerOffset - 1, y, color, figure, clbk);
-        surface.drawLine(x + 2, y, right - 2, y, color, figure, clbk);
-        surface.drawLine(right, y + centerOffset, right - 1, bottom - 1, color, figure, clbk);
-        surface.drawLine(right, y + 2, right, bottom - 2, color, figure, clbk);
-        surface.drawLine(right - centerOffset, y, right - 1, y + centerOffset - 2, color, figure, clbk);
-        surface.drawLine(right - 2, bottom, x + 2, bottom, color, figure, clbk);
-        surface.drawLine(x, bottom - centerOffset, x + centerOffset - 2, bottom - 1, color, figure, clbk);
-    }
-
-    private static void drawEllipse(FunnySurface surface, int x, int y, int charWidth, int charHeight, FunnySurface.DotColor color, FunnySurface.DotType figure, FunnySurface.CallbackDraw clbk) {
-        int centerOffset = (int) Math.ceil(charWidth / 2.0);
-        int leftCorner = x + centerOffset - 3;
-        int rightCorner = x + centerOffset + 2;
-        int topCorner = y + centerOffset - 3;
-        int bottomCorner = y + centerOffset + 3;
-
-        surface.drawLine(rightCorner - 1, topCorner, leftCorner + 1, topCorner, color, figure, clbk);
-        surface.drawLine(leftCorner, topCorner, leftCorner - 2, topCorner + 2, color, figure, clbk);
-        surface.drawLine(leftCorner - 2, topCorner + 3, leftCorner - 2, topCorner + 4, color, figure, clbk);
-        surface.drawLine(leftCorner - 1, bottomCorner - 1, leftCorner, bottomCorner, color, figure, clbk);
-        surface.drawLine(leftCorner + 1, bottomCorner, rightCorner - 1, bottomCorner, color, figure, clbk);
-        surface.drawLine(rightCorner, bottomCorner, rightCorner + 2, bottomCorner - 2, color, figure, clbk);
-        surface.drawLine(rightCorner + 2, bottomCorner - 3, rightCorner + 2, bottomCorner - 4, color, figure, clbk);
-        surface.drawLine(rightCorner + 2, topCorner + 2, rightCorner, topCorner, color, figure, clbk);
-    }
-
     private static void drawSquare(FunnySurface surface, int x, int y, int charWidth, int charHeight, FunnySurface.DotColor color, FunnySurface.DotType figure, FunnySurface.CallbackDraw clbk) {
         int bottom = y + charHeight - 1;
         int right = x + charWidth - 1;
@@ -526,10 +501,11 @@ public class FunnySurfaceUtils {
     private static void drawTriangle(FunnySurface surface, int x, int y, int charWidth, int charHeight, FunnySurface.DotColor color, FunnySurface.DotType figure, FunnySurface.CallbackDraw clbk) {
         int bottom = y + charHeight - 1;
         int right = x + charWidth - 1;
-
-        surface.drawLine(4, 9, 10, 3, color, figure, clbk);
-        surface.drawLine(10, 3, right, bottom - 1, color, figure, clbk);
-        surface.drawLine(right + 1, bottom, x - 1, bottom, color, figure, clbk);
+        int maxL=charHeight>charWidth?charHeight:charWidth;
+        int centerL=maxL/2 ;
+        surface.drawLine(x, bottom, x+centerL, bottom-centerL, color, figure, clbk);
+        surface.drawLine(right-centerL, bottom-centerL, right, bottom  , color, figure, clbk);
+        surface.drawLine( right- 1, bottom,x + 1, bottom, color, figure, clbk);
     }
 
     private static void drawRectangle(FunnySurface surface, int x, int y, int charWidth, int charHeight, FunnySurface.DotColor color, FunnySurface.DotType figure, FunnySurface.CallbackDraw clbk) {
@@ -545,33 +521,132 @@ public class FunnySurfaceUtils {
     private static void drawTrapes(FunnySurface surface, int x, int y, int charWidth, int charHeight, FunnySurface.DotColor color, FunnySurface.DotType figure, FunnySurface.CallbackDraw clbk) {
         int bottom = y + charHeight - 1;
         int right = x + charWidth - 1;
-        surface.drawLine(x, bottom, x, y, color, figure, clbk);
-        surface.drawLine(x, y, right - 6, y, color, figure, clbk);
-        surface.drawLine(right - 5, y + 1, right, bottom, color, figure, clbk);
-        surface.drawLine(right, bottom, x, bottom, color, figure, clbk);
+        int minoff=charWidth-charHeight;
+        minoff=minoff>0?minoff:minoff;
+        surface.drawLine(x, y, right-minoff-1, y, color, figure, clbk);
+        surface.drawLine(right-minoff, y+1, right, bottom, color, figure, clbk);
+        surface.drawLine(right - 1, bottom, x, bottom, color, figure, clbk);
+        surface.drawLine(x, bottom-1, x, y+1, color, figure, clbk);
+    }
+
+    public static void drawHeart(FunnySurface surface, int x, int y, int charWidth, int charHeight, FunnySurface.DotColor color, FunnySurface.DotType figure, FunnySurface.CallbackDraw clbk) {
+
+        int minOff=charWidth/4;
+        int centerL=charWidth/2 ;
+        int bottom = y + charHeight - 1;
+        int right = x + charWidth - 1;
+
+
+        surface.drawLine(x, bottom-centerL-minOff,x+minOff,bottom-centerL-minOff-minOff, color, figure, clbk);
+        surface.drawLine( x+minOff+1,bottom-centerL-minOff-minOff,x+centerL, bottom-centerL-minOff-1, color, figure, clbk);
+        surface.drawLine(x+centerL, bottom-centerL-minOff, x+centerL,bottom-centerL-1 , color, figure, clbk);
+        surface.drawLine(x+centerL, bottom-centerL, x ,bottom , color, figure, clbk);
+        //left part
+        surface.drawLine(x, bottom-centerL-minOff,x-minOff,bottom-centerL-minOff-minOff, color, figure, clbk);
+        surface.drawLine( x-minOff-1,bottom-centerL-minOff-minOff,x-centerL, bottom-centerL-minOff-1, color, figure, clbk);
+        surface.drawLine(x-centerL, bottom-centerL-minOff, x-centerL,bottom-centerL-1 , color, figure, clbk);
+        surface.drawLine(x-centerL, bottom-centerL, x ,bottom , color, figure, clbk);
+    }
+
+
+    public static void drawCircle(FunnySurface surface, int x, int y, int charWidth, int charHeight, FunnySurface.DotColor color, FunnySurface.DotType figure, FunnySurface.CallbackDraw clbk) {
+
+        int centerL=charWidth/2 ;
+
+        surface.drawLine(x+centerL,y,x+centerL+2,y,color,figure,clbk);
+        surface.drawLine(x+centerL+3,y+1,x+centerL+4,y+1,color,figure,clbk);
+        surface.drawLine(x+centerL+5,y+2,x+centerL+5,y+3,color,figure,clbk);
+
+        surface.drawLine(x+centerL+6,y+4,x+centerL+6,y+7,color,figure,clbk);
+
+        surface.drawLine(x+centerL+5,y+8,x+centerL+5,y+9,color,figure,clbk);
+        surface.drawLine(x+centerL+4,y+10,x+centerL+3,y+10,color,figure,clbk);
+
+        surface.drawLine(x+centerL+2,y+11,x+centerL-2,y+11,color,figure,clbk);
+
+        surface.drawLine(x+centerL-3,y+10,x+centerL-4,y+10,color,figure,clbk);
+        surface.drawLine(x+centerL-5,y+9,x+centerL-5,y+8,color,figure,clbk);
+        surface.drawLine(x+centerL-6,y+7,x+centerL-6,y+4,color,figure,clbk);
+
+        surface.drawLine(x+centerL-5,y+3,x+centerL-5,y+2,color,figure,clbk);
+        surface.drawLine(x+centerL-4,y+1,x+centerL-3,y+1,color,figure,clbk);
+
+        surface.drawLine(x+centerL-2,y,x+centerL-1 ,y,color,figure,clbk);
+
+    }
+
+    public static void drawEllipse(FunnySurface surface, int x, int y, int charWidth, int charHeight, FunnySurface.DotColor color, FunnySurface.DotType figure, FunnySurface.CallbackDraw clbk) {
+
+        int centerL=charWidth/2 ;
+        int minx=(charWidth-charHeight)/2;
+        minx=minx>0?minx:-minx;
+        surface.drawLine(x+centerL,y,x+centerL+2+minx,y,color,figure,clbk);
+        surface.drawLine(x+centerL+3+minx,y+1,x+centerL+4+minx,y+1,color,figure,clbk);
+        surface.drawLine(x+centerL+5+minx,y+2,x+centerL+5+minx,y+3 ,color,figure,clbk);
+
+        surface.drawLine(x+centerL+6+minx,y+4,x+centerL+6+minx,y+7,color,figure,clbk);
+
+        surface.drawLine(x+centerL+5+minx,y+8,x+centerL+5+minx,y+9,color,figure,clbk);
+        surface.drawLine(x+centerL+4+minx,y+10,x+centerL+3+minx,y+10,color,figure,clbk);
+
+        surface.drawLine(x+centerL+2+minx,y+11,x+centerL-2- minx,y+11,color,figure,clbk);
+
+        surface.drawLine(x+centerL-3- minx,y+10,x+centerL-4- minx,y+10,color,figure,clbk);
+        surface.drawLine(x+centerL-5- minx,y+9,x+centerL-5- minx,y+8,color,figure,clbk);
+        surface.drawLine(x+centerL-6- minx,y+7,x+centerL-6- minx,y+4,color,figure,clbk);
+
+        surface.drawLine(x+centerL-5- minx,y+3,x+centerL-5- minx,y+2,color,figure,clbk);
+        surface.drawLine(x+centerL-4- minx,y+1,x+centerL-3- minx,y+1,color,figure,clbk);
+
+        surface.drawLine(x+centerL-2- minx,y,x+centerL-1 ,y,color,figure,clbk);
+
+    }
+
+
+        public static void drawStar(FunnySurface surface, int x, int y, int charWidth, int charHeight, FunnySurface.DotColor color, FunnySurface.DotType figure, FunnySurface.CallbackDraw clbk) {
+
+        int centerL=charWidth/2 ;
+        int bottom = y + charHeight - 1;
+        int right = x + charWidth - 1;
+
+        surface.drawLine(x, bottom-centerL, x,bottom-centerL-centerL, color, figure, clbk);
+        surface.drawLine(x, bottom-centerL, x+centerL,bottom-centerL , color, figure, clbk);
+        surface.drawLine(x, bottom-centerL, x-centerL,bottom-centerL , color, figure, clbk) ;
+        surface.drawLine(x, bottom-centerL, x ,bottom  , color, figure, clbk);
+        surface.drawLine(x, bottom-centerL, x-centerL+1,bottom-centerL-centerL+1 , color, figure, clbk) ;
+        surface.drawLine(x, bottom-centerL, x+centerL-1,bottom-centerL-centerL+1 , color, figure, clbk) ;
+        surface.drawLine(x, bottom-centerL, x-centerL+1,bottom-1 , color, figure, clbk) ;
+        surface.drawLine(x, bottom-centerL, x+centerL-1,bottom-1 , color, figure, clbk) ;
     }
 
     public static void drawPentagon(FunnySurface surface, int x, int y, int charWidth, int charHeight, FunnySurface.DotColor color, FunnySurface.DotType figure, FunnySurface.CallbackDraw clbk) {
         int bottom = y + charHeight - 1;
         int right = x + charWidth - 1;
+        int centerX=charWidth/2;
+        int mint=charWidth;
+        mint=mint/3;
 
-        surface.drawLine(x - 1, bottom - 4, x + 2, y - 1, color, figure, clbk);
-        surface.drawLine(x + 3, y - 1, right, bottom - 4, color, figure, clbk);
-        surface.drawLine(right + 1, bottom - 3, right - 2, bottom, color, figure, clbk);
-        surface.drawLine(right - 2, bottom, x + 2, bottom, color, figure, clbk);
-        surface.drawLine(x + 1, bottom, x - 2, bottom - 3, color, figure, clbk);
+        surface.drawLine(x, y+mint, x+centerX, y+mint-centerX, color, figure, clbk);
+        surface.drawLine( right-centerX, y+mint-centerX,right,mint+y ,color, figure, clbk);
+
+        surface.drawLine( right-1,mint+y+1 ,right-mint, mint+y+mint,color, figure, clbk);
+        surface.drawLine(right-mint-1, mint+y+mint,x+mint+1, mint+y+mint, color, figure, clbk);
+        surface.drawLine(x+mint, y+mint+mint, x , y+mint, color, figure, clbk);
     }
 
     public static void drawHexagon(FunnySurface surface, int x, int y, int charWidth, int charHeight, FunnySurface.DotColor color, FunnySurface.DotType figure, FunnySurface.CallbackDraw clbk) {
         int bottom = y + charHeight - 1;
         int right = x + charWidth - 1;
+        int mint=charWidth;
+        mint=mint/3;
 
-        surface.drawLine(x - 1, bottom - 4, x + 1, y, color, figure, clbk);
-        surface.drawLine(x + 2, y, x + 3, y, color, figure, clbk);
-        surface.drawLine(x + 4, y, x + 6, bottom - 4, color, figure, clbk);
-        surface.drawLine(right + 1, bottom - 3, right - 2, bottom, color, figure, clbk);
-        surface.drawLine(right - 2, bottom, x + 2, bottom, color, figure, clbk);
-        surface.drawLine(x + 1, bottom, x - 2, bottom - 3, color, figure, clbk);
+        surface.drawLine(x, y+mint, x+mint, y, color, figure, clbk);
+        surface.drawLine(x+mint+1, y,right-mint-1, y, color, figure, clbk);
+        surface.drawLine( right-mint, y,right,mint+y ,color, figure, clbk);
+
+        surface.drawLine( right-1,mint+y+1 ,right-mint, mint+y+mint,color, figure, clbk);
+        surface.drawLine(right-mint-1, mint+y+mint,x+mint+1, mint+y+mint, color, figure, clbk);
+        surface.drawLine(x+mint, y+mint+mint, x , y+mint, color, figure, clbk);
 
     }
 
@@ -601,44 +676,69 @@ public class FunnySurfaceUtils {
         int standardHeight = 7;
         switch (innerShapeType) {
             case Circle:
-                if (center) x = x - standardWidth / 2 - 1;
-                FunnySurfaceUtils.drawCircle(surface, x, y, standardWidth + 2, standardHeight, color, figure, clbk);
+                standardWidth=12;
+                standardHeight=12;
+                if (center) x = x - standardWidth / 2  ;
+                FunnySurfaceUtils.drawCircle(surface, x, y-2, standardWidth  , standardHeight, color, figure, clbk);
                 break;
             case Square:
-                if (center) x = x - standardWidth / 2 - 1;
-                FunnySurfaceUtils.drawSquare(surface, x, y, standardWidth + 2, standardHeight, color, figure, clbk);
+                standardWidth=10;
+                standardHeight=10;
+                if (center) x = x - standardWidth / 2  ;
+                FunnySurfaceUtils.drawSquare(surface, x, y , standardWidth  , standardHeight, color, figure, clbk);
                 break;
             case Triangle:
-                if (center) x = x - standardWidth / 2 - 4;
-                FunnySurfaceUtils.drawTriangle(surface, x, y, standardWidth + 8, standardHeight, color, figure, clbk);
+                standardWidth=15;
+                standardHeight=8;
+                if (center) x = x - standardWidth / 2  ;
+                FunnySurfaceUtils.drawTriangle(surface, x, y, standardWidth , standardHeight, color, figure, clbk);
                 break;
             case Rectangle:
-                if (center) x = x - standardWidth / 2 - 3;
-                FunnySurfaceUtils.drawRectangle(surface, x, y, standardWidth + 5, standardHeight, color, figure, clbk);
+                standardWidth=14;
+                standardHeight=10;
+                if (center) x = x - standardWidth / 2   ;
+                FunnySurfaceUtils.drawRectangle(surface, x, y, standardWidth   , standardHeight, color, figure, clbk);
                 break;
             case Trapes:
-                if (center) x = x - standardWidth / 2 - 2;
-                FunnySurfaceUtils.drawTrapes(surface, x, y, standardWidth + 6, standardHeight, color, figure, clbk);
+                standardWidth=16;
+                standardHeight=9;
+                if (center) x = x - standardWidth / 2 ;
+                FunnySurfaceUtils.drawTrapes(surface, x , y , standardWidth  , standardHeight, color, figure, clbk);
                 break;
             case Heart:
+                standardWidth=10;
+                standardHeight=10;
+                drawHeart(surface, x, y, standardWidth, standardHeight, color, figure, clbk);
                 break;
             case Star:
+                standardWidth=10;
+                standardHeight=10;
+                drawStar(surface, x, y  , standardWidth, standardHeight, color, figure, clbk);
                 break;
             case Pentagon:
-                if (center) x = x - standardWidth / 2 - 1;
-                drawPentagon(surface, x, y, standardHeight, standardHeight, color, figure, clbk);
+                standardWidth=15;
+                standardHeight=10;
+                if (center) x = x - standardWidth / 2  ;
+                drawPentagon(surface, x, y-1, standardWidth, standardHeight, color, figure, clbk);
                 break;
             case Ellipse:
-                if (center) x = x - standardWidth / 2 - 1;
-                drawEllipse(surface, x, y, standardWidth, standardHeight, color, figure, clbk);
+                standardWidth=16;
+                standardHeight=12;
+                 if (center) x = x - standardWidth / 2 ;
+                 FunnySurfaceUtils.drawEllipse(surface, x, y-2, standardWidth  , standardHeight, color, figure, clbk);
+
                 break;
             case Hexagon:
-                if (center) x = x - standardWidth / 2 - 1;
-                drawHexagon(surface, x, y, standardHeight, standardHeight, color, figure, clbk);
+                standardWidth=15;
+                standardHeight=10;
+                if (center) x = x - standardWidth / 2  ;
+                drawHexagon(surface, x, y-2, standardWidth, standardHeight, color, figure, clbk);
                 break;
             default:
         }
     }
+
+
 
     public static void drawChar(FunnySurface surface, int x, int y, char Letter, FunnySurface.DotColor color, FunnySurface.DotType figure, boolean center) {
         drawChar(surface, x, y, Letter, color, figure, center, null);

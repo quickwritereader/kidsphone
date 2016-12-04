@@ -18,7 +18,7 @@ public class FunnyDisplay extends View {
     private static final double sqrt2 = Math.sqrt(2);
     private final Paint paintBack = new Paint();
     int surfaceWidth = 20;
-    int surfaceHeight = 15;
+    int surfaceHeight = 16;
     private int width = -1;
     private int height = -1;
     //private Paint innerLight;

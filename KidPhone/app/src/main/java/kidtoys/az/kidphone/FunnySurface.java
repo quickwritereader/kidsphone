@@ -10,7 +10,7 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class FunnySurface {
 
-    public interface CallbackDraw{
+    public interface CallbackDraw {
         boolean dotHasDrawn();
     }
 
@@ -23,7 +23,8 @@ public class FunnySurface {
     private byte[] mem = null;
 
 
-    private Lock locker=new ReentrantLock();
+    private Lock locker = new ReentrantLock();
+
     /**
      * Create 1x1 blank surface
      */
@@ -75,15 +76,15 @@ public class FunnySurface {
         return newS;
     }
 
-    public   void lock(){
+    public void lock() {
         locker.lock();
     }
 
-    public   boolean tryLock() {
+    public boolean tryLock() {
         return locker.tryLock();
     }
 
-    public   void unlock() {
+    public void unlock() {
         locker.unlock();
     }
 
@@ -149,16 +150,17 @@ public class FunnySurface {
     }
 
 
-    public void putDot(int x, int y, DotColor color, DotType type,CallbackDraw clbk) {
+    public void putDot(int x, int y, DotColor color, DotType type, CallbackDraw clbk) {
         if (x >= 0 && x < width && y >= 0 && y < height) {
             mem[y * width + x] = (byte) (color.ordinal() | (type.ordinal() << 4));
-            if(clbk!=null){
-                if(!clbk.dotHasDrawn()){
+            if (clbk != null) {
+                if (!clbk.dotHasDrawn()) {
                     return;
                 }
             }
         }
     }
+
     /**
      * Put Dot data into surface
      *
@@ -185,32 +187,32 @@ public class FunnySurface {
         //if above surface area
         if (x > this.width) return;
         if (y > this.height) return;
-        int offsetSurfX=0;
-        int offsetSurfY=0;
-        int drawWidth= surface.width ;
-        int drawHeight=surface.height ;
-        if(x<0) {
+        int offsetSurfX = 0;
+        int offsetSurfY = 0;
+        int drawWidth = surface.width;
+        int drawHeight = surface.height;
+        if (x < 0) {
             offsetSurfX = -x;
-            drawWidth=drawWidth-offsetSurfX;
+            drawWidth = drawWidth - offsetSurfX;
         }
-        if(y<0) {
-            offsetSurfY=-y;
-            drawHeight=drawHeight-offsetSurfY;
+        if (y < 0) {
+            offsetSurfY = -y;
+            drawHeight = drawHeight - offsetSurfY;
         }
         //lets blt naive way
-        if(x<0)x=0;
-        if(y<0)y=0;
-        int remain=this.width-x;
-        drawWidth=remain>drawWidth?drawWidth:remain;
-         remain=this.height-y;
-        drawHeight=remain>drawHeight ?drawHeight :remain;
+        if (x < 0) x = 0;
+        if (y < 0) y = 0;
+        int remain = this.width - x;
+        drawWidth = remain > drawWidth ? drawWidth : remain;
+        remain = this.height - y;
+        drawHeight = remain > drawHeight ? drawHeight : remain;
 
         for (int j = 0; j < drawHeight; j++) {
             for (int i = 0; i < drawWidth; i++) {
-                    int ind = (y + j) * width + x + i;
-                    int surfInd = (j+offsetSurfY) * surface.width + offsetSurfX+i;
-                    this.mem[ind] = surface.mem[surfInd];
-                }
+                int ind = (y + j) * width + x + i;
+                int surfInd = (j + offsetSurfY) * surface.width + offsetSurfX + i;
+                this.mem[ind] = surface.mem[surfInd];
+            }
         }
 
     }
@@ -237,8 +239,8 @@ public class FunnySurface {
         }
     }
 
-    public void drawLine(int x1, int y1, int x2, int y2, DotColor color, DotType type){
-        drawLine(  x1,   y1,   x2,   y2, color,   type,null);
+    public void drawLine(int x1, int y1, int x2, int y2, DotColor color, DotType type) {
+        drawLine(x1, y1, x2, y2, color, type, null);
     }
 
     /**
@@ -254,7 +256,7 @@ public class FunnySurface {
      * @param color
      * @param type
      */
-    public void drawLine(int x1, int y1, int x2, int y2, DotColor color, DotType type,CallbackDraw clbk) {
+    public void drawLine(int x1, int y1, int x2, int y2, DotColor color, DotType type, CallbackDraw clbk) {
 
         int deltaX = Math.abs(x2 - x1);
         int deltaY = Math.abs(y2 - y1);
@@ -262,20 +264,15 @@ public class FunnySurface {
         int x = x1;
         int cInt = color.ordinal() | type.ordinal() << 4;
         byte c = (byte) (cInt);
-        if(clbk!=null){
-            if(!clbk.dotHasDrawn()) {
-                return;
-            }
 
-        }
         if (deltaX == 0) {
             //horizontal
             int sign = y2 > y1 ? 1 : -1;
             for (; y != y2 + sign; y += sign) {
                 if (x >= 0 && x < width && y >= 0 && y < height) {
                     mem[y * width + x] = c;
-                    if(clbk!=null){
-                        if(!clbk.dotHasDrawn()){
+                    if (clbk != null) {
+                        if (!clbk.dotHasDrawn()) {
                             return;
                         }
                     }
@@ -288,8 +285,8 @@ public class FunnySurface {
             for (; x != x2 + sign; x += sign) {
                 if (x >= 0 && x < width && y >= 0 && y < height) {
                     mem[y * width + x] = c;
-                    if(clbk!=null){
-                        if(!clbk.dotHasDrawn()){
+                    if (clbk != null) {
+                        if (!clbk.dotHasDrawn()) {
                             return;
                         }
                     }
@@ -302,8 +299,8 @@ public class FunnySurface {
             for (; y != y2 + signY; y += signY, x += signX) {
                 if (x >= 0 && x < width && y >= 0 && y < height) {
                     mem[y * width + x] = c;
-                    if(clbk!=null){
-                        if(!clbk.dotHasDrawn()){
+                    if (clbk != null) {
+                        if (!clbk.dotHasDrawn()) {
                             return;
                         }
                     }
@@ -323,8 +320,8 @@ public class FunnySurface {
                 for (; ; ) {
                     if (x1 >= 0 && x1 < width && y1 >= 0 && y1 < height) {
                         mem[y1 * width + x1] = c;
-                        if(clbk!=null){
-                            if(!clbk.dotHasDrawn()){
+                        if (clbk != null) {
+                            if (!clbk.dotHasDrawn()) {
                                 return;
                             }
                         }
@@ -343,8 +340,8 @@ public class FunnySurface {
                     //plot(g, x1, y1);
                     if (x1 >= 0 && x1 < width && y1 >= 0 && y1 < height) {
                         mem[y1 * width + x1] = c;
-                        if(clbk!=null){
-                            if(!clbk.dotHasDrawn()){
+                        if (clbk != null) {
+                            if (!clbk.dotHasDrawn()) {
                                 return;
                             }
                         }
@@ -361,6 +358,91 @@ public class FunnySurface {
             }
         }//end ifelse
 
+    }
+
+
+    public void drawEllipseFast(int xc, int yc, int widthE, int heightE, DotColor color, DotType type, CallbackDraw clbk) {
+
+
+        int a2 = widthE * widthE;
+        int b2 = heightE * heightE;
+        int fa2 = 4 * a2, fb2 = 4 * b2;
+        int x, y, sigma;
+        int cInt = color.ordinal() | type.ordinal() << 4;
+        byte c = (byte) (cInt);
+        int px = 0;
+        int py = 0;
+    /* first half */
+        for (x = 0, y = heightE, sigma = 2 * b2 + a2 * (1 - 2 * heightE); b2 * x <= a2 * y; x++) {
+            //DrawPixel (xc + x, yc + y);
+            px = xc + x;
+            py = yc + y;
+            if (px >= 0 && px < width && py >= 0 && py < height) {
+                mem[py * width + px] = c;
+            }
+
+            //DrawPixel (xc - x, yc + y);
+            px = xc - x;
+            py = yc + y;
+            if (px >= 0 && px < width && py >= 0 && py < height) {
+                mem[py * width + px] = c;
+            }
+            //DrawPixel (xc + x, yc - y);
+            px = xc + x;
+            py = yc - y;
+            if (px >= 0 && px < width && py >= 0 && py < height) {
+                mem[py * width + px] = c;
+            }
+            // DrawPixel (xc - x, yc - y);
+            px = xc - x;
+            py = yc - y;
+            if (px >= 0 && px < width && py >= 0 && py < height) {
+                mem[py * width + px] = c;
+            }
+            if (sigma >= 0) {
+                sigma += fa2 * (1 - y);
+                y--;
+            }
+            sigma += b2 * ((4 * x) + 6);
+        }
+
+    /* second half */
+        for (x = widthE, y = 0, sigma = 2 * a2 + b2 * (1 - 2 * widthE); a2 * y <= b2 * x; y++) {
+            //DrawPixel (xc + x, yc + y);
+            px = xc + x;
+            py = yc + y;
+            if (px >= 0 && px < width && py >= 0 && py < height) {
+                mem[py * width + px] = c;
+            }
+            //DrawPixel (xc - x, yc + y);
+            px = xc - x;
+            py = yc + y;
+            if (px >= 0 && px < width && py >= 0 && py < height) {
+                mem[py * width + px] = c;
+            }
+            //DrawPixel (xc + x, yc - y);
+            px = xc + x;
+            py = yc - y;
+            if (px >= 0 && px < width && py >= 0 && py < height) {
+                mem[py * width + px] = c;
+                if (clbk != null) {
+                    if (!clbk.dotHasDrawn()) {
+                        return;
+                    }
+                }
+            }
+            // DrawPixel (xc - x, yc - y);
+            px = xc - x;
+            py = yc - y;
+            if (px >= 0 && px < width && py >= 0 && py < height) {
+                mem[py * width + px] = c;
+            }
+            if (sigma >= 0) {
+                sigma += fb2 * (1 - x);
+                x--;
+            }
+            sigma += a2 * ((4 * y) + 6);
+        }
     }
 
     /**

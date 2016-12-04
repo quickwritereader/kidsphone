@@ -284,7 +284,7 @@ public class FunnyButton extends View {
                 canvas.drawRoundRect(r, r.width() / 2.f, radius, innerP1);
                 break;
             case Star:
-                canvas.drawPath(CanvasUtils.StarPath(cx, cy, 5, radius, radius - radius / 2.f),
+                canvas.drawPath(CanvasUtils.StarPath(cx, cy, 8, radius, radius - radius / 2.f),
                         innerP1);
                 break;
             case Hexagon:

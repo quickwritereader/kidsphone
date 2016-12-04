@@ -42,10 +42,12 @@ public class LetterAnimation extends BaseAnimation implements FunnySurface.Callb
 
             if (currentClbk != null) {
                 currentClbk.RenderSurfaceOnMain();
+            }else{
+                return false;
             }
-            long startime = System.currentTimeMillis();
-            while (startime + time > System.currentTimeMillis()) {
-                Thread.sleep(10);
+            long starting = System.currentTimeMillis();
+            while (starting + time > System.currentTimeMillis()) {
+                Thread.sleep(5);
             }
         } catch (InterruptedException ex) {
             currentClbk = null;
@@ -58,7 +60,7 @@ public class LetterAnimation extends BaseAnimation implements FunnySurface.Callb
     protected boolean onLoopDraw(FunnySurface surface, RenderClbk renderClbk) {
         this.currentClbk = renderClbk;
         surface.clear();
-        if (!timeAndRender(200)) {
+        if (!timeAndRender(150)) {
             return false;
         }
         if (isLetter) {
@@ -76,7 +78,7 @@ public class LetterAnimation extends BaseAnimation implements FunnySurface.Callb
                     FunnySurface.DotType.Circle, true, this);
         }
         surface.clear();
-        if (!timeAndRender(200)) {
+        if (!timeAndRender(150)) {
             return false;
         }
         return false;
@@ -85,6 +87,6 @@ public class LetterAnimation extends BaseAnimation implements FunnySurface.Callb
     @Override
     public boolean dotHasDrawn() {
 
-        return timeAndRender(200);
+        return timeAndRender(150);
     }
 }
