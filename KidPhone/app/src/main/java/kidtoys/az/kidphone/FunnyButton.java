@@ -50,6 +50,7 @@ public class FunnyButton extends View {
     private Rect bounds = new Rect();
     private InnerShapeType innerShape;
     private OuterShapeType outerShape;
+    private OuterShapeDirection outerShapeDirection ;
     private Drawable picture=null;
     private KeyMode bMode;
 
@@ -70,8 +71,12 @@ public class FunnyButton extends View {
             innerShapeColor = typedArray.getColor(R.styleable.FunnyButton_innerShapeColor, 0);
             outerShapeColor = typedArray.getColor(R.styleable.FunnyButton_outerShapeColor, 0);
             picture = typedArray.getDrawable(R.styleable.FunnyButton_pictureSrc);
-            int ordinal = typedArray.getInt(R.styleable.FunnyButton_InnerShapeProperty, 0);
 
+            int ordinal = typedArray.getInt(R.styleable.FunnyButton_OuterShapeDirection, 0);
+            if (ordinal >= 0 && ordinal < InnerShapeType.values().length) {
+                outerShapeDirection = OuterShapeDirection.values()[ordinal];
+            }
+            ordinal = typedArray.getInt(R.styleable.FunnyButton_InnerShapeProperty, 0);
             if (ordinal >= 0 && ordinal < InnerShapeType.values().length) {
                 innerShape = InnerShapeType.values()[ordinal];
             }
@@ -209,28 +214,62 @@ public class FunnyButton extends View {
 
     private void drawOuter(Canvas canvas, boolean pressed) {
 
-        float scaleDivision = 32 * 1.6f;
+        //float scaleDivision = 32 * 1.6f;
+        float pad = rectF.height() / 6;
+//        if (pad > 12) pad = 12;
+        pad=pad>12?12:pad;
         int color = getOuterShapeColor();
+        float incX=1.8f;
+        float decX=1/1.4f;
+        float incY=1.5f;
+        float decY=1/1.2f;
         if (pressed) {
-            color = getNewColor(color, -50);
+            color = getNewColor(color, -28);
             outerP1.setColor(color);
-            scaleDivision = 32;
+            //scaleDivision = 32;
+             pad=pad/2.0f;
+             incX=1.4f;
+             decX=1/1.2f;
+             incY=1.2f;
+             decY=1/1.1f;
         } else {
             outerP1.setColor(color);
         }
-        outerP2.setColor(getNewColor(color, -90));
-        float pad = rectF.height() / scaleDivision;
-        if (pad > 5) pad = 5;
-        rectF2.left = rectF.left + pad;
-        rectF2.top = rectF.top + pad;
-        rectF2.right = rectF.right - pad;
-        rectF2.bottom = rectF.bottom - pad;
+        outerP2.setColor(getNewColor(color, -17));
+        float padLeft=pad;
+        float padRight=pad;
+        float padTop=pad;
+        float padBottom=pad;
+        if((outerShapeDirection.Val() &  OuterShapeDirection.Left.Val() )== OuterShapeDirection.Left.Val()){
+            padLeft*=incX;
+            padRight*=decX;
+        }
+        if((outerShapeDirection.Val() &  OuterShapeDirection.Right.Val() )== OuterShapeDirection.Right.Val()){
+            padLeft*=decX;
+            padRight*=incX;
+        }
+        if((outerShapeDirection.Val() &  OuterShapeDirection.Top.Val() )== OuterShapeDirection.Top.Val()){
+            padTop*=incY;
+            padBottom*=decY;
+        }
+        if((outerShapeDirection.Val() &  OuterShapeDirection.Bottom.Val() )== OuterShapeDirection.Bottom.Val()){
+            padTop*=decY;
+            padBottom*=incY;
+        }
+        rectF2.left = rectF.left + padLeft;
+        rectF2.top = rectF.top + padTop;
+        rectF2.right = rectF.right - padRight;
+        rectF2.bottom = rectF.bottom - padBottom;
 
         switch (outerShape) {
             case None: {
                 canvas.drawColor(color);
             }
             break;
+            case Rectangle:
+                canvas.drawRect(rectF, outerP2);
+                canvas.drawRect(rectF2 , outerP1);
+                break;
             case Rounded: {
                 canvas.drawRoundRect(rectF, rectF.width() / 4, rectF.height() / 2, outerP2);
                 canvas.drawRoundRect(rectF2, rectF2.width() / 4, rectF2.height() / 2, outerP1);
@@ -446,7 +485,23 @@ public class FunnyButton extends View {
         BottomRounded,
         YesButton,
         NoButton,
+        Rectangle,
         Picture
+    }
+
+    public enum OuterShapeDirection{
+         Center(0),Left(2),Right(4),Top(8),Bottom(16),
+        LeftTop(2|8),LeftBottom(2|16),RightTop(4|8),RightBottom(4|16) ;
+
+        private int val;
+
+        OuterShapeDirection(int val) {
+            this.val = val;
+        }
+
+        public int Val() {
+            return val;
+        }
     }
 
 }

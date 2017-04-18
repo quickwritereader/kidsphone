@@ -165,7 +165,7 @@ public class FunnyDisplay extends View {
                 oldValue.recycle();
             }
         };
-        paintBack.setColor(Color.BLACK);
+        paintBack.setColor(Color.argb(255,2,16,20) );
         paintBack.setAntiAlias(true);
         setWillNotDraw(false);
     }
@@ -173,7 +173,9 @@ public class FunnyDisplay extends View {
     private void initPath(int width, int height) {
         if (this.width != width || this.height != height) {
             diameter = (width - 40) / mainSurface.getWidth();
-            screenPath = CanvasUtils.Rounded(0, 0, (float) width, (float) height, 30.f, 30.f);
+            float rx=width/surfaceWidth;
+            float ry=height/surfaceHeight;
+            screenPath = CanvasUtils.Rounded(0, 0, (float) width, (float) height, rx, ry);
             //initialize Pathes
             FunnySurface.DotType[] dotTypes = FunnySurface.DotType.values();
             int len = dotTypes.length;
@@ -281,7 +283,9 @@ public class FunnyDisplay extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         //long time = System.currentTimeMillis();
-        canvas.drawPath(screenPath, paintBack);
+
+        canvas.clipPath(screenPath);
+        canvas.drawColor(paintBack.getColor());
         //blt surface
         bltBack(canvas);
         bltInner(canvas);

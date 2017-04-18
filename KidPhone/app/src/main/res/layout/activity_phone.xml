@@ -48,8 +48,9 @@
                 app:InnerShapeProperty="YesPhone"
                 app:OuterShapeProperty="YesButton"
                 app:KeyMode="System"
+                app:OuterShapeDirection="Left"
                 app:innerShapeColor="#ffffff"
-                app:outerShapeColor="#00ff00" />
+                app:outerShapeColor="#a4ff41" />
 
             <kidtoys.az.kidphone.FunnyButton
                 android:id="@+id/buttonNo"
@@ -60,8 +61,9 @@
                 app:InnerShapeProperty="NoPhone"
                 app:OuterShapeProperty="NoButton"
                 app:KeyMode="System"
+                app:OuterShapeDirection="Right"
                 app:innerShapeColor="#ffffff"
-                app:outerShapeColor="#ff0004" />
+                app:outerShapeColor="#ff6363" />
         </LinearLayout>
 
         <LinearLayout
@@ -82,8 +84,9 @@
                 android:padding="@dimen/smallSpace2"
                 app:KeyMode="System"
                 app:InnerShapeProperty="Picture"
-                app:OuterShapeProperty="Rounded"
-                app:outerShapeColor="#00ff00" />
+                app:OuterShapeProperty="Rectangle"
+                app:OuterShapeDirection="Left"
+                app:outerShapeColor="#02bebe" />
 
             <kidtoys.az.kidphone.FunnyButton
                 android:layout_width="0dp"
@@ -95,8 +98,9 @@
                 android:id="@+id/quizMode"
                 app:InnerShapeProperty="Picture"
                 app:pictureSrc="@drawable/question"
-                app:OuterShapeProperty="Rounded"
-                app:outerShapeColor="#00ff00" />
+                app:OuterShapeDirection="Center"
+                app:OuterShapeProperty="Rectangle"
+                app:outerShapeColor="#ff9757" />
 
             <kidtoys.az.kidphone.FunnyButton
                 android:layout_width="0dp"
@@ -108,8 +112,9 @@
                 android:id="@+id/gameMode"
                 app:InnerShapeProperty="Picture"
                 app:pictureSrc="@drawable/game"
-                app:OuterShapeProperty="Rounded"
-                app:outerShapeColor="#00ff00" />
+                app:OuterShapeDirection="Right"
+                app:OuterShapeProperty="Rectangle"
+                app:outerShapeColor="#b7960e8d" />
         </LinearLayout>
 
         <kidtoys.az.kidphone.FunnyButton
@@ -125,7 +130,8 @@
             app:innerShapeColor="#ffffff"
             app:layout_columnWeight="1"
             app:layout_rowWeight="1"
-            app:outerShapeColor="#FFBF00" />
+            app:OuterShapeDirection="LeftTop"
+            app:outerShapeColor="#FA58F4" />
 
         <kidtoys.az.kidphone.FunnyButton
             android:id="@+id/heart"
@@ -140,6 +146,7 @@
             app:TextSize="22sp"
             app:innerShapeColor="#ffffff"
             app:layout_columnWeight="1"
+            app:OuterShapeDirection="Top"
             app:layout_rowWeight="1"
             app:outerShapeColor="#FFBF00" />
 
@@ -155,8 +162,9 @@
             app:TextSize="22sp"
             app:innerShapeColor="#ffffff"
             app:layout_columnWeight="1"
+            app:OuterShapeDirection="RightTop"
             app:layout_rowWeight="1"
-            app:outerShapeColor="#FFBF00" />
+            app:outerShapeColor="#FA58F4" />
 
         <kidtoys.az.kidphone.FunnyButton
             android:layout_width="0dp"
@@ -170,6 +178,7 @@
             app:TextSize="22sp"
             app:innerShapeColor="#ffffff"
             app:layout_columnWeight="1"
+            app:OuterShapeDirection="Left"
             app:layout_rowWeight="1"
             app:outerShapeColor="#FFBF00" />
 
@@ -187,7 +196,7 @@
             app:innerShapeColor="#ffffff"
             app:layout_columnWeight="1"
             app:layout_rowWeight="1"
-            app:outerShapeColor="#FFBF00" />
+            app:outerShapeColor="#ff6363" />
 
         <kidtoys.az.kidphone.FunnyButton
             android:layout_width="0dp"
@@ -201,6 +210,7 @@
             app:TextSize="22sp"
             app:layout_columnWeight="1"
             app:layout_rowWeight="1"
+            app:OuterShapeDirection="Right"
             app:innerShapeColor="#ffffff"
             app:outerShapeColor="#FFBF00" />
 
@@ -216,8 +226,9 @@
             app:TextSize="22sp"
             app:innerShapeColor="#ffffff"
             app:layout_columnWeight="1"
+            app:OuterShapeDirection="LeftBottom"
             app:layout_rowWeight="1"
-            app:outerShapeColor="#FFBF00" />
+            app:outerShapeColor="#FA58F4" />
 
         <kidtoys.az.kidphone.FunnyButton
             android:layout_width="0dp"
@@ -232,6 +243,7 @@
             app:innerShapeColor="#ffffff"
             app:layout_columnWeight="1"
             app:layout_rowWeight="1"
+            app:OuterShapeDirection="Bottom"
             app:outerShapeColor="#FFBF00" />
 
         <kidtoys.az.kidphone.FunnyButton
@@ -247,7 +259,8 @@
             app:innerShapeColor="#ffffff"
             app:layout_columnWeight="1"
             app:layout_rowWeight="1"
-            app:outerShapeColor="#FFBF00" />
+            app:OuterShapeDirection="RightBottom"
+            app:outerShapeColor="#FA58F4" />
 
         <kidtoys.az.kidphone.FunnyButton
             android:layout_width="0dp"
@@ -265,7 +278,8 @@
             app:layout_columnSpan="3"
             app:layout_columnWeight="1"
             app:layout_rowWeight="1"
-            app:outerShapeColor="#FFBF00" />
+            app:OuterShapeDirection="Bottom"
+            app:outerShapeColor="#00ddff" />
     </android.support.v7.widget.GridLayout>
 
 
