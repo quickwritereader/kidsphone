@@ -18,6 +18,7 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
     private ViewGroup keysGroup;
     private BaseMode mode = null;
     private BaseAnimation localSpeaker;
+    private BaseAnimation callAnimation;
 
     @Override
     public View getViewById(int id) {
@@ -31,12 +32,12 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
 
     @Override
     public void activateDelay(UiHandler.DelayObject object, long delay) {
-       handler.activateDelay(object, delay);
+        handler.activateDelay(object, delay);
     }
 
     @Override
     public void deActivateDelay() {
-      handler.deActivateDelay();
+        handler.deActivateDelay();
     }
 
     @Override
@@ -46,12 +47,12 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
 
     @Override
     public void startSpeaker(boolean restoreOld) {
-        localSpeaker.start(-1,restoreOld);
+        localSpeaker.start(-1, restoreOld);
     }
 
     @Override
-    public void startSpeaker(int duration,boolean restoreOld) {
-        localSpeaker.start(duration,restoreOld);
+    public void startSpeaker(int duration, boolean restoreOld) {
+        localSpeaker.start(duration, restoreOld);
     }
 
     @Override
@@ -71,7 +72,7 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
 
     @Override
     public void stopSpeaker(boolean force) {
-       localSpeaker.stop(force);
+        localSpeaker.stop(force);
     }
 
     @Override
@@ -95,29 +96,38 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
         display = (FunnyDisplay) findViewById(R.id.display);
         keysGroup = (ViewGroup) findViewById(R.id.KeysGroup);
         handler = new UiHandler(this);
-        localSpeaker=new SpeakerAnimation(display);
-
+        localSpeaker = new SpeakerAnimation(display);
+        callAnimation = new CallAnimation(display);
     }
 
-    int started=0;
+    int started = 0;
+
     @Override
     protected void onStart() {
         super.onStart();
         handler.deActivateDelay();
-        handler.activateDelay(UiHandler.TIME_DELAY );
+        handler.activateDelay(UiHandler.TIME_DELAY);
         try {
-            if(started==0) {
-                started=1;
+            if (started == 0) {
+                started = 1;
 
-                int duration=soundPlayer.playPhoneOpenMode();
-                startSpeaker(duration);
-                refreshActiveTime(duration);
+                callAnimation.start();
+                getAudio().PlayMp3(R.raw.open_ringtone, new SoundCallBack() {
+                    @Override
+                    public void soundPlayFinished() {
+                        callAnimation.stop(true);
+                        int duration = soundPlayer.playPhoneOpenMode();
+                        startSpeaker(duration);
+                        refreshActiveTime(duration);
+                    }
+                });
+
                 TeachMode teachMode = new TeachMode(this, false);
                 mode = teachMode;
                 teachMode.setPlaySound(true);
             }
             //finally, we can set mode
-          //  drawAny();;
+            //  drawAny();;
         } catch (Exception e) {
             //should not happen
         }
@@ -143,7 +153,7 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
         if ((keyCode == KeyEvent.KEYCODE_HOME)) {
             if (mode != null) mode.onSave();
             handler.deActivateDelay();
-            started=0;
+            started = 0;
         }
         return super.onKeyDown(keyCode, event);
     }
@@ -152,7 +162,7 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
     public void onBackPressed() {
         handler.deActivateDelay();
         this.soundPlayer.playPhoneCloseMode();
-        started=0;
+        started = 0;
         super.onBackPressed();
     }
 
@@ -204,7 +214,7 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
                     break;
                 case R.id.buttonNo:
                     if (mode != null && mode instanceof CallMode) {
-                         mode.onClick((FunnyButton) v);
+                        mode.onClick((FunnyButton) v);
                     }
                     break;
                 case R.id.gameMode:
@@ -223,7 +233,7 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
                     }
             }//switch end
         } catch (Exception ignored) {
-           ignored.printStackTrace();
+            ignored.printStackTrace();
         }
 
     }
@@ -258,7 +268,6 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
     public SoundPlayer getAudio() {
         return this.soundPlayer;
     }
-
 
 
     public Handler getHandler() {

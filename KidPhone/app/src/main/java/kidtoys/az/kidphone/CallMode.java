@@ -63,13 +63,12 @@ public class CallMode extends BaseMode implements SoundCallBack {
             isNoActive=false;
             phone.stopSpeaker(true);
             callNoAnimation.start();
-            audio.PlayMp3(R.raw.dial_tone, new SoundCallBack() {
+            audio.PlayMp3(R.raw.busy_signal, new SoundCallBack() {
                 @Override
                 public void soundPlayFinished() {
                     callNoAnimation.stop(true);
                     isNoActive=true;
-                    phone.startSpeaker();
-                    audio.PlayMp3(R.raw.az_incorrect_number_2, callMode);
+                    onRefresh();
                 }
             });
             return;

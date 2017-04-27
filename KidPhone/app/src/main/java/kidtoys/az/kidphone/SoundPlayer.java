@@ -66,7 +66,7 @@ public class SoundPlayer {
     }
 
     public int playPhoneOpenMode() {
-        return this.PlayMp3(R.raw.az_open_ringtone);
+        return this.PlayMp3(R.raw.open_speech);
     }
 
     public int playPhoneCloseMode() {
