@@ -11,6 +11,8 @@ import android.util.Log;
 import android.util.LruCache;
 import android.view.View;
 
+import java.lang.ref.WeakReference;
+
 /**
  * Funny Display
  */
@@ -38,10 +40,12 @@ public class FunnyDisplay extends View {
     private Bitmap previousBitmap = null;
     private Path[] outerPathList = null;
     private Path[] innerPathList = null;
-   // private Path[] centerPathList = null;
-    private int padOuter=11;
-    private int padInner=-5;
-    private int padCenter=1;
+    // private Path[] centerPathList = null;
+    private int padOuter = 11;
+    private int padInner = -5;
+    private int padCenter = 1;
+
+    private WeakReference<BaseAnimation> attachedAnim = null;
 
     /**
      * used as backbuffer
@@ -53,6 +57,25 @@ public class FunnyDisplay extends View {
 
 
     }
+
+    public synchronized void attachAnimation(BaseAnimation anim) {
+
+        BaseAnimation a=attachedAnim!=null?attachedAnim.get():null;
+        if(a!=null){
+            if(a!=anim){
+                a.stop(true);
+            }
+        }
+        if(a!=anim) {
+            if(anim==null){
+                attachedAnim=null;
+            }else {
+                attachedAnim = new WeakReference<BaseAnimation>(anim);
+            }
+        }
+    }
+
+
 
     public FunnyDisplay(Context context, AttributeSet attrs) {
         super(context, attrs);

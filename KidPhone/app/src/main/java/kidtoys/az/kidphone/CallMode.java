@@ -8,22 +8,23 @@ import android.media.MediaPlayer;
 public class CallMode extends BaseMode implements SoundCallBack {
 
     public static String dialedNumber;
-    public int lastDialedIndex=0;
-    public static int[] callPositions={0,0,0,0,0,0,0,0};
+    public int lastDialedIndex = 0;
+    public static int[] callPositions = {0, 0, 0, 0, 0, 0, 0, 0};
     FunnySurface surface;
-    private static int [] callAny ={R.raw.az_gel_birine_zeng_edek };
-    private static int [] callWho ={R.raw.az_kimin_nomresin_yigmaq_isteyirsen};
-    private static int [] call000Arr={R.raw.az_call_000_1,R.raw.az_call_000_2};
-    private static int [] call102Arr={R.raw.az_call_102_1,R.raw.az_call_102_2,R.raw.az_call_102_3};
-    private static int [] call103Arr={R.raw.az_call_103_1,R.raw.az_call_103_2};
-    private static int [] call112Arr={R.raw.az_call_112_1,R.raw.az_call_112_2,R.raw.az_call_112_3};
-    private static int [] callIncorret={R.raw.az_incorrect_number_1,R.raw.az_incorrect_number_2};
+    private static int[] callAny = {R.raw.az_gel_birine_zeng_edek};
+    private static int[] callWho = {R.raw.az_kimin_nomresin_yigmaq_isteyirsen};
+    private static int[] call000Arr = {R.raw.az_call_000_1, R.raw.az_call_000_2};
+    private static int[] call102Arr = {R.raw.az_call_102_1, R.raw.az_call_102_2, R.raw.az_call_102_3};
+    private static int[] call103Arr = {R.raw.az_call_103_1, R.raw.az_call_103_2};
+    private static int[] call112Arr = {R.raw.az_call_112_1, R.raw.az_call_112_2, R.raw.az_call_112_3};
+    private static int[] callIncorret = {R.raw.az_incorrect_number_1, R.raw.az_incorrect_number_2};
     BaseAnimation callAnimation;
     BaseAnimation callNoAnimation;
-    boolean  isNoActive=false;
+    boolean isNoActive = false;
+    boolean isNoPressed = false;
 
 
-    public int[] getCallSoundArray(int index){
+    public int[] getCallSoundArray(int index) {
         switch (index) {
             case 1:
                 return call000Arr;
@@ -48,45 +49,50 @@ public class CallMode extends BaseMode implements SoundCallBack {
 
     public CallMode(Phone phone) throws Exception {
         super(phone);
-        surface=new FunnySurface(phone.getDisplay().surfaceWidth,phone.getDisplay().surfaceHeight);
-        callAnimation=new CallAnimation(phone.getDisplay());
-        callNoAnimation=new CallNoButtonAnim(phone.getDisplay());
+        surface = new FunnySurface(phone.getDisplay().surfaceWidth, phone.getDisplay().surfaceHeight);
+        callAnimation = new CallAnimation(phone.getDisplay());
+        callNoAnimation = new CallNoButtonAnim(phone.getDisplay());
         onRefresh();
     }
-    private boolean handleKeys=true;
 
-    private CallMode callMode=this;
+    private boolean handleKeys = true;
+
+    private CallMode callMode = this;
 
     @Override
     public void onClick(FunnyButton funnyButton) {
-        if(funnyButton.getId()==R.id.buttonNo && isNoActive){
-            isNoActive=false;
-            phone.stopSpeaker(true);
-            callNoAnimation.start();
-            audio.PlayMp3(R.raw.busy_signal, new SoundCallBack() {
-                @Override
-                public void soundPlayFinished() {
-                    callNoAnimation.stop(true);
-                    isNoActive=true;
-                    onRefresh();
-                }
-            });
-            return;
+        if (funnyButton.getId() == R.id.buttonNo) {
+            if (isNoActive) {
+                isNoActive = false;
+                isNoPressed = true;
+                phone.stopSpeaker(true);
+                callNoAnimation.start();
+                audio.PlayMp3(R.raw.busy_signal, new SoundCallBack() {
+                    @Override
+                    public void soundPlayFinished() {
+                        callNoAnimation.stop(true);
+                        isNoActive = true;
+                        onRefresh();
+                    }
+                });
+                return;
+            } else {
+                onRefresh();
+            }
         }
         if (funnyButton.getKeyMode() == FunnyButton.KeyMode.Numbers) {
             String number = funnyButton.getNumbersText();
             if (number.length() > 0 && handleKeys) {
                 phone.stopSpeaker();
-                isNoActive=false;
+                isNoActive = false;
                 dialedNumber = dialedNumber + number;
                 //if first time change wait to who
-                if(dialedNumber.length()==1){
+                if (dialedNumber.length() == 1) {
                     phone.deActivateDelay();
                     callModeWait(0);
-                }
-                else if(dialedNumber.length()>=3){
+                } else if (dialedNumber.length() >= 3) {
                     phone.deActivateDelay();
-                    handleKeys=false;
+                    handleKeys = false;
                 }
 
                 audio.playKeypadTones(number.charAt(0));
@@ -95,42 +101,44 @@ public class CallMode extends BaseMode implements SoundCallBack {
                     @Override
                     public void onCompletion(MediaPlayer mp) {
                         if (dialedNumber.length() >= 3) {
-                            int index=0;
+                            int index = 0;
                             switch (dialedNumber) {
                                 case "000":
-                                   index=1;
+                                    index = 1;
                                     break;
                                 case "102":
-                                    index=2;
+                                    index = 2;
                                     break;
                                 case "103":
-                                    index=3;
+                                    index = 3;
                                     break;
                                 case "112":
-                                   index=4;
+                                    index = 4;
                                     break;
                                 default:
-                                    index=7;
+                                    index = 7;
                             }
-                             int [] arr= getCallSoundArray(index);
-                            lastDialedIndex=index;
-                            final int position=callPositions[index];
-                            callPositions[index]=callPositions[index]+1;
-                            if(callPositions[index]>=arr.length){
-                                callPositions[index]=0;
+                            int[] arr = getCallSoundArray(index);
+                            lastDialedIndex = index;
+                            final int position = callPositions[index];
+                            callPositions[index] = callPositions[index] + 1;
+                            if (callPositions[index] >= arr.length) {
+                                callPositions[index] = 0;
                             }
-                            final int audio_id=arr[position];
-                           // phone.startSpeaker();
+                            final int audio_id = arr[position];
+                            // phone.startSpeaker();
                             //audio.playCall( arr[position],callMode);
-                            final boolean useNoButton=index!=7;
+                            isNoActive = true;
+                            isNoPressed = false;
                             callAnimation.start();
                             audio.PlayMp3(R.raw.dial_tone, new SoundCallBack() {
                                 @Override
                                 public void soundPlayFinished() {
-                                    callAnimation.stop(true);
-                                    isNoActive=useNoButton;
-                                    phone.startSpeaker();
-                                    audio.PlayMp3(audio_id, callMode);
+                                    if (!isNoPressed) {
+                                        callAnimation.stop(true);
+                                        phone.startSpeaker();
+                                        audio.PlayMp3(audio_id, callMode);
+                                    }
                                 }
                             });
 
@@ -144,38 +152,38 @@ public class CallMode extends BaseMode implements SoundCallBack {
     }
 
     private void draw(String dialedNumber) {
-        if(dialedNumber==null || dialedNumber.length()<1)return;
-        int figureRandom = (int) (Math.random() * (FunnySurface.getMaxTypeSupport()- 1)) + 1;
+        if (dialedNumber == null || dialedNumber.length() < 1) return;
+        int figureRandom = (int) (Math.random() * (FunnySurface.getMaxTypeSupport() - 1)) + 1;
         int colorRandom = (int) (Math.random() * (FunnySurface.getMaxColorSupport() - 2)) + 1;//exclude white and black
-        if(dialedNumber.length()==1) {
+        if (dialedNumber.length() == 1) {
             surface.clear();
         }
-        int i=dialedNumber.length()-1;
-        char Char=dialedNumber.charAt(dialedNumber.length()-1);
-        int length=dialedNumber.length()*7;
-        FunnySurfaceUtils.drawChar(surface, i*7 , 0, dialedNumber.charAt(i), FunnySurface.supportedColors[colorRandom],
-                    FunnySurface.supportedTypes[figureRandom], false);
+        int i = dialedNumber.length() - 1;
+        char Char = dialedNumber.charAt(dialedNumber.length() - 1);
+        int length = dialedNumber.length() * 7;
+        FunnySurfaceUtils.drawChar(surface, i * 7, 0, dialedNumber.charAt(i), FunnySurface.supportedColors[colorRandom],
+                FunnySurface.supportedTypes[figureRandom], false);
         phone.getDisplay().clear();
 
-        phone.getDisplay().getMainSurface().putSurface(surface,(surface.getWidth() -length)/2,4);
+        phone.getDisplay().getMainSurface().putSurface(surface, (surface.getWidth() - length) / 2, 4);
         phone.getDisplay().render();
     }
 
     @Override
     public void onRefresh() {
-        audio=phone.getAudio();
-        isNoActive=false;
-        handleKeys=true ;
+        audio = phone.getAudio();
+        isNoActive = false;
+        handleKeys = true;
         phone.deActivateDelay();
-        int duration=audio.PlayMp3(R.raw.az_gel_birine_zeng_edek );
+        int duration = audio.PlayMp3(R.raw.az_gel_birine_zeng_edek);
         callAnimation.stop(true);
         callNoAnimation.stop(true);
         phone.startSpeaker(duration);
-        phone.activateDelay(new UiHandler.DelayObject(getCallSoundArray(0),callPositions[0]), 5000);
+        phone.activateDelay(new UiHandler.DelayObject(getCallSoundArray(0), callPositions[0]), 5000);
         phone.refreshActiveTime(duration);//forward user timing
         phone.changeKeys(FunnyButton.KeyMode.Numbers);
         phone.getDisplay().clear();
-        lastDialedIndex=0;
+        lastDialedIndex = 0;
         dialedNumber = "";
     }
 
@@ -190,19 +198,18 @@ public class CallMode extends BaseMode implements SoundCallBack {
     }
 
 
-
     @Override
     public void soundPlayFinished() {
 
         callModeWait(lastDialedIndex);
         phone.stopSpeaker(false);
-        handleKeys=true;
+        handleKeys = true;
     }
 
     private void callModeWait(int dialedIndex) {
         UiHandler.DelayObject obj;
-        if(dialedIndex==7)dialedIndex=0;
-        obj=new UiHandler.DelayObject(getCallSoundArray(dialedIndex),callPositions[dialedIndex]);
-        phone.activateDelay(obj,5000);
+        if (dialedIndex == 7) dialedIndex = 0;
+        obj = new UiHandler.DelayObject(getCallSoundArray(dialedIndex), callPositions[dialedIndex]);
+        phone.activateDelay(obj, 5000);
     }
 }

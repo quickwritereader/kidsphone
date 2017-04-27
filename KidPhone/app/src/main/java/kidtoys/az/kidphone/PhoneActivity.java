@@ -184,6 +184,7 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
     public void onClick(View v) {
         handler.refreshActiveTime();
         try {
+
             switch (v.getId()) {
                 case R.id.KeysMode:
                     if (mode != null && mode instanceof TeachMode) {

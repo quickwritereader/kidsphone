@@ -115,6 +115,7 @@ public class TeachMode extends BaseMode implements  SoundCallBack{
             letterAnimation.stop(true);
             letterAnimation.setLetter(l);
         }
+        phone.getDisplay().attachAnimation(null);
         phone.getDisplay().drawChar(l);
 //        int duration=phone.getAudio().playChar(l);
 //        phone.refreshActiveTime(duration);
@@ -209,15 +210,19 @@ public class TeachMode extends BaseMode implements  SoundCallBack{
     public   void onRefresh(){
         lastPressed="";
         pressedTimes=0;
-        changeKeyMode();
-        changeModeButton(true);
+        phone.stopSpeaker();
         if(letterAnimation!=null){
             letterAnimation.stop(true);
         }
+        drawLetterFigureAnime =false;
+        changeKeyMode();
+        changeModeButton(true);
+
     }
 
     public   void onSave(){
         putState(STATE,keysMode);
+        drawLetterFigureAnime =false;
         changeModeButton(false);
         phone.stopSpeaker();
         phone.getAudio().StopMp3();

@@ -51,6 +51,7 @@ public class GameMode extends BaseMode {
     @Override
     public void onRefresh() {
         //deactivate delay
+        phone.getDisplay().attachAnimation(null);
         phone.deActivateDelay();
         phone.changeKeys(FunnyButton.KeyMode.Numbers);
         if (snakeGame != null) {

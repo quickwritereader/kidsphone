@@ -22,18 +22,21 @@ public abstract class BaseAnimation {
     }
 
     public void start(int duration){
+        this.display.attachAnimation(this);
         stop(true);
         anim=new AnimThread(this,display,duration,false,isLooped());
         anim.start();
     }
 
     public void start(int duration,boolean restoreOld){
+        this.display.attachAnimation(this);
         stop(true);
         anim=new AnimThread(this,display,duration,restoreOld,isLooped());
         anim.start();
     }
 
     public void stop(boolean force){
+
         if(anim!=null && anim.isAlive()){
 
             if(force){
