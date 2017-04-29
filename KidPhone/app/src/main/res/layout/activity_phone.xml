@@ -157,7 +157,7 @@
             app:InnerShapeProperty="Triangle"
             app:OuterShapeProperty="Rounded"
             app:NumbersText="3"
-            app:LettersText="əFG"
+            app:LettersText="ƏFG"
             app:TextColor="#ffffff"
             app:TextSize="22sp"
             app:innerShapeColor="#ffffff"
