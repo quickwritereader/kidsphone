@@ -493,8 +493,8 @@ public class FunnySurfaceUtils {
     }
 
     private static void drawSquare(FunnySurface surface, int x, int y, int charWidth, int charHeight, FunnySurface.DotColor color, FunnySurface.DotType figure, FunnySurface.CallbackDraw clbk) {
-        int bottom = y + charHeight - 3;
-        int right = x + charWidth - 1;
+        int bottom = y + charHeight-1  ;
+        int right = x + charWidth -1 ;
 
         surface.drawLine(x, y, x, bottom, color, figure, clbk);
         surface.drawLine(x, bottom, right, bottom, color, figure, clbk);
@@ -688,7 +688,7 @@ public class FunnySurfaceUtils {
                 standardWidth = 10;
                 standardHeight = 10;
                 if (center) x = x - standardWidth / 2;
-                FunnySurfaceUtils.drawSquare(surface, x, y, standardWidth, standardHeight, color, figure, clbk);
+                FunnySurfaceUtils.drawSquare(surface, x, y-1, standardWidth, standardHeight, color, figure, clbk);
                 break;
             case Triangle:
                 standardWidth = 15;
