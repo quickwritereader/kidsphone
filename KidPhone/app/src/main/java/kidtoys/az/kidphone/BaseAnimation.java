@@ -5,8 +5,8 @@ package kidtoys.az.kidphone;
  */
 public abstract class BaseAnimation {
 
-    public interface RenderClbk{
-        public void RenderSurfaceOnMain();
+    public interface RenderCallback {
+         void RenderSurfaceOnMain();
     }
 
     private  AnimThread anim;
@@ -55,9 +55,9 @@ public abstract class BaseAnimation {
     protected abstract boolean onDraw(FunnySurface surface);
 
     protected abstract boolean isLooped( );
-     protected abstract boolean onLoopDraw(FunnySurface surface,RenderClbk renderClbk);
+    protected abstract boolean onLoopDraw(FunnySurface surface,RenderCallback renderClbk);
 
-    private static class AnimThread extends  Thread implements RenderClbk
+    private static class AnimThread extends  Thread implements RenderCallback
     {
         private int duration=-1;
         private final FunnyDisplay display;
@@ -171,7 +171,7 @@ public abstract class BaseAnimation {
                 }finally {
                     mainSurface.unlock();
                 }
-                display.postInvalidate();
+                display.postRender();
             }
         }
 

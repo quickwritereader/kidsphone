@@ -11,7 +11,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class FunnySurface {
 
     public interface CallbackDraw {
-        boolean dotHasDrawn();
+        boolean renderStep();
     }
 
     public static final DotColor[] supportedColors = DotColor.values();
@@ -23,7 +23,7 @@ public class FunnySurface {
     private byte[] mem = null;
 
 
-    private Lock locker = new ReentrantLock();
+    private final Lock locker = new ReentrantLock();
 
     /**
      * Create 1x1 blank surface
@@ -154,9 +154,7 @@ public class FunnySurface {
         if (x >= 0 && x < width && y >= 0 && y < height) {
             mem[y * width + x] = (byte) (color.ordinal() | (type.ordinal() << 4));
             if (clbk != null) {
-                if (!clbk.dotHasDrawn()) {
-                    return;
-                }
+                clbk.renderStep();
             }
         }
     }
@@ -272,7 +270,7 @@ public class FunnySurface {
                 if (x >= 0 && x < width && y >= 0 && y < height) {
                     mem[y * width + x] = c;
                     if (clbk != null) {
-                        if (!clbk.dotHasDrawn()) {
+                        if (!clbk.renderStep()) {
                             return;
                         }
                     }
@@ -285,10 +283,8 @@ public class FunnySurface {
             for (; x != x2 + sign; x += sign) {
                 if (x >= 0 && x < width && y >= 0 && y < height) {
                     mem[y * width + x] = c;
-                    if (clbk != null) {
-                        if (!clbk.dotHasDrawn()) {
+                    if (clbk != null && !clbk.renderStep()) {
                             return;
-                        }
                     }
                 }
             }
@@ -299,10 +295,8 @@ public class FunnySurface {
             for (; y != y2 + signY; y += signY, x += signX) {
                 if (x >= 0 && x < width && y >= 0 && y < height) {
                     mem[y * width + x] = c;
-                    if (clbk != null) {
-                        if (!clbk.dotHasDrawn()) {
+                    if (clbk != null && !clbk.renderStep()) {
                             return;
-                        }
                     }
                 }
             }
@@ -320,10 +314,8 @@ public class FunnySurface {
                 for (; ; ) {
                     if (x1 >= 0 && x1 < width && y1 >= 0 && y1 < height) {
                         mem[y1 * width + x1] = c;
-                        if (clbk != null) {
-                            if (!clbk.dotHasDrawn()) {
+                        if (clbk != null && !clbk.renderStep()) {
                                 return;
-                            }
                         }
                     }
                     if (x1 == x2)
@@ -340,10 +332,8 @@ public class FunnySurface {
                     //plot(g, x1, y1);
                     if (x1 >= 0 && x1 < width && y1 >= 0 && y1 < height) {
                         mem[y1 * width + x1] = c;
-                        if (clbk != null) {
-                            if (!clbk.dotHasDrawn()) {
+                        if (clbk != null && !clbk.renderStep()) {
                                 return;
-                            }
                         }
                     }
                     if (y1 == y2)
@@ -356,7 +346,7 @@ public class FunnySurface {
                     }
                 }
             }
-        }//end ifelse
+        }//end if else
 
     }
 
@@ -370,8 +360,8 @@ public class FunnySurface {
         int x, y, sigma;
         int cInt = color.ordinal() | type.ordinal() << 4;
         byte c = (byte) (cInt);
-        int px = 0;
-        int py = 0;
+        int px;
+        int py;
     /* first half */
         for (x = 0, y = heightE, sigma = 2 * b2 + a2 * (1 - 2 * heightE); b2 * x <= a2 * y; x++) {
             //DrawPixel (xc + x, yc + y);
@@ -425,10 +415,8 @@ public class FunnySurface {
             py = yc - y;
             if (px >= 0 && px < width && py >= 0 && py < height) {
                 mem[py * width + px] = c;
-                if (clbk != null) {
-                    if (!clbk.dotHasDrawn()) {
+                if (clbk != null && !clbk.renderStep()) {
                         return;
-                    }
                 }
             }
             // DrawPixel (xc - x, yc - y);

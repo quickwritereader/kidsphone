@@ -294,7 +294,6 @@ public class SoundPlayer {
                   this.PlayMp3(R.raw.az_9,soundDone);
                 break;
             default:
-                return  ;
         }
     }
 

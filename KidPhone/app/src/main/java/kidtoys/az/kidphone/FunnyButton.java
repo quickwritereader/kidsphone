@@ -416,7 +416,6 @@ public class FunnyButton extends View {
             drawOnCanvas(c, false);
             c.setBitmap(latestPressed);
             drawOnCanvas(c, true);
-            c = null;
         }
         if (isPressed()) {
             if (latestPressed != null) canvas.drawBitmap(latestPressed, 0, 0, null);

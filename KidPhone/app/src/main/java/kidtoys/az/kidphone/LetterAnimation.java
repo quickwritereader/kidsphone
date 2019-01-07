@@ -10,7 +10,7 @@ public class LetterAnimation extends BaseAnimation implements FunnySurface.Callb
     private char Letter = ' ';
     private boolean isLetter = true;
     private FunnyButton.InnerShapeType innerShapeType = null;
-    private RenderClbk currentClbk = null;
+    private RenderCallback currentClbk = null;
 
     public LetterAnimation(FunnyDisplay display) {
         super(display);
@@ -57,7 +57,7 @@ public class LetterAnimation extends BaseAnimation implements FunnySurface.Callb
     }
 
     @Override
-    protected boolean onLoopDraw(FunnySurface surface, RenderClbk renderClbk) {
+    protected boolean onLoopDraw(FunnySurface surface, RenderCallback renderClbk) {
         this.currentClbk = renderClbk;
         surface.clear();
         if (!timeAndRender(150)) {
@@ -85,7 +85,7 @@ public class LetterAnimation extends BaseAnimation implements FunnySurface.Callb
     }
 
     @Override
-    public boolean dotHasDrawn() {
+    public boolean renderStep() {
 
         return timeAndRender(150);
     }

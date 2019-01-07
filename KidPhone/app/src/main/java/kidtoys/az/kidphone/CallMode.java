@@ -101,7 +101,7 @@ public class CallMode extends BaseMode implements SoundCallBack {
                     @Override
                     public void onCompletion(MediaPlayer mp) {
                         if (dialedNumber.length() >= 3) {
-                            int index = 0;
+                            int index;
                             switch (dialedNumber) {
                                 case "000":
                                     index = 1;

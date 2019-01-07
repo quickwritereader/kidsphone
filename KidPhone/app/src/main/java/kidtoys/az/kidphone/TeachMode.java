@@ -168,7 +168,7 @@ public class TeachMode extends BaseMode implements  SoundCallBack{
     public void changeModeButton(boolean switched){
         if(modeButton!=null){
             int ret=R.drawable.figure;
-            FunnyButton.KeyMode inMode=switched==true?switchMode(keysMode):keysMode;
+            FunnyButton.KeyMode inMode= switched ?switchMode(keysMode):keysMode;
             switch ( inMode ){
                 case Letters:
                     ret=R.drawable.alphabet;

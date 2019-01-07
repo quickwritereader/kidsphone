@@ -675,8 +675,8 @@ public class FunnySurfaceUtils {
     }
 
     public static void drawFigure(FunnySurface surface, int x, int y, FunnyButton.InnerShapeType innerShapeType, FunnySurface.DotColor color, FunnySurface.DotType figure, boolean center, FunnySurface.CallbackDraw clbk) {
-        int standardWidth = 5;
-        int standardHeight = 7;
+        int standardWidth;
+        int standardHeight;
         switch (innerShapeType) {
             case Circle:
                 standardWidth = 12;

@@ -22,20 +22,20 @@ public interface Phone {
 
     void activateDelay(UiHandler.DelayObject object,long delay);
 
-    public void deActivateDelay();
+    void deActivateDelay();
 
-    public void refreshActiveTime(int forwardDelay);
+    void refreshActiveTime(int forwardDelay);
 
-    public void startSpeaker();
+    void startSpeaker();
 
-    public void startSpeaker(int duration);
+    void startSpeaker(int duration);
 
-    public void startSpeaker( boolean restoreOld);
+    void startSpeaker(boolean restoreOld);
 
-    public void startSpeaker(int duration,boolean restoreOld);
+    void startSpeaker(int duration, boolean restoreOld);
 
-    public  void stopSpeaker();
+    void stopSpeaker();
 
-    public void stopSpeaker(boolean force) ;
+    void stopSpeaker(boolean force) ;
 
 }

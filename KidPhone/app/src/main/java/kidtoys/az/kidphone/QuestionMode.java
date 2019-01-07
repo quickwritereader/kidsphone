@@ -66,7 +66,7 @@ public class QuestionMode extends BaseMode implements  SoundCallBack{
                }
                break;
            }
-           int id=-1;
+           int id;
 
            FunnySurface surface=phone.getDisplay().getMainSurface();
            surface.clear();

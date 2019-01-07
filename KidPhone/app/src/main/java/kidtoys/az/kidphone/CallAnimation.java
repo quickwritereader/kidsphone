@@ -36,7 +36,7 @@ public class CallAnimation extends BaseAnimation {
     }
 
     @Override
-    protected boolean onLoopDraw(FunnySurface surface, RenderClbk renderClbk) {
+    protected boolean onLoopDraw(FunnySurface surface, RenderCallback renderClbk) {
         return false;
     }
 }

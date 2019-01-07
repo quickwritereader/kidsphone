@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.LruCache;
 import android.view.View;
 
@@ -70,7 +69,7 @@ public class FunnyDisplay extends View {
             if(anim==null){
                 attachedAnim=null;
             }else {
-                attachedAnim = new WeakReference<BaseAnimation>(anim);
+                attachedAnim = new WeakReference<>(anim);
             }
         }
     }
@@ -337,7 +336,7 @@ public class FunnyDisplay extends View {
                     if (b == null) {
                         //add to cache
                         //use integer cache of java platform (-128 til 127 are in cache within Integer.valueof
-                        key = Integer.valueOf(-127+(d.ordinal()*FunnySurface.getMaxColorSupport()+color));
+                        key = -127 + (d.ordinal() * FunnySurface.getMaxColorSupport() + color);
                         b = bitmapCache.get(key);
                     }
                     //generate and put into cache and save in previousBitmap
@@ -355,11 +354,9 @@ public class FunnyDisplay extends View {
                         // Log.d("display bitmap cached ", key);
 
                     }
-                    if (b != null) {
-                        int left = 20 + i * diameter -padOuter+1 ;
-                        int top = 20 + j * diameter -padOuter+1;
-                        canvas.drawBitmap(b, left, top, null);
-                    }
+                    int left = 20 + i * diameter -padOuter+1 ;
+                    int top = 20 + j * diameter -padOuter+1;
+                    canvas.drawBitmap(b, left, top, null);
                 }//need to draw
             }//for inner
         }//for outer
@@ -383,7 +380,7 @@ public class FunnyDisplay extends View {
                     if (b == null) {
                         //add to cache
                         //use integer cache of java platform
-                        key = Integer.valueOf(d.ordinal()*FunnySurface.getMaxColorSupport()+color);
+                        key = d.ordinal() * FunnySurface.getMaxColorSupport() + color;
                         b = bitmapCache.get(key);
                     }
 
@@ -411,11 +408,9 @@ public class FunnyDisplay extends View {
                         bitmapCache.put(key, b);
                         previousBitmap = b;
                     }//b==null
-                    if (b != null) {
-                        int left = 20 + i * diameter + pad;
-                        int top = 20 + j * diameter + pad;
-                        canvas.drawBitmap(b, left, top, null);
-                    }
+                    int left = 20 + i * diameter + pad;
+                    int top = 20 + j * diameter + pad;
+                    canvas.drawBitmap(b, left, top, null);
                 }//need to draw
             }//for inner
         }//for exit
