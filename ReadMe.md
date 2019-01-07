@@ -15,8 +15,8 @@ Picture of the toy Program:
 
 ## Theme 
 
-Genre: Baby Phone for learning 
-Language: Azerbaijani
+* Genre: Baby Phone for learning   
+* Language: Azerbaijani
 
 ### Features
   - Letters,Figures ,Numbers
