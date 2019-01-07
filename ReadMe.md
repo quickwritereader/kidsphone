@@ -5,7 +5,7 @@
 
 Picture of the toy Program: 
 
-![screen1.png](https://bytebucket.org/overflowzero/kidsprogram/raw/90fcc351a81701e1c70783e575b4d91e7d4995db/screen1.png?token=45b627c1e9fbae169f7b8bd8736d3c92c36d1d2e)
+![screen1.png](https://github.com/quickwritereader/kidsphone/blob/master/screen1.png?raw=true)
  
 
 ##Development##
