@@ -1,7 +1,8 @@
-# Funny telephone for kids version 1.0 
+# Funny educational telephone for kids
+
  
 
-
+Version : 1.0  
 Picture of the toy Program: 
 
 <img src="https://github.com/quickwritereader/kidsphone/blob/master/screen1.png?raw=true)" alt="phone" width="40%" />
