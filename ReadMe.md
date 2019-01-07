@@ -29,4 +29,4 @@ Picture of the toy Program:
 
 
 #### Notes
-Currently available on Play Store for download. For financial reasons it is still paid one.
+Currently available on Play Store for download by "Bilik Toys". For financial reasons it is still paid one.
