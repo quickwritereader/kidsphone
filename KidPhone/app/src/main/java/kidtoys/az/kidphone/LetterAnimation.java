@@ -12,7 +12,7 @@ public class LetterAnimation extends BaseAnimation implements FunnySurface.Callb
     private FunnyButton.InnerShapeType innerShapeType = null;
     private RenderCallback currentClbk = null;
 
-    public LetterAnimation(FunnyDisplay display) {
+    public LetterAnimation(FunnyDisplayBase display) {
         super(display);
     }
 

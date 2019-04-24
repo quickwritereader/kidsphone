@@ -15,7 +15,7 @@ import java.lang.ref.WeakReference;
 /**
  * Funny Display
  */
-public class FunnyDisplay extends View {
+public class FunnyDisplay extends View  implements FunnyDisplayBase{
     private static final double sqrt2 = Math.sqrt(2);
     private final Paint paintBack = new Paint();
     int surfaceWidth = 20;
@@ -28,6 +28,7 @@ public class FunnyDisplay extends View {
     private Paint[] outerColors;
     private LruCache<Integer, Bitmap> bitmapCache;
     private FunnySurface mainSurface;
+    private FunnySurface backSurface;
     private int diameter = -1;
     private Path screenPath = null;
     //for reducing garbage collection
@@ -138,15 +139,37 @@ public class FunnyDisplay extends View {
     }
 
     /**
-     * returns Main Surface that you can use to draw
+     * returns Back Surface that you can use to draw
      *
      * @return
      */
-    public FunnySurface getMainSurface() {
-        return mainSurface;
+    public  FunnySurface getSurface() {
+        return backSurface;
     }
 
-    private void init() {
+    @Override
+    public  FunnySurface getSurfaceSnapshot() {
+        FunnySurface surface=new FunnySurface(backSurface.getWidth(), backSurface.getHeight());
+        try {
+            backSurface.lock();
+            surface.CopyFrom(backSurface);
+        }finally {
+            backSurface.unlock();
+        }
+        return surface;
+    }
+
+    @Override
+    public void copyToSurface(FunnySurface surface) {
+        try {
+            backSurface.lock();
+            backSurface.CopyFrom(surface);
+        }finally {
+            backSurface.unlock();
+        }
+    }
+
+    private synchronized void init() {
         FunnySurface.DotColor dotColors[] = FunnySurface.DotColor.values();
 //        innerLight = new Paint();
 //        innerLight.setColor(Color.WHITE);
@@ -176,7 +199,11 @@ public class FunnyDisplay extends View {
             outerColors[i].setStyle(Paint.Style.FILL);
             outerColors[i].setAntiAlias(true);
         }
+        mainSurface=null;
+        backSurface=null;
         mainSurface = new FunnySurface(surfaceWidth, surfaceHeight);
+        backSurface = new FunnySurface(surfaceWidth, surfaceHeight); ;
+
         bitmapCache = new LruCache<Integer, Bitmap>(12) {
 
 
@@ -216,56 +243,37 @@ public class FunnyDisplay extends View {
 
     }
 
-    public void render() {
+
+
+    public   void render() {
         invalidate();
     }
 
-    public void postRender() {
+    public   void postRender() {
         postInvalidate();
     }
 
-    public void clear() {
-        mainSurface.lock();
+    public   void clear() {
         try {
-            mainSurface.clear();
-        }finally {
-            mainSurface.unlock();
-        }
-        render();
-    }
-
-    public void drawFigure(FunnyButton.InnerShapeType innerShapeType) {
-        mainSurface.lock();
-        try {
-            mainSurface.clear();
-            int figureRandom = (int) (Math.random() * (FunnySurface.getMaxTypeSupport()- 1)) + 1;
-            int colorRandom = (int) (Math.random() * (FunnySurface.getMaxColorSupport() - 2)) + 1;//exclude white and black
-            /*FunnySurfaceUtils.drawFigure(mainSurface, mainSurface.getWidth() / 2, 4, l, FunnySurface.supportedColors[colorRandom],
-                    FunnySurface.supportedTypes[figureRandom], true);*/
-            FunnySurfaceUtils.drawFigure(mainSurface, mainSurface.getWidth() / 2, 4, innerShapeType, FunnySurface.supportedColors[colorRandom],
-                    FunnySurface.DotType.Circle, true);
+            backSurface.lock();
+            backSurface.clear();
             render();
-        } finally {
-            mainSurface.unlock();
+        }finally {
+            backSurface.unlock();
         }
     }
 
-    public void drawChar(char l) {
-        //Log.d("letter", "letter: " + l);
-        mainSurface.lock();
-        try {
-            mainSurface.clear();
-            int figureRandom = (int) (Math.random() * (FunnySurface.getMaxTypeSupport() - 1)) + 1;
-            int colorRandom = (int) (Math.random() * (FunnySurface.getMaxColorSupport() - 2)) + 1;//exclude white and black
-        /*FunnySurfaceUtils.drawChar(mainSurface, mainSurface.getWidth() / 2, 4, l, FunnySurface.supportedColors[colorRandom],
-                FunnySurface.supportedTypes[figureRandom], true);*/
-            FunnySurfaceUtils.drawChar(mainSurface, mainSurface.getWidth() / 2, 4, l, FunnySurface.supportedColors[colorRandom],
-                    FunnySurface.DotType.Circle, true);
-        }finally {
-            mainSurface.unlock();
-        }
-        render();
+    @Override
+    public int getSurfaceWidth() {
+        return surfaceWidth;
     }
+
+    @Override
+    public int getSurfaceHeight() {
+        return surfaceHeight;
+    }
+
+
 
     private Path getDotPath(FunnySurface.DotType type, int cx, int cy, int radius, int pad) {
         int r = radius + pad;
@@ -309,13 +317,20 @@ public class FunnyDisplay extends View {
         canvas.clipPath(screenPath);
         canvas.drawColor(paintBack.getColor());
         //blt surface
-        bltBack(canvas);
-        bltInner(canvas);
-        //Log.d("display render time ", "" + (System.currentTimeMillis() - time));
+          try {
+             backSurface.lock();
+             mainSurface.CopyFrom(backSurface);
+          }finally {
+              backSurface.unlock();
+          }
+            bltBack(canvas);
+            bltInner(canvas);
+            //Log.d("display render time ", "" + (System.currentTimeMillis() - time));
+
 
     }
 
-    private void bltBack(Canvas canvas) {
+    private  void bltBack(Canvas canvas) {
 
         for (int j = 0; j < mainSurface.getHeight(); j++) {
             for (int i = 0; i < mainSurface.getWidth(); i++) {
@@ -362,7 +377,7 @@ public class FunnyDisplay extends View {
         }//for outer
     }
 
-    private void bltInner(Canvas canvas) {
+    private  void bltInner(Canvas canvas) {
         for (int j = 0; j < mainSurface.getHeight(); j++) {
             for (int i = 0; i < mainSurface.getWidth(); i++) {
 

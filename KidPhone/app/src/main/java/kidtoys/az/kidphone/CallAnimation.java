@@ -9,7 +9,7 @@ public class CallAnimation extends BaseAnimation {
     private long timeCall=0;
     private int scene=0;
 
-    public CallAnimation(FunnyDisplay display) {
+    public CallAnimation(FunnyDisplayBase display) {
         super(display);
     }
 

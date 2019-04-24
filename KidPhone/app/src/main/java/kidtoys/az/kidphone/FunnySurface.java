@@ -181,37 +181,38 @@ public class FunnySurface {
      * @param y
      */
     public void putSurface(FunnySurface surface, int x, int y) {
-        //find copyable areas
-        //if above surface area
-        if (x > this.width) return;
-        if (y > this.height) return;
-        int offsetSurfX = 0;
-        int offsetSurfY = 0;
-        int drawWidth = surface.width;
-        int drawHeight = surface.height;
-        if (x < 0) {
-            offsetSurfX = -x;
-            drawWidth = drawWidth - offsetSurfX;
-        }
-        if (y < 0) {
-            offsetSurfY = -y;
-            drawHeight = drawHeight - offsetSurfY;
-        }
-        //lets blt naive way
-        if (x < 0) x = 0;
-        if (y < 0) y = 0;
-        int remain = this.width - x;
-        drawWidth = remain > drawWidth ? drawWidth : remain;
-        remain = this.height - y;
-        drawHeight = remain > drawHeight ? drawHeight : remain;
 
-        for (int j = 0; j < drawHeight; j++) {
-            for (int i = 0; i < drawWidth; i++) {
-                int ind = (y + j) * width + x + i;
-                int surfInd = (j + offsetSurfY) * surface.width + offsetSurfX + i;
-                this.mem[ind] = surface.mem[surfInd];
+            //find copyable areas
+            //if above surface area
+            if (x > this.width) return;
+            if (y > this.height) return;
+            int offsetSurfX = 0;
+            int offsetSurfY = 0;
+            int drawWidth = surface.width;
+            int drawHeight = surface.height;
+            if (x < 0) {
+                offsetSurfX = -x;
+                drawWidth = drawWidth - offsetSurfX;
             }
-        }
+            if (y < 0) {
+                offsetSurfY = -y;
+                drawHeight = drawHeight - offsetSurfY;
+            }
+            //lets blt naive way
+            if (x < 0) x = 0;
+            if (y < 0) y = 0;
+            int remain = this.width - x;
+            drawWidth = remain > drawWidth ? drawWidth : remain;
+            remain = this.height - y;
+            drawHeight = remain > drawHeight ? drawHeight : remain;
+
+            for (int j = 0; j < drawHeight; j++) {
+                for (int i = 0; i < drawWidth; i++) {
+                    int ind = (y + j) * width + x + i;
+                    int surfInd = (j + offsetSurfY) * surface.width + offsetSurfX + i;
+                    this.mem[ind] = surface.mem[surfInd];
+                }
+            }
 
     }
 
@@ -235,6 +236,18 @@ public class FunnySurface {
         for (int i = 0; i < mem.length; i++) {
             mem[i] = 0;
         }
+    }
+
+    public void CopyFrom(FunnySurface funnySurface){
+
+            int min_w = Math.min(funnySurface.width, width);
+            int min_h = Math.min(funnySurface.height, height);
+            int surf_w = funnySurface.width;
+            for (int i = 0; i < min_w; i++) {
+                for (int j = 0; j < min_h; j++) {
+                    mem[j * width + i] = funnySurface.mem[j * surf_w + i];
+                }
+            }
     }
 
     public void drawLine(int x1, int y1, int x2, int y2, DotColor color, DotType type) {
@@ -430,6 +443,40 @@ public class FunnySurface {
                 x--;
             }
             sigma += a2 * ((4 * y) + 6);
+        }
+    }
+
+
+
+    public void drawFigure(FunnyButton.InnerShapeType innerShapeType) {
+        locker.lock();
+        try {
+            this.clear();
+            int figureRandom = (int) (Math.random() * (maxTypeSupport- 1)) + 1;
+            int colorRandom = (int) (Math.random() * (maxColorSupport - 2)) + 1;//exclude white and black
+            /*FunnySurfaceUtils.drawFigure(mainSurface, mainSurface.getWidth() / 2, 4, l, FunnySurface.supportedColors[colorRandom],
+                    FunnySurface.supportedTypes[figureRandom], true);*/
+            FunnySurfaceUtils.drawFigure(this, width / 2, 4, innerShapeType, FunnySurface.supportedColors[colorRandom],
+                    FunnySurface.DotType.Circle, true);
+
+        } finally {
+            locker.unlock();
+        }
+    }
+
+    public void drawChar(char l) {
+        //Log.d("letter", "letter: " + l);
+        locker.lock();
+        try {
+            this.clear();
+            int figureRandom = (int) (Math.random() * (maxTypeSupport - 1)) + 1;
+            int colorRandom = (int) (Math.random() * (maxColorSupport - 2)) + 1;//exclude white and black
+        /*FunnySurfaceUtils.drawChar(mainSurface, mainSurface.getWidth() / 2, 4, l, FunnySurface.supportedColors[colorRandom],
+                FunnySurface.supportedTypes[figureRandom], true);*/
+            FunnySurfaceUtils.drawChar(this, width / 2, 4, l, FunnySurface.supportedColors[colorRandom],
+                    FunnySurface.DotType.Circle, true);
+        }finally {
+            locker.unlock();
         }
     }
 

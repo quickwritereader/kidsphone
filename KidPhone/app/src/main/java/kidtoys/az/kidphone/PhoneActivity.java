@@ -12,7 +12,7 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
 
 
     private SoundPlayer soundPlayer;
-    private FunnyDisplay display;
+    private FunnyDisplayBase display;
     private FunnyButton.KeyMode lastKeyMode = null;
     private UiHandler handler;
     private ViewGroup keysGroup;
@@ -93,10 +93,10 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
         button.setOnClickListener(this);
         button = findViewById(R.id.quizMode);
         button.setOnClickListener(this);
-        display = (FunnyDisplay) findViewById(R.id.display);
+        display = (FunnyDisplayBase) findViewById(R.id.display);
         keysGroup = (ViewGroup) findViewById(R.id.KeysGroup);
         handler = new UiHandler(this);
-        localSpeaker = new SpeakerAnimation(display);
+        localSpeaker = new SpeakerAnimation( display);
         callAnimation = new CallAnimation(display);
     }
 
@@ -261,7 +261,7 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
     }
 
     @Override
-    public FunnyDisplay getDisplay() {
+    public FunnyDisplayBase getDisplay() {
         return this.display;
     }
 
@@ -276,7 +276,7 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
     }
 
 //    public void drawAny(){
-//        FunnySurface surface=display.getMainSurface();
+//        FunnySurface surface=display.getSurface();
 //        surface.clear();
 //        surface.putDot(1,1, FunnySurface.DotColor.Blue, FunnySurface.DotType.Star);
 //        FunnySurface surface1=FunnySurface.createSurface(3,3, FunnySurface.DotColor.Blue, FunnySurface.DotType.Heart);

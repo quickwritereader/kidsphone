@@ -10,10 +10,10 @@ public abstract class BaseAnimation {
     }
 
     private  AnimThread anim;
-    private  final FunnyDisplay display;
+    private  final FunnyDisplayBase display;
 
 
-    public BaseAnimation(FunnyDisplay display) {
+    public BaseAnimation(FunnyDisplayBase display) {
         this.display=display;
     }
 
@@ -60,7 +60,7 @@ public abstract class BaseAnimation {
     private static class AnimThread extends  Thread implements RenderCallback
     {
         private int duration=-1;
-        private final FunnyDisplay display;
+        private final FunnyDisplayBase display;
         private FunnySurface surface;
         private BaseAnimation baseAnimation;
         private FunnySurface prevSurface;
@@ -91,11 +91,11 @@ public abstract class BaseAnimation {
             this.baseAnimation=animation;
             isLoopBased=isLoop;
         }
-        public AnimThread(BaseAnimation animation,FunnyDisplay display,int duration,boolean restoreOld,boolean isLoop) {
+        public AnimThread(BaseAnimation animation, FunnyDisplayBase display, int duration, boolean restoreOld, boolean isLoop) {
             this.duration=duration;
             this.display=display;
             this.restoreOld=restoreOld;
-            this.surface=new FunnySurface(display.surfaceWidth,display.surfaceHeight);
+            this.surface=new FunnySurface(display.getSurfaceWidth(),display.getSurfaceHeight());
             this.baseAnimation=animation;
             isLoopBased=isLoop;
         }
@@ -107,15 +107,8 @@ public abstract class BaseAnimation {
             long startTime=System.currentTimeMillis();
             boolean forced=false;
             if(restoreOld){
-                this.prevSurface=new FunnySurface(display.surfaceWidth,display.surfaceHeight);
-                FunnySurface mainSurface = display.getMainSurface();
-                if (mainSurface.tryLock() ) {
-                    try {
-                        prevSurface.putSurface(mainSurface,0,0); 
-                    }finally {
-                        mainSurface.unlock();
-                    }
-                }
+                this.prevSurface=null;
+                this.prevSurface=display.getSurfaceSnapshot();
             }
             while (isAnimRun()){
                    if(isLoopBased){
@@ -140,40 +133,22 @@ public abstract class BaseAnimation {
             }
             if(!forced & !immediate){
                 if(restoreOld){
-                    restoreOldDisplay();
+                    display.copyToSurface(prevSurface);
+                    display.postRender();
                 }else{
-                    draw( );
+                    draw();
                 }
-
 
             }
 
         }
 
-        private  void restoreOldDisplay(){
-            FunnySurface mainSurface = display.getMainSurface();
-            if (mainSurface.tryLock() ) {
-                try {
-                    if(prevSurface!=null) mainSurface.putSurface(prevSurface, 0, 0);
-                    else mainSurface.clear();
-                }finally {
-                    mainSurface.unlock();
-                }
-                display.postInvalidate();
-            }
+        private void draw() {
+            if(isAnimRun()) display.copyToSurface(surface );
+            else display.clear();
+            display.postRender();
         }
-        private void draw( ) {
-            FunnySurface mainSurface = display.getMainSurface();
-            if (mainSurface.tryLock() ) {
-                try {
-                   if(isAnimRun()) mainSurface.putSurface(surface, 0, 0);
-                    else mainSurface.clear();
-                }finally {
-                    mainSurface.unlock();
-                }
-                display.postRender();
-            }
-        }
+
 
         @Override
         public void RenderSurfaceOnMain() {

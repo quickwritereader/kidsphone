@@ -8,7 +8,7 @@ public class SpeakerAnimation extends BaseAnimation {
 
     int faceScene =0;
     long timeFace;
-    public SpeakerAnimation(FunnyDisplay display) {
+    public SpeakerAnimation(FunnyDisplayBase display) {
         super(display);
         timeFace=0;
     }

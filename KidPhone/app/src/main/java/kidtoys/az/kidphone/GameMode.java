@@ -95,7 +95,7 @@ public class GameMode extends BaseMode {
         public static final String FRUIT = "fruit";
         public static final String SNAKE = "snake";
         public static final String LAST_KEY = "lastKey";
-        public final FunnyDisplay display;
+        public final FunnyDisplayBase display;
         public final ArrayBlockingQueue<KeyPress> events = new ArrayBlockingQueue<>(5);
         private final GameMode mode;
         private final FunnySurface.DotColor snakeColor = FunnySurface.DotColor.Green;
@@ -147,7 +147,7 @@ public class GameMode extends BaseMode {
             snakePos = (short[]) this.mode.getState(SNAKE);
             last = (KeyPress) this.mode.getState(LAST_KEY);
 
-            map = new FunnySurface(display.surfaceWidth, display.surfaceHeight);
+            map = new FunnySurface(display.getSurfaceWidth(), display.getSurfaceHeight());
 
             random = new Random();
             random.setSeed(System.currentTimeMillis());
@@ -216,7 +216,7 @@ public class GameMode extends BaseMode {
 
         private void initGame() {
             map = null;
-            map = new FunnySurface(display.surfaceWidth, display.surfaceHeight);
+            map = new FunnySurface(display.getSurfaceWidth(), display.getSurfaceHeight());
             last = KeyPress.RIGHT;
             initSnake();
             mapSnakeOnMap();
@@ -300,14 +300,7 @@ public class GameMode extends BaseMode {
 
         private void display() {
             if (gameRun) {
-                FunnySurface mainSurface = display.getMainSurface();
-                if (mainSurface.tryLock()) {
-                    try {
-                        mainSurface.putSurface(map, 0, 0);
-                    }finally {
-                        mainSurface.unlock();
-                    }
-                }
+                display.copyToSurface(map);
                 display.postInvalidate();
             }
         }
@@ -340,7 +333,7 @@ public class GameMode extends BaseMode {
 
         private void initSnake() {
             snakePos = null;
-            snakePos = new short[display.surfaceHeight * display.surfaceWidth / 2];
+            snakePos = new short[(int) (display.getSurfaceWidth() * display.getSurfaceHeight()*2/3)];
             for (int i = 0; i < snakePos.length; i++) {
                 snakePos[i] = (short) 0xFFFF;
             }

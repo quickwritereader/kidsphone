@@ -27,6 +27,7 @@ public class QuestionMode extends BaseMode implements  SoundCallBack{
             quizGiver.addQuestion(new QuestionChooser.Question(R.raw.az_question_figure,i));
         }
         askNew();
+        FunnyDisplayBase dispBase=phone.getDisplay();
     }
 
     @Override
@@ -68,7 +69,7 @@ public class QuestionMode extends BaseMode implements  SoundCallBack{
            }
            int id;
 
-           FunnySurface surface=phone.getDisplay().getMainSurface();
+           FunnySurface surface=phone.getDisplay().getSurface();
            surface.clear();
            if(found){
                if(correctCount>=corrects.length)correctCount=0;
@@ -103,14 +104,26 @@ public class QuestionMode extends BaseMode implements  SoundCallBack{
 
     private void play_figure(FunnyButton.InnerShapeType innerShapeType) {
 
-        phone.getDisplay().drawFigure(innerShapeType);
+        drawFigure(innerShapeType);
         int duration = phone.getAudio().playFigures(innerShapeType);
         phone.refreshActiveTime(duration);
     }
 
+    private void drawFigure(FunnyButton.InnerShapeType innerShapeType) {
+        FunnyDisplayBase display=phone.getDisplay();
+        if(display!=null  ) {
+           display.getSurface().drawFigure(innerShapeType);
+           display.render();
+        }
+    }
+
 
     private void play(char l) {
-        phone.getDisplay().drawChar(l) ;
+        FunnyDisplayBase display=phone.getDisplay();
+        if(display!=null  ) {
+            display.getSurface().drawChar(l);
+            display.render();
+        }
         int duration=phone.getAudio().playChar(l);
         phone.refreshActiveTime(duration);
     }

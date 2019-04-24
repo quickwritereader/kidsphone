@@ -5,7 +5,7 @@ package kidtoys.az.kidphone;
  */
 public class CallNoButtonAnim extends BaseAnimation {
 
-    public CallNoButtonAnim(FunnyDisplay display) {
+    public CallNoButtonAnim(FunnyDisplayBase display) {
         super(display);
     }
 

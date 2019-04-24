@@ -10,7 +10,7 @@ public interface Phone {
 
     void changeKeys(FunnyButton.KeyMode newMode);
 
-    FunnyDisplay getDisplay();
+    FunnyDisplayBase getDisplay();
 
     SoundPlayer getAudio();
 

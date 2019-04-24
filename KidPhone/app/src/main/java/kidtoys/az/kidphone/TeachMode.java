@@ -11,7 +11,7 @@ public class TeachMode extends BaseMode implements  SoundCallBack{
     private String lastPressed = "";
     private int pressedTimes = 0;
     private SoundPlayer soundPlayer;
-    private FunnyDisplay display;
+    private FunnyDisplayBase display;
     private  FunnyButton modeButton=null;
     private boolean playSound=true;
     private  LetterAnimation letterAnimation=null;
@@ -98,7 +98,7 @@ public class TeachMode extends BaseMode implements  SoundCallBack{
             letterAnimation.stop(true);
             letterAnimation.setInnerShapeType(innerShapeType);
         }
-        phone.getDisplay().drawFigure(innerShapeType);
+         drawFigure(innerShapeType);
          phone.getAudio().playFigures(innerShapeType,this);
     }
 
@@ -115,15 +115,31 @@ public class TeachMode extends BaseMode implements  SoundCallBack{
             letterAnimation.stop(true);
             letterAnimation.setLetter(l);
         }
-        phone.getDisplay().attachAnimation(null);
-        phone.getDisplay().drawChar(l);
+        FunnyDisplayBase display=phone.getDisplay();
+        if(display!=null) {
+            display.attachAnimation(null);
+            drawChar(l);
 //        int duration=phone.getAudio().playChar(l);
 //        phone.refreshActiveTime(duration);
 
 
-        phone.getAudio().playChar(l,this);
+            phone.getAudio().playChar(l, this);
+        }
 
-
+    }
+    private void drawFigure(FunnyButton.InnerShapeType innerShapeType) {
+        FunnyDisplayBase display=phone.getDisplay();
+        if(display!=null  ) {
+            display.getSurface().drawFigure(innerShapeType);
+            display.render();
+        }
+    }
+    private  void drawChar(char l){
+        FunnyDisplayBase display=phone.getDisplay();
+        if(display!=null  ) {
+            display.getSurface().drawChar(l);
+            display.render();
+        }
     }
 
     private FunnyButton.KeyMode switchMode(FunnyButton.KeyMode old){
