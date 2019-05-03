@@ -95,6 +95,8 @@ public class GameMode extends BaseMode {
         public static final String FRUIT = "fruit";
         public static final String SNAKE = "snake";
         public static final String LAST_KEY = "lastKey";
+        public static final int CYCLE_TIME_MS = 150;
+        public static final int DEAD_TIME_MS = 1800;
         public final FunnyDisplayBase display;
         public final ArrayBlockingQueue<KeyPress> events = new ArrayBlockingQueue<>(5);
         private final GameMode mode;
@@ -159,18 +161,18 @@ public class GameMode extends BaseMode {
             while (gameRun) {
 
                 try {
-                    Thread.sleep(30);
+                    Thread.sleep(1);
                 } catch (InterruptedException e) {
                     gameRun = false;
                     break;
                 }
 
-                if (dead && time + 1800 < System.currentTimeMillis()) {
+                if (dead && time + DEAD_TIME_MS < System.currentTimeMillis()) {
                     time = System.currentTimeMillis();
                     dead = false;
                     events.clear();
                 }
-                if (!dead && time + 180 < System.currentTimeMillis()) {
+                if (!dead && time + CYCLE_TIME_MS < System.currentTimeMillis()) {
                     time = System.currentTimeMillis();
                     if (events.peek() != null) {
                         KeyPress key = events.poll();
@@ -301,7 +303,7 @@ public class GameMode extends BaseMode {
         private void display() {
             if (gameRun) {
                 display.copyToSurface(map);
-                display.postInvalidate();
+                display.postRender();
             }
         }
 
@@ -333,7 +335,7 @@ public class GameMode extends BaseMode {
 
         private void initSnake() {
             snakePos = null;
-            snakePos = new short[(int) (display.getSurfaceWidth() * display.getSurfaceHeight()*2/3)];
+            snakePos = new short[display.getSurfaceWidth() * display.getSurfaceHeight()*2/3];
             for (int i = 0; i < snakePos.length; i++) {
                 snakePos[i] = (short) 0xFFFF;
             }

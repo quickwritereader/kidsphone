@@ -16,16 +16,15 @@ public class CallAnimation extends BaseAnimation {
     @Override
     protected boolean onDraw(FunnySurface surface) {
         boolean drawn=false;
-
-        if(timeCall+100<System.currentTimeMillis()) {
+        int count=surface.getWidth()/2-FunnySurfaceUtils.scaleX;
+        if(timeCall+25<System.currentTimeMillis()) {
             surface.clear();
-            int center = surface.getWidth() / 2;
             drawn=true;
             timeCall=System.currentTimeMillis();
-            FunnySurface face=FunnySurface.createSurface(6+scene*2,2+scene*2, FunnySurface.DotColor.Red, FunnySurface.DotType.Star);
-            surface.putSurface(face, 7-scene, 7-scene);
+            FunnySurface rectA=FunnySurface.createSurface( scene*2+FunnySurfaceUtils.scaleX, scene*2+FunnySurfaceUtils.scaleY, FunnySurface.DotColor.Orange, FunnySurface.DotType.Star);
+            surface.putSurface(rectA, count-scene, count-scene);
             scene++;
-            if (scene >7) scene = 0;
+            if (scene >count) scene = 0;
         }
         return  drawn;
     }

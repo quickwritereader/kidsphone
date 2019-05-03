@@ -15,12 +15,11 @@ public interface FunnyDisplayBase {
 
     void copyToSurface(FunnySurface surface);
     void render();
-    void postRender();
     void clear();
     int getSurfaceWidth();
     int getSurfaceHeight();
 
     void attachAnimation(BaseAnimation baseAnimation);
 
-    void postInvalidate();
+    void postRender();
 }

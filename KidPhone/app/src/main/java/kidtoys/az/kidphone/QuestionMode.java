@@ -74,13 +74,13 @@ public class QuestionMode extends BaseMode implements  SoundCallBack{
            if(found){
                if(correctCount>=corrects.length)correctCount=0;
                  id=corrects[correctCount++];
-               FunnySurfaceUtils.drawCorrect(surface,surface.getWidth() / 2, 4,true);
+               FunnySurfaceUtils.drawChar(surface,surface.getWidth() / 2, surface.getHeight() / 2,'$', FunnySurface.DotColor.Green, FunnySurface.DotType.Romb,true);
 
                quizGiver.markCorrectlyFound();
            }else{
                if(wrongCount>=wrongs.length)wrongCount=0;
                id=wrongs[wrongCount++];
-               FunnySurfaceUtils.drawChar(surface,surface.getWidth() / 2, 4,'X', FunnySurface.DotColor.Red, FunnySurface.DotType.Star, true);
+               FunnySurfaceUtils.drawChar(surface,surface.getWidth() / 2, surface.getHeight() / 2,'X', FunnySurface.DotColor.Red, FunnySurface.DotType.Star, true);
                quizGiver.markWronglyFound();
            }
            phone.getDisplay().render();

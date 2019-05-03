@@ -162,7 +162,7 @@ public class UiHandler extends Handler implements SoundCallBack {
             if (SoundIds != null) {
                 soundIds = SoundIds;
                 if (position < 0) position = soundIds.length - 1;
-                if (position >= soundIds.length) position = 0;
+
             }
         }
 

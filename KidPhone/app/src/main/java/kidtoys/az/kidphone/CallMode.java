@@ -161,8 +161,8 @@ public class CallMode extends BaseMode implements SoundCallBack {
         }
         int i = dialedNumber.length() - 1;
         char Char = dialedNumber.charAt(dialedNumber.length() - 1);
-        int length = dialedNumber.length() * 7;
-        FunnySurfaceUtils.drawChar(surface, i * 7, 0, dialedNumber.charAt(i), FunnySurface.supportedColors[colorRandom],
+        int length = dialedNumber.length() * 7* FunnySurfaceUtils.scaleX;
+        FunnySurfaceUtils.drawChar(surface, i * 7*FunnySurfaceUtils.scaleX+10, 5*FunnySurfaceUtils.scaleY, dialedNumber.charAt(i), FunnySurface.supportedColors[colorRandom],
                 FunnySurface.supportedTypes[figureRandom], false);
 
         FunnySurface displaySurface=phone.getDisplay().getSurface();
@@ -170,7 +170,7 @@ public class CallMode extends BaseMode implements SoundCallBack {
             displaySurface.lock();
             displaySurface.clear();
 
-            displaySurface.putSurface(surface, (surface.getWidth() - length) / 2, 4);
+            displaySurface.putSurface(surface, (surface.getWidth() - length) / 2, 5*FunnySurfaceUtils.scaleY);
         }finally {
             displaySurface.unlock();
         }

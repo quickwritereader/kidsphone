@@ -7,6 +7,7 @@ package kidtoys.az.kidphone;
 public class LetterAnimation extends BaseAnimation implements FunnySurface.CallbackDraw {
 
 
+    public static final int RENDER_TIME_MS = 100;
     private char Letter = ' ';
     private boolean isLetter = true;
     private FunnyButton.InnerShapeType innerShapeType = null;
@@ -60,25 +61,25 @@ public class LetterAnimation extends BaseAnimation implements FunnySurface.Callb
     protected boolean onLoopDraw(FunnySurface surface, RenderCallback renderClbk) {
         this.currentClbk = renderClbk;
         surface.clear();
-        if (!timeAndRender(150)) {
+        if (!timeAndRender(RENDER_TIME_MS)) {
             return false;
         }
         if (isLetter) {
             int figureRandom = (int) (Math.random() * (FunnySurface.getMaxTypeSupport() - 1)) + 1;
             int colorRandom = (int) (Math.random() * (FunnySurface.getMaxColorSupport() - 2)) + 1;//exclude white and black
 
-            FunnySurfaceUtils.drawChar(surface, surface.getWidth() / 2, 4, Letter, FunnySurface.supportedColors[colorRandom],
+            FunnySurfaceUtils.drawChar(surface, surface.getWidth() / 2, surface.getHeight()/2, Letter, FunnySurface.supportedColors[colorRandom],
                     FunnySurface.DotType.Circle, true, this);
         } else {
             int figureRandom = (int) (Math.random() * (FunnySurface.getMaxTypeSupport() - 1)) + 1;
             int colorRandom = (int) (Math.random() * (FunnySurface.getMaxColorSupport() - 2)) + 1;//exclude white and black
             /*FunnySurfaceUtils.drawFigure(mainSurface, mainSurface.getWidth() / 2, 4, l, FunnySurface.supportedColors[colorRandom],
                     FunnySurface.supportedTypes[figureRandom], true);*/
-            FunnySurfaceUtils.drawFigure(surface, surface.getWidth() / 2, 4, innerShapeType, FunnySurface.supportedColors[colorRandom],
+            FunnySurfaceUtils.drawFigure(surface, surface.getWidth() / 2, surface.getHeight()/2, innerShapeType, FunnySurface.supportedColors[colorRandom],
                     FunnySurface.DotType.Circle, true, this);
         }
         surface.clear();
-        if (!timeAndRender(150)) {
+        if (!timeAndRender(RENDER_TIME_MS)) {
             return false;
         }
         return false;
@@ -87,6 +88,6 @@ public class LetterAnimation extends BaseAnimation implements FunnySurface.Callb
     @Override
     public boolean renderStep() {
 
-        return timeAndRender(150);
+        return timeAndRender(RENDER_TIME_MS);
     }
 }

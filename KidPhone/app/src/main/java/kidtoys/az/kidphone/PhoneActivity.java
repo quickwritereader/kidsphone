@@ -1,16 +1,22 @@
 package kidtoys.az.kidphone;
 
+import android.app.ActivityManager;
+import android.content.Context;
+import android.content.pm.ConfigurationInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
 
 public class PhoneActivity extends AppCompatActivity implements Phone, View.OnClickListener {
 
-
+    boolean supportsEs2 ;
     private SoundPlayer soundPlayer;
     private FunnyDisplayBase display;
     private FunnyButton.KeyMode lastKeyMode = null;
@@ -19,6 +25,8 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
     private BaseMode mode = null;
     private BaseAnimation localSpeaker;
     private BaseAnimation callAnimation;
+
+    final boolean useNew=true;
 
     @Override
     public View getViewById(int id) {
@@ -81,6 +89,14 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_phone);
+        final ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        final ConfigurationInfo configurationInfo = activityManager != null ? activityManager.getDeviceConfigurationInfo() : null;
+
+        supportsEs2 = configurationInfo.reqGlEsVersion >= 0x20000 ||
+                (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1 && (Build.FINGERPRINT.startsWith("generic")
+                        || Build.FINGERPRINT.startsWith("unknown") || Build.MODEL.contains("google_sdk") ||
+                        Build.MODEL.contains("Emulator") || Build.MODEL.contains("Android SDK built for x86")));
+
         soundPlayer = new SoundPlayer(getApplicationContext());
         setListenersForKeys();
         View button = findViewById(R.id.KeysMode);
@@ -93,11 +109,30 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
         button.setOnClickListener(this);
         button = findViewById(R.id.quizMode);
         button.setOnClickListener(this);
-        display = (FunnyDisplayBase) findViewById(R.id.display);
+        ViewGroup group = (ViewGroup) findViewById(R.id.layout);
+        if (group != null) {
+            addDisplay(group);
+        }
+
         keysGroup = (ViewGroup) findViewById(R.id.KeysGroup);
         handler = new UiHandler(this);
-        localSpeaker = new SpeakerAnimation( display);
+        localSpeaker = new SpeakerAnimation(display);
         callAnimation = new CallAnimation(display);
+    }
+
+    private void addDisplay(ViewGroup group) {
+         View displayView = supportsEs2 && useNew?
+                new FunnyDisplay_GL(this):new FunnyDisplay(this);
+        LinearLayout.LayoutParams p = new LinearLayout.LayoutParams((int) getResources().getDimension(R.dimen.display_width),
+                (int) getResources().getDimension(R.dimen.display_height)
+        );
+
+        p.gravity = Gravity.CENTER_HORIZONTAL;
+        p.topMargin = (int) getResources().getDimension(R.dimen.activity_vertical_margin);
+        displayView.setLayoutParams(p);
+        displayView.setVisibility(View.VISIBLE);
+        group.addView(displayView, 0);
+        display = (FunnyDisplayBase) displayView;
     }
 
     int started = 0;
