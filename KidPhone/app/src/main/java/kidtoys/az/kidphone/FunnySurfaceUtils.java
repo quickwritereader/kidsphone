@@ -214,10 +214,15 @@ public class FunnySurfaceUtils {
             new Line(0, 3, 4, 3),
             new Line(4, 0, 4, 6));
 
-    private final static List<Primitive> FigX = Arrays.asList(
-            new Line(0, 0, 6, 6),
-            new PointObj(6, 6),
-            new Line(6, 0, 0, 6));
+    private final static List<Primitive> FigX = Arrays.<Primitive>asList(
+            new Line(0, 0, 0, 1),
+            new Line(0, 1,4,5),
+            new Line(4, 5,4,6),
+            new Line(4, 0, 4, 1),
+            new Line(4, 1, 0, 5),
+            new Line(0, 5, 0, 6)
+
+    );
 
     private final static List<Primitive> FigI = Arrays.<Primitive>asList(
             new Line(2, 0, 2, 6),
@@ -258,7 +263,9 @@ public class FunnySurfaceUtils {
 
     private final static List<Primitive> FigL = Arrays.<Primitive>asList(
             new Line(0, 0, 0, 6),
-            new Line(0, 6, 4, 6));
+            new Line(0, 6, 4, 4),
+            new Line(4, 4, 2, 6)
+    );
 
     private final static List<Primitive> FigM = Arrays.<Primitive>asList(
             new Line(0, 6, 0, 0),
@@ -489,10 +496,10 @@ public class FunnySurfaceUtils {
 
 
     private final static List<Primitive> FigSquare = Arrays.<Primitive>asList(
-            new Line(3, 3, 3, 12),
-            new Line(3, 12, 12, 12),
-            new Line(12, 12, 12, 3),
-            new Line(12, 3, 3, 3)
+            new Line(3, 2, 3, 11),
+            new Line(3, 11, 12, 11),
+            new Line(12, 11, 12, 2),
+            new Line(12, 2, 3, 2)
 
     );
     private final static List<Primitive> FigTriangle = Arrays.<Primitive>asList(
@@ -502,10 +509,10 @@ public class FunnySurfaceUtils {
 
     );
     private final static List<Primitive> FigRectangle = Arrays.<Primitive>asList(
-            new Line(0, 3, 0, 12),
-            new Line(0, 12, 14, 12),
-            new Line(14, 12, 14, 3),
-            new Line(14, 3, 0, 3)
+            new Line(0, 2, 0, 11),
+            new Line(0, 11, 14, 11),
+            new Line(14, 11, 14, 2),
+            new Line(14, 2, 0, 2)
 
     );
     private final static List<Primitive> FigPentagon = Arrays.<Primitive>asList(
