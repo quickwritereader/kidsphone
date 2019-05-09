@@ -43,6 +43,9 @@ public class FunnyDisplay_GL extends GLSurfaceView implements FunnyDisplayBase, 
     private Circle mCircle;
     private GL_Shapes.Rectangle mRectangle;
     private GL_Shapes.Romb mRomb;
+    private GL_Shapes.Poly mPentagon;
+    private GL_Shapes.Poly mHexagon;
+    private GL_Shapes.Heart mHeart;
 
     public FunnyDisplay_GL(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -163,6 +166,9 @@ public class FunnyDisplay_GL extends GLSurfaceView implements FunnyDisplayBase, 
         mCircle = new Circle();
         mRectangle = new Rectangle();
         mRomb =new GL_Shapes.Romb();
+        mPentagon = new GL_Shapes.Poly(5);
+        mHexagon=new GL_Shapes.Poly(6);
+        mHeart = new GL_Shapes.Heart();
         // Set the background frame color
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     }
@@ -224,13 +230,29 @@ public class FunnyDisplay_GL extends GLSurfaceView implements FunnyDisplayBase, 
                             mRectangle.setColor(c);
                             mRectangle.draw(transform);
                             break;
+                        case Triangle:
+                            mTriangle.setColor(c);
+                            mTriangle.draw(transform);
+                            break;
                         case Romb:
                             mRomb.setColor(c);
                             mRomb.draw(transform);
                             break;
+                        case Hexagon:
+                            mHexagon.setColor(c);
+                            mHexagon.draw(transform);
+                            break;
+                        case Pentagon:
+                            mPentagon.setColor(c);
+                            mPentagon.draw(transform);
+                            break;
+                        case Heart:
+                            mHeart.setColor(c);
+                            mHeart.draw(transform);
+                            break;
                         default:
-                            mTriangle.setColor(c);
-                            mTriangle.draw(transform);
+                            mPentagon.setColor(c);
+                            mPentagon.draw(transform);
                     }
                 }
             }

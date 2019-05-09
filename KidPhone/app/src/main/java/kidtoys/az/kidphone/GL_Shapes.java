@@ -30,10 +30,7 @@ public class GL_Shapes {
                         "attribute vec4 vPosition;" +
                         "attribute vec4 a_Color; varying vec4 v_Color;" +
                         "void main() {" +
-                        "v_Color = a_Color;" +
-                        // the matrix must be included as a modifier of gl_Position
-                        // Note that the uMVPMatrix factor *must be first* in order
-                        // for the matrix multiplication product to be correct.
+                        "v_Color = a_Color;" + 
                         "  gl_Position = uMVPMatrix * vPosition;" +
                         "}";
         private final String fragmentShaderCode =
@@ -127,26 +124,26 @@ public class GL_Shapes {
 
                 "uniform mat4 uMVPMatrix;" +
                         "attribute vec4 vPosition;" +
-                        "// transformed position\n" +
-                        "varying highp vec4 pos;"+
-                        "attribute vec4 a_Color; varying vec4 v_Color;" +
+                        "varying highp vec4 cpos;"+
+                        "attribute vec4 a_Color; " +
+                        "varying vec4 v_Color;" +
                         "void main() {" +
                         "v_Color = a_Color;" +
                         "  gl_Position = uMVPMatrix * vPosition;" +
-                        "pos=vPosition;"+
+                        "cpos=vPosition;"+
                         "}";
 
         private final String fragmentShaderCode =
                 "precision mediump float;" +
                         "varying vec4 v_Color;" +
-                        "varying highp vec4 pos;"+
-                        "void main() {" +
-                        "float ab_kv= pos.x*pos.x+pos.y*pos.y;" +
-                        "  if ( ab_kv <= 1.00 ){" +
-                        " gl_FragColor = (ab_kv>0.25 )? vec4(v_Color[0],v_Color[1],v_Color[2],(1.2-ab_kv)*(1.2-ab_kv)) : v_Color ;" +
-                        "} else {" +
-                        "gl_FragColor = vec4(0,0,0,0);" +
-                        "}"+
+                        "varying vec4 cpos;" +
+                        "void main() {\n"+
+                        "vec2 pos=cpos.xy;"+
+                        "float d = length(pos);\n"+
+                        "float r=0.85;\n"+
+                        "float b=0.15;\n"+
+                        "float c= smoothstep(r+b,r-b,d);\n"+
+                        "gl_FragColor =vec4(c * v_Color.xyz,1.0)  ;\n"+
                         "}";
         private static final int COORDS_PER_VERTEX = 2;
         private int mProgram;
@@ -191,7 +188,7 @@ public class GL_Shapes {
         public void draw(float[] mvpMatrix) {
             glEnable(GL_BLEND);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-           glUseProgram(mProgram);
+            glUseProgram(mProgram);
 
             // get handle to vertex vertex_shader's vPosition member
             positionHandle = glGetAttribLocation(mProgram, V_POSITION);
@@ -354,7 +351,7 @@ public class GL_Shapes {
         private static final int COLOR_COMPONENT_COUNT = 3;
         private static final int STRIDE = (COORDS_PER_VERTEX + COLOR_COMPONENT_COUNT) * 4;
         private float VERTEX_COORDINATES[] = {
-                 1f, 0f,1f,1f,1f,
+                1f, 0f,1f,1f,1f,
                 0f, -1f,1f,1f,1f,
                 -1f, 0f,1f,1f,1f,
                 0f, 1f,1f,1f,1f
@@ -424,4 +421,221 @@ public class GL_Shapes {
         }
 
     }
+
+
+    public static class Poly {
+
+
+        private final String vertexShaderCode =
+                "uniform mat4 uMVPMatrix;" +
+                        "attribute vec4 vPosition;" +
+                        "attribute vec4 a_Color; varying vec4 v_Color;" +
+                        "void main() {" +
+                        "v_Color = a_Color;" +
+                        "  gl_Position = uMVPMatrix * vPosition;" +
+                        "}";
+
+        private final String fragmentShaderCode =
+                "precision mediump float;" +
+                        "varying vec4 v_Color;" +
+                        "void main() {" +
+                        "  gl_FragColor = v_Color ;" +
+                        "}";
+        private static final int COORDS_PER_VERTEX = 2;
+        private int mProgram;
+
+        private static final int COLOR_COMPONENT_COUNT = 3;
+        private static final int STRIDE = (COORDS_PER_VERTEX + COLOR_COMPONENT_COUNT) * 4;
+        private float VERTEX_COORDINATES[] ;
+        private FloatBuffer vertexBuffer;
+        private int positionHandle;
+        private int vPMatrixHandle;
+        private int vertexCount;
+
+
+        public Poly ( int n_sides ) {
+            vertexCount=n_sides;//+1;
+            VERTEX_COORDINATES = new float[vertexCount*(COORDS_PER_VERTEX + COLOR_COMPONENT_COUNT)] ;
+
+            float start=-(float) (Math.PI );
+            if(n_sides%2==1){
+                start= (float) (Math.PI / 2);
+            }
+            float a = (float) (Math.PI * 2) / (float) n_sides;
+
+            for (int i = 0; i < n_sides; i++) {
+                int t=i*(COORDS_PER_VERTEX + COLOR_COMPONENT_COUNT);
+                VERTEX_COORDINATES[t]=(float) Math.cos(a * i + start);
+                VERTEX_COORDINATES[t+1]=(float) Math.sin(a * i + start) ;
+                VERTEX_COORDINATES[t+2]=1;
+                VERTEX_COORDINATES[t+3]=1;
+                VERTEX_COORDINATES[t+4]=1;
+            }
+            int vertexShader = GL_Helper.compileVertexShader(vertexShaderCode);
+            int fragmentShader = GL_Helper.compileFragmentShader(fragmentShaderCode);
+            mProgram = GL_Helper.linkProgram(vertexShader, fragmentShader);
+            if (BuildConfig.DEBUG) {
+                GL_Helper.validateProgram(mProgram);
+            }
+
+
+            ByteBuffer vertexByteBuffer = ByteBuffer.allocateDirect(VERTEX_COORDINATES.length * 4);
+            vertexByteBuffer.order(ByteOrder.nativeOrder());
+            vertexBuffer = vertexByteBuffer.asFloatBuffer();
+            vertexBuffer.put(VERTEX_COORDINATES);
+            vertexBuffer.position(0);
+
+        }
+        public void setColor(FunnySurface.DotColor color) {
+            for( int i=1;i<vertexCount;i++){
+                GL_Helper.setColorFromDotColor(color, vertexBuffer,
+                        COORDS_PER_VERTEX +  (i-1)*(COORDS_PER_VERTEX + COLOR_COMPONENT_COUNT));
+
+            }
+        }
+
+        public void draw(float[] mvpMatrix) {
+//            glEnable(GL_BLEND);
+//            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            glUseProgram(mProgram);
+
+            // get handle to vertex vertex_shader's vPosition member
+            positionHandle = glGetAttribLocation(mProgram, V_POSITION);
+
+            // Enable a handle to the triangle vertices
+            glEnableVertexAttribArray(positionHandle);
+            vertexBuffer.position(0);
+            // Prepare the triangle coordinate data
+            glVertexAttribPointer(positionHandle, COORDS_PER_VERTEX,
+                    GL_FLOAT, false,
+                    STRIDE, vertexBuffer);
+
+            int aColorLocation = glGetAttribLocation(mProgram, A_COLOR);
+
+            vertexBuffer.position(COORDS_PER_VERTEX);
+            glVertexAttribPointer(aColorLocation, COLOR_COMPONENT_COUNT, GL_FLOAT, false, STRIDE, vertexBuffer);
+            glEnableVertexAttribArray(aColorLocation);
+            vPMatrixHandle = glGetUniformLocation(mProgram, U_MVP_MATRIX);
+
+            // Pass the projection and view transformation to the vertex_shader
+            glUniformMatrix4fv(vPMatrixHandle, 1, false, mvpMatrix, 0);
+
+            // Draw the triangle
+            glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
+
+            // Disable vertex array
+            glDisableVertexAttribArray(positionHandle);
+
+            glDisableVertexAttribArray(aColorLocation);
+        }
+
+    }
+
+    public static class Heart {
+
+
+        private final String vertexShaderCode =
+
+                "uniform mat4 uMVPMatrix;" +
+                        "attribute vec4 vPosition;" +
+                        "varying highp vec4 cpos;"+
+                        "attribute vec4 a_Color; " +
+                        "varying vec4 v_Color;" +
+                        "void main() {" +
+                        "v_Color = a_Color;" +
+                        "  gl_Position = uMVPMatrix * vPosition;" +
+                        "cpos=vPosition;"+
+                        "}";
+
+        private final String fragmentShaderCode =
+                "precision mediump float;\n"+
+                        "varying vec4 v_Color;\n"+
+                        "varying highp vec4 cpos;" +
+                        "void main() {\n"+
+                        "vec2 pos=cpos.xy;"+
+                        "pos.x*=0.7;"+
+                        "pos.y-= sqrt(abs(pos.x))* 0.7;"+
+                        "float d = length(pos);\n"+
+                        "float r=0.65;\n"+
+                        "float b=0.05;\n"+
+                        "float c= smoothstep(r+b,r-b,d);\n"+
+                        "gl_FragColor =vec4(c * v_Color.xyz,1.0)  ;\n"+
+                        "} ";
+        private static final int COORDS_PER_VERTEX = 2;
+        private int mProgram;
+
+        private static final int COLOR_COMPONENT_COUNT = 3;
+        private static final int STRIDE = (COORDS_PER_VERTEX + COLOR_COMPONENT_COUNT) * 4;
+        private float VERTEX_COORDINATES[] = {
+                -1f, 1f,1f,1f,1f,   // top left r g b
+                -1f, -1f,1f,1f,1f,   // bottom left
+                1f, -1f,1f,1f,1f,   // bottom right
+                1f, 1f,1f,1f,1f   // top right
+        };
+        private FloatBuffer vertexBuffer;
+        private int positionHandle;
+        private int vPMatrixHandle;
+        private int vertexCount=4;
+
+
+        public Heart() {
+
+            int vertexShader = GL_Helper.compileVertexShader(vertexShaderCode);
+            int fragmentShader = GL_Helper.compileFragmentShader(fragmentShaderCode);
+            mProgram = GL_Helper.linkProgram(vertexShader, fragmentShader);
+            if (BuildConfig.DEBUG) {
+                GL_Helper.validateProgram(mProgram);
+            }
+
+
+            ByteBuffer vertexByteBuffer = ByteBuffer.allocateDirect(VERTEX_COORDINATES.length * 4);
+            vertexByteBuffer.order(ByteOrder.nativeOrder());
+            vertexBuffer = vertexByteBuffer.asFloatBuffer();
+            vertexBuffer.put(VERTEX_COORDINATES);
+            vertexBuffer.position(0);
+
+        }
+        public void setColor(FunnySurface.DotColor color) {
+            GL_Helper.setColorFromDotColor(color, vertexBuffer, COORDS_PER_VERTEX);
+            GL_Helper.setColorFromDotColor(color, vertexBuffer, COORDS_PER_VERTEX + 5);
+            GL_Helper.setColorFromDotColor(color, vertexBuffer, COORDS_PER_VERTEX + 15);
+        }
+
+        public void draw(float[] mvpMatrix) {
+            glEnable(GL_BLEND);
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            glUseProgram(mProgram);
+
+            // get handle to vertex vertex_shader's vPosition member
+            positionHandle = glGetAttribLocation(mProgram, V_POSITION);
+
+            // Enable a handle to the triangle vertices
+            glEnableVertexAttribArray(positionHandle);
+            vertexBuffer.position(0);
+            // Prepare the triangle coordinate data
+            glVertexAttribPointer(positionHandle, COORDS_PER_VERTEX,
+                    GL_FLOAT, false,
+                    STRIDE, vertexBuffer);
+
+            int aColorLocation = glGetAttribLocation(mProgram, A_COLOR);
+
+            vertexBuffer.position(COORDS_PER_VERTEX);
+            glVertexAttribPointer(aColorLocation, COLOR_COMPONENT_COUNT, GL_FLOAT, false, STRIDE, vertexBuffer);
+            glEnableVertexAttribArray(aColorLocation);
+            vPMatrixHandle = glGetUniformLocation(mProgram, U_MVP_MATRIX);
+
+            // Pass the projection and view transformation to the vertex_shader
+            glUniformMatrix4fv(vPMatrixHandle, 1, false, mvpMatrix, 0);
+
+            // Draw the triangle
+            glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
+
+            // Disable vertex array
+            glDisableVertexAttribArray(positionHandle);
+
+            glDisableVertexAttribArray(aColorLocation);
+        }
+
+    }
+
 }

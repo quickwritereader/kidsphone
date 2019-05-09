@@ -16,7 +16,10 @@ public class FunnySurfaceUtils {
 
     public static final int scaleX=2;
     public static final int scaleY=2 ;
-
+    public static final int standardCharWidth = 5;
+    public static final int standardCharHeight = 7;
+    public static final int standardFigWidth = 15;
+    public static final int standardFigHeight = 15;
     public abstract static class Primitive {
 
         public abstract void draw(FunnySurface surface, FunnySurface.CallbackDraw callbackDraw, FunnySurface.DotColor color, FunnySurface.DotType dot_type, Matrix3f transform);
@@ -111,24 +114,23 @@ public class FunnySurfaceUtils {
     private final static List<Primitive> FigA = Arrays.<Primitive>asList(
             new Line(0, 6, 0, 2),
             new Line(0, 2, 2, 0),
-            new Line(2, 0, 3, 0),
-            new Line(3, 0, 5, 2),
-            new Line(5, 2, 5, 6),
-            new Line(0, 4, 5, 4));
+            new Line(2, 0, 4, 2),
+            new Line(4, 2, 4, 6),
+            new Line(0, 4, 4, 4));
 
     private final static List<Primitive> FigB = Arrays.<Primitive>asList(
             new Line(0, 0, 0, 6),
             new Line(0,0,1 ,0),
-            new Line(1, 0, 4, 0),
-            new Line( 4, 0,5,1),
-            new Line(5, 1, 5, 2),
-            new Line(5, 2, 4, 3),
-            new Line(5, 2,4,3),
-            new Line(4, 3, 0, 3),
-            new Line(4, 3, 5, 4),
-            new Line(5, 4, 5, 5),
-            new Line(5, 5, 4, 6),
-            new Line(4, 6, 0, 6));
+            new Line(1, 0, 3, 0),
+            new Line( 3, 0,4,1),
+            new Line(4, 1, 4, 2),
+            new Line(4, 2, 3, 3),
+            new Line(4, 2,3,3),
+            new Line(3, 3, 0, 3),
+            new Line(3, 3, 4, 4),
+            new Line(4, 4, 4, 5),
+            new Line(4, 5, 3, 6),
+            new Line(3, 6, 0, 6));
 
     private final static List<Primitive> FigC = Arrays.<Primitive>asList(
             new Line(4, 1,3,0),
@@ -152,11 +154,11 @@ public class FunnySurfaceUtils {
     private final static List<Primitive> FigD = Arrays.<Primitive>asList(
             new Line(0, 0, 0, 6),
             new Line(0, 0, 1, 0),
-            new Line(1, 0, 4, 0),
-            new Line(4, 0, 5, 1),
-            new Line(5, 1, 5, 5),
-            new Line(5, 5, 4, 6),
-            new Line(4, 6, 0, 6));
+            new Line(1, 0, 3, 0),
+            new Line(3, 0, 4, 1),
+            new Line(4, 1, 4, 5),
+            new Line(4, 5, 3, 6),
+            new Line(3, 6, 0, 6));
 
     private final static List<Primitive> FigE = Arrays.<Primitive>asList(
             new Line(4, 0, 0, 0),
@@ -480,103 +482,87 @@ public class FunnySurfaceUtils {
             new Line(4, 1, 3, 0),
             new Line(3, 0, 1, 0));
 
-
     private final static List<Primitive> FigCircle = Arrays.<Primitive>asList(
-            new Line(10, 2, 12, 2),
-            new Line(13, 3, 14, 3),
-            new Line(15, 4, 15, 5),
-            new Line(16, 6, 16, 9),
-            new Line(15, 10, 15, 11),
-            new Line(14, 12, 13, 12),
-            new Line(12, 13, 8, 13),
-            new Line(7, 12, 6, 12),
-            new Line(5, 11, 5, 10),
-            new Line(4, 9, 4, 6),
-            new Line(5, 5, 5, 4),
-            new Line(6, 3, 7, 3),
-            new Line(8, 2, 9, 2)
+            new Ellipse(3,3,12,12)
     );
+
+
     private final static List<Primitive> FigSquare = Arrays.<Primitive>asList(
-            new Line(5, 3, 5, 12),
-            new Line(5, 12, 14, 12),
-            new Line(14, 12, 14, 3),
-            new Line(14, 3, 5, 3)
+            new Line(3, 3, 3, 12),
+            new Line(3, 12, 12, 12),
+            new Line(12, 12, 12, 3),
+            new Line(12, 3, 3, 3)
 
     );
     private final static List<Primitive> FigTriangle = Arrays.<Primitive>asList(
-            new Line(3, 11, 10, 4),
-            new Line(10, 4, 17, 11),
-            new Line(16, 11, 4, 11)
+            new Line(0, 11, 7, 4),
+            new Line(7, 4, 14, 11),
+            new Line(14, 11, 0, 11)
 
     );
     private final static List<Primitive> FigRectangle = Arrays.<Primitive>asList(
-            new Line(3, 4, 3, 11),
-            new Line(3, 11, 16, 11),
-            new Line(16, 11, 16, 4),
-            new Line(16, 4, 3, 4)
+            new Line(0, 3, 0, 12),
+            new Line(0, 12, 14, 12),
+            new Line(14, 12, 14, 3),
+            new Line(14, 3, 0, 3)
 
     );
     private final static List<Primitive> FigPentagon = Arrays.<Primitive>asList(
-            new Line(3, 8, 10, 1),
-            new Line(10, 1, 17, 8),
-            new Line(16, 9, 12, 13),
-            new Line(11, 13, 9, 13),
-            new Line(8, 13, 3, 8)
+            new Line(0, 8, 7, 1),
+            new Line(7, 1, 14, 8),
+            new Line(14, 8, 9, 13),
+            new Line(9, 13, 5, 13),
+            new Line(5, 13, 0, 8)
 
     );
     private final static List<Primitive> FigHexagon = Arrays.<Primitive>asList(
-            new Line(3, 7, 8, 2),
-            new Line(9, 2, 11, 2),
-            new Line(12, 2, 17, 7),
-            new Line(16, 8, 12, 12),
-            new Line(11, 12, 9, 12),
-            new Line(8, 12, 3, 7)
+            new Line(0, 7, 5, 2),
+            new Line(5, 2, 9, 2),
+            new Line(9, 2, 14, 7),
+            new Line(14, 7, 9, 12),
+            new Line(9, 12, 5, 12),
+            new Line(5, 12, 0, 7)
     );
     private final static List<Primitive> FigEllipse = Arrays.<Primitive>asList(
-            new Line(10, 2, 14, 2),
-            new Line(15, 3, 16, 3),
-            new Line(17, 4, 17, 5),
-            new Line(18, 6, 18, 9),
-            new Line(17, 10, 17, 11),
-            new Line(16, 12, 15, 12),
-            new Line(14, 13, 6, 13),
-            new Line(5, 12, 4, 12),
-            new Line(3, 11, 3, 10),
-            new Line(2, 9, 2, 6),
-            new Line(3, 5, 3, 4),
-            new Line(4, 3, 5, 3),
-            new Line(6, 2, 9, 2));
+            new Ellipse(0,3,14,12));
     private final static List<Primitive> FigHeart = Arrays.<Primitive>asList(
-            new Line(10, 5, 12, 3),
-            new Line(13, 3, 15, 4),
-            new Line(15, 5, 15, 6),
-            new Line(15, 7, 10, 12),
-            new Line(10, 5, 8, 3),
-            new Line(7, 3, 5, 4),
-            new Line(5, 5, 5, 6),
-            new Line(5, 7, 10, 12)
+            new Line(7, 5, 9, 3),
+            new Line(9, 3, 10, 3),
+            new Line(10, 3, 12, 5),
+            new Line(12, 5, 12, 7),
+            new Line(12, 7, 7, 12),
+            new Line(7, 5, 5, 3),
+            new Line(5, 3, 4, 3),
+            new Line(4, 3, 2, 5),
+            new Line(2, 5, 2, 7),
+            new Line(2, 7, 7, 12)
     );
     private final static List<Primitive> FigStar = Arrays.<Primitive>asList(
-            new Line(10, 3, 10, 8),
-            new Line(10, 8, 10, 13),
-            new Line(5, 8, 10, 8),
-            new Line(10, 8, 15, 8),
-            new Line(10, 8, 6, 4),
-            new Line(10, 8, 14, 4),
-            new Line(10, 8, 6, 12),
-            new Line(10, 8, 14, 12)
+            new Line(7, 2, 7, 7),
+            new Line(7, 7, 7, 12),
+            new Line(2, 7, 7, 7),
+            new Line(7, 7, 12, 7),
+            new Line(7, 7, 3, 3),
+            new Line(7, 7, 11, 3),
+            new Line(7, 7, 3, 11),
+            new Line(7, 7, 11, 11)
     );
 
     private static List<Primitive> FigTrapes = Arrays.<Primitive>asList(
-            new Line(2, 4, 9, 4),
-            new Line(10, 5, 17, 12),
-            new Line(16, 12, 2, 12),
-            new Line(2, 11, 2, 5));
+      new Line(0, 3, 0, 12),
+            new Line(0, 12, 14, 12),
+            new Line(14, 12, 5, 3),
+            new Line(5, 3, 0, 3));
 
 
     private final static List<Primitive> FigCorrect = Arrays.<Primitive>asList(
-            new Line(0, 7, 3, 10),
-            new Line(3, 10, 9, 4)  );
+            new Line(0, 3, 3, 6),
+            new Line(3, 6, 9, 0)  );
+
+    private final static List<Primitive> FigInCorrect = Arrays.<Primitive>asList(
+            new Line(0, 0, 6, 6),
+            new PointObj(6, 6),
+            new Line(6, 0, 0, 6));
 
     private static final HashMap<Character, List<Primitive>> number_letters = new HashMap<Character, List<Primitive>>() {{
         put('A', FigA);
@@ -622,6 +608,7 @@ public class FunnySurfaceUtils {
         put('8', Fig8);
         put('9', Fig9);
         put('$', FigCorrect);
+        put('!',FigInCorrect);
     }};
 
 
@@ -648,16 +635,14 @@ public class FunnySurfaceUtils {
 
     public static void drawFigure(FunnySurface surface, int x, int y, FunnyButton.InnerShapeType innerShapeType, FunnySurface.DotColor color, FunnySurface.DotType figure, boolean center, FunnySurface.CallbackDraw clbk) {
 
-        int standardWidth = 20;
-        int standardHeight = 18;
         if (center){
-            x = x - scaleX*standardWidth / 2  ;
-            y=y-scaleY*standardHeight/2;
+            x = x - scaleX * standardFigWidth / 2;
+            y= y- scaleY * standardFigHeight /2;
         }
         Matrix3f matrix3f=new Matrix3f();
-        matrix3f.translate(12+x,12+y);
+        matrix3f.translate(x+scaleX * standardFigWidth / 2, y+scaleY * standardFigHeight /2);
         matrix3f.scale(scaleX,scaleY);
-        matrix3f.translate(-standardWidth/2 ,-standardHeight/2  );
+        matrix3f.translate(-standardFigWidth / 2 ,-standardFigHeight /2  );
         List<Primitive> obj = shapes.get(innerShapeType);
         if (obj != null) {
             for (Primitive prim : obj) {
@@ -684,17 +669,16 @@ public class FunnySurfaceUtils {
      * @param figure
      */
     public static void drawChar(FunnySurface surface, int x, int y, char Letter, FunnySurface.DotColor color, FunnySurface.DotType figure, boolean center, FunnySurface.CallbackDraw clbk) {
-        int standardWidth = 5;
-        int standardHeight = 7;
+
 
         if (center){
-            x = x - scaleX *standardWidth / 2;
-            y= y- scaleY *standardHeight/2;
+            x = x - scaleX * standardCharWidth / 2;
+            y= y- scaleY * standardCharHeight /2;
         }
         Matrix3f matrix3f=new Matrix3f();
-        matrix3f.translate(3+x,4+y);
+        matrix3f.translate(x+scaleX * standardCharWidth / 2, y+scaleY * standardCharHeight /2);
         matrix3f.scale(scaleX,scaleY);
-        matrix3f.translate(-3 ,-4  );
+        matrix3f.translate(-standardCharWidth / 2 ,-standardCharHeight /2  );
         List<Primitive> obj = number_letters.get(Character.toUpperCase(Letter));
         if (obj != null) {
             for (Primitive prim : obj) {

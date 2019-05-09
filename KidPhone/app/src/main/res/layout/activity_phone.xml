@@ -11,7 +11,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:weightSum="1"
     android:id="@+id/layout"
-    android:background="@drawable/gradient"
     tools:context=".PhoneActivity">
 
     <android.support.v7.widget.GridLayout xmlns:android="http://schemas.android.com/apk/res/android"

@@ -2,6 +2,7 @@ package kidtoys.az.kidphone;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.opengl.GLES20;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -24,6 +25,7 @@ import static android.opengl.GLES20.glDeleteProgram;
 import static android.opengl.GLES20.glDeleteShader;
 import static android.opengl.GLES20.glGetProgramInfoLog;
 import static android.opengl.GLES20.glGetProgramiv;
+import static android.opengl.GLES20.glGetShaderInfoLog;
 import static android.opengl.GLES20.glGetShaderiv;
 import static android.opengl.GLES20.glLinkProgram;
 import static android.opengl.GLES20.glShaderSource;
@@ -34,6 +36,8 @@ import static android.opengl.GLES20.glValidateProgram;
  */
 
 public class GL_Helper {
+
+    private final static String TAG="GL_I";
 
 
     public static String readTextFileFromResource(Context context, int resourceId) {
@@ -70,12 +74,13 @@ public class GL_Helper {
         }
         glShaderSource(shaderObjectId, shaderCode);
         glCompileShader(shaderObjectId);
-        final int[] compileStatus = new int[1];
+         int[] compileStatus = new int[1];
         glGetShaderiv(shaderObjectId, GL_COMPILE_STATUS, compileStatus, 0);
         if (compileStatus[0] == 0) {
             // If it failed, delete the shader object.
+
+            Log.e(TAG,  glGetShaderInfoLog(shaderObjectId));
             glDeleteShader(shaderObjectId);
-            Log.w(TAG, "Compilation of shader failed.");
             return 0;
         }
         return shaderObjectId;
@@ -84,7 +89,7 @@ public class GL_Helper {
     public static int linkProgram(int vertexShaderId, int fragmentShaderId) {
         final int programObjectId = glCreateProgram();
         if (programObjectId == 0) {
-            Log.w(TAG, "Could not create new program");
+            Log.e(TAG, "Could not create new program");
             return 0;
         }
         glAttachShader(programObjectId, vertexShaderId);
@@ -93,11 +98,15 @@ public class GL_Helper {
         final int[] linkStatus = new int[1];
         glGetProgramiv(programObjectId, GL_LINK_STATUS, linkStatus, 0);
 
-        if (linkStatus[0] == 0) {
-            glDeleteProgram(programObjectId);
+        if (linkStatus[0]  != GLES20.GL_TRUE) {
+
             if (BuildConfig.DEBUG) {
-                Log.w(TAG, "Linking of program failed.");
+
+            Log.e(TAG, "Could not link program: ");
+            Log.e(TAG, GLES20.glGetProgramInfoLog(programObjectId));
             }
+            GLES20.glDeleteProgram(programObjectId);
+            return 0;
         }
         return programObjectId;
     }
@@ -106,8 +115,13 @@ public class GL_Helper {
         glValidateProgram(programObjectId);
         final int[] validateStatus = new int[1];
         glGetProgramiv(programObjectId, GL_VALIDATE_STATUS, validateStatus, 0);
-        Log.v(TAG, "Results of validating program: " + validateStatus[0] +
-                "\nLog:" + glGetProgramInfoLog(programObjectId));
+
+            Log.e(TAG, "Results of validating program: " + validateStatus[0]  );
+            //Object ret=glGetProgramInfoLog(programObjectId);
+
+              //  Log.e(TAG, ret.toString());
+              //android ndk modified utf-8 bug
+              //ignored
         return validateStatus[0] != 0;
     }
 
@@ -116,8 +130,8 @@ public class GL_Helper {
         switch (color) {
             case Red:
                 setArr.put(start_index, 1f);
-                setArr.put(start_index + 1, 1f);
-                setArr.put(start_index + 2, 0x40 / 255f);
+                setArr.put(start_index + 1, 0f);
+                setArr.put(start_index + 2, 0);
                 break;
             case Blue:
                 setArr.put(start_index, 0);

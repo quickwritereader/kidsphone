@@ -1,5 +1,10 @@
 package kidtoys.az.kidphone;
 
+import android.renderscript.Matrix3f;
+
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Created by ramil on 24.07.2016.
  */
@@ -9,6 +14,11 @@ public class CallNoButtonAnim extends BaseAnimation {
         super(display);
     }
 
+    private final static Matrix3f initM=new Matrix3f();
+    private static List<FunnySurfaceUtils.Primitive> RejectLines = Arrays.<FunnySurfaceUtils.Primitive>asList(
+            new FunnySurfaceUtils.Line(0,0,2,0),
+            new FunnySurfaceUtils.Line(5,0,7,0),
+            new FunnySurfaceUtils.Line(10,0,12,0));
 
 
     private long timeCall=0;
@@ -24,22 +34,27 @@ public class CallNoButtonAnim extends BaseAnimation {
             surface.clear();
             drawn=true;
             timeCall=System.currentTimeMillis();
-           if(scene==0){
-               surface.drawLine(3,7,5,7, FunnySurface.DotColor.Red, FunnySurface.DotType.Square);
-               surface.drawLine(8,7,10,7, FunnySurface.DotColor.Red, FunnySurface.DotType.Square);
-               surface.drawLine(12,7,14,7, FunnySurface.DotColor.Red, FunnySurface.DotType.Square);
-               surface.drawLine(5,9,7,9, FunnySurface.DotColor.Red, FunnySurface.DotType.Square);
-               surface.drawLine(9,9,11,9, FunnySurface.DotColor.Red, FunnySurface.DotType.Square);
-               surface.drawLine(13,9,15,9, FunnySurface.DotColor.Red, FunnySurface.DotType.Square);
-           }else{
-               surface.drawLine(3,9,5,9, FunnySurface.DotColor.Red, FunnySurface.DotType.Square);
-               surface.drawLine(8,9,10,9, FunnySurface.DotColor.Red, FunnySurface.DotType.Square);
-               surface.drawLine(12,9,14,9, FunnySurface.DotColor.Red, FunnySurface.DotType.Square);
-               surface.drawLine(5,7,7,7, FunnySurface.DotColor.Red, FunnySurface.DotType.Square);
-               surface.drawLine(9,7,11,7, FunnySurface.DotColor.Red, FunnySurface.DotType.Square);
-               surface.drawLine(13,7,15,7, FunnySurface.DotColor.Red, FunnySurface.DotType.Square);
+            int topLineX=0;
+            int bottomLineX=3;
+            int topLineY=surface.getHeight()/2-2;
+            int bottomLineY=topLineY+4;
+           if(scene==1){
+               topLineX=3;
+               bottomLineX=0;
            }
+            Matrix3f matrix3f=new Matrix3f();
+            matrix3f.translate(surface.getWidth()/2-6+topLineX,topLineY);
+            for (FunnySurfaceUtils.Primitive prim : RejectLines) {
+                prim.draw(surface, null, FunnySurface.DotColor.Red, FunnySurface.DotType.Square, matrix3f);
+            }
+
+            matrix3f.load(initM);
+            matrix3f.translate(surface.getWidth()/2-6+bottomLineX,bottomLineY);
+            for (FunnySurfaceUtils.Primitive prim : RejectLines) {
+                prim.draw(surface, null, FunnySurface.DotColor.Red, FunnySurface.DotType.Square, matrix3f);
+            }
             scene++;
+
             if (scene >1) scene = 0;
         }
         return  drawn;

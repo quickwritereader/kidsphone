@@ -21,21 +21,22 @@ public class SpeakerAnimation extends BaseAnimation {
 
         if(timeFace+250<System.currentTimeMillis()) {
             surface.clear();
-            int center = surface.getWidth() / 2;
+            int centerX = surface.getWidth() / 2;
+            int centerY=surface.getHeight()/2;
             drawn=true;
             timeFace=System.currentTimeMillis();
             //eyes
-            surface.putDot(center - 2, 5, FunnySurface.DotColor.Red, FunnySurface.DotType.Star);
-            surface.putDot(center + 2, 5, FunnySurface.DotColor.Red, FunnySurface.DotType.Star);
+            surface.putDot(centerX - 2,  centerY-2, FunnySurface.DotColor.Red, FunnySurface.DotType.Star);
+            surface.putDot(centerX + 2,  centerY-2, FunnySurface.DotColor.Red, FunnySurface.DotType.Star);
             //lips
             if (faceScene == 0) {
-                surface.drawLine(center - 3, 8, center + 3, 8, FunnySurface.DotColor.Red, FunnySurface.DotType.Romb);
-                surface.drawLine(center - 3, 8, center, 9, FunnySurface.DotColor.Black, FunnySurface.DotType.None);
-                surface.drawLine(center, 9, center + 3, 8, FunnySurface.DotColor.Black, FunnySurface.DotType.None);
+                surface.drawLine(centerX - 3,  centerY+1, centerX + 3,  centerY+1, FunnySurface.DotColor.Red, FunnySurface.DotType.Romb);
+                surface.drawLine(centerX - 3, centerY+1, centerX, centerY+2, FunnySurface.DotColor.Black, FunnySurface.DotType.None);
+                surface.drawLine(centerX, centerY+2, centerX + 3,  centerY+1, FunnySurface.DotColor.Black, FunnySurface.DotType.None);
             } else if (faceScene == 1) {
-                surface.drawLine(center - 3, 8, center + 3, 8, FunnySurface.DotColor.Black, FunnySurface.DotType.None);
-                surface.drawLine(center - 3, 8, center, 9, FunnySurface.DotColor.Red, FunnySurface.DotType.Romb);
-                surface.drawLine(center, 9, center + 3, 8, FunnySurface.DotColor.Red, FunnySurface.DotType.Romb);
+                surface.drawLine(centerX - 3, centerY+1, centerX + 3, centerY+1, FunnySurface.DotColor.Black, FunnySurface.DotType.None);
+                surface.drawLine(centerX - 3, centerY+1, centerX, centerY+2, FunnySurface.DotColor.Red, FunnySurface.DotType.Romb);
+                surface.drawLine(centerX, centerY+2, centerX + 3, centerY+1, FunnySurface.DotColor.Red, FunnySurface.DotType.Romb);
             }
             faceScene++;
             if (faceScene > 1) faceScene = 0;
