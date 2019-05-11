@@ -32,7 +32,7 @@ public class FunnyDisplay_GL extends GLSurfaceView implements FunnyDisplayBase, 
     private final float[] placenMatrix = new float[16];
     int surfaceWidth = 20 * FunnySurfaceUtils.scaleX;
     int surfaceHeight = 16 * FunnySurfaceUtils.scaleY;
-    DotType prev_type = null;
+    private boolean draw_grid=false;
     private float[] transform = new float[16];
     private WeakReference<BaseAnimation> attachedAnim;
     private FunnySurface mainSurface;
@@ -46,6 +46,15 @@ public class FunnyDisplay_GL extends GLSurfaceView implements FunnyDisplayBase, 
     private GL_Shapes.Poly mPentagon;
     private GL_Shapes.Poly mHexagon;
     private GL_Shapes.Heart mHeart;
+    private GL_Shapes.GridDot mGrid;
+    private GL_Shapes.Star mStar;
+
+
+    public void setDraw_grid(boolean draw_grid) {
+        this.draw_grid = draw_grid;
+    }
+
+
 
     public FunnyDisplay_GL(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -169,6 +178,10 @@ public class FunnyDisplay_GL extends GLSurfaceView implements FunnyDisplayBase, 
         mPentagon = new GL_Shapes.Poly(5);
         mHexagon=new GL_Shapes.Poly(6);
         mHeart = new GL_Shapes.Heart();
+        mStar = new GL_Shapes.Star(8);
+        mGrid =new GL_Shapes.GridDot();
+        mGrid.setColor(FunnySurface.DotColor.Magenta);
+        mGrid.setGrid(mainSurface.getWidth(),mainSurface.getHeight());
         // Set the background frame color
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     }
@@ -207,6 +220,10 @@ public class FunnyDisplay_GL extends GLSurfaceView implements FunnyDisplayBase, 
         int mh_half = mh / 2;
         float scaledW2 = scaledW * 2;
         float scaledH2 = scaledH * 2;
+        if(draw_grid) {
+            Matrix.setIdentityM(transform, 0);
+            mGrid.draw(transform);
+        }
         for (int j = 0; j < mh; j++) {
             for (int i = 0; i < mw; i++) {
 
@@ -249,6 +266,10 @@ public class FunnyDisplay_GL extends GLSurfaceView implements FunnyDisplayBase, 
                         case Heart:
                             mHeart.setColor(c);
                             mHeart.draw(transform);
+                            break;
+                        case Star:
+                            mStar.setColor(c);
+                            mStar.draw(transform);
                             break;
                         default:
                             mPentagon.setColor(c);

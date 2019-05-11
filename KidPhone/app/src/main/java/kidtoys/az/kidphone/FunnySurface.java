@@ -11,7 +11,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * Created by abdurrauf on 3/5/16.
  * This class will be used as main block for drawings
  */
-public class FunnySurface {
+public class FunnySurface  {
 
 
     public interface CallbackDraw {

@@ -75,6 +75,10 @@ public class FunnyDisplay extends View  implements FunnyDisplayBase{
         }
     }
 
+    @Override
+    public void setDraw_grid(boolean draw_grid) {
+        //ignored
+    }
 
 
     public FunnyDisplay(Context context, AttributeSet attrs) {

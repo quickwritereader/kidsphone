@@ -3,6 +3,8 @@ package kidtoys.az.kidphone;
 
 import android.media.SoundPool;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
 
 import java.io.Serializable;
 import java.util.Random;
@@ -29,14 +31,14 @@ public class GameMode extends BaseMode {
             String number = funnyButton.getNumbersText();
             Snake.KeyPress key = null;
             switch (number) {
-                case "2":
-                    key = Snake.KeyPress.UP;
-                    break;
                 case "4":
                     key = Snake.KeyPress.LEFT;
                     break;
                 case "6":
                     key = Snake.KeyPress.RIGHT;
+                    break;
+                case "2":
+                    key = Snake.KeyPress.UP;
                     break;
                 case "8":
                     key = Snake.KeyPress.DOWN;
@@ -53,6 +55,7 @@ public class GameMode extends BaseMode {
         //deactivate delay
         phone.getDisplay().attachAnimation(null);
         phone.deActivateDelay();
+        phone.getDisplay().setDraw_grid(true);
         phone.changeKeys(FunnyButton.KeyMode.Numbers);
         if (snakeGame != null) {
             if (snakeGame.isStopped()) {
@@ -65,6 +68,33 @@ public class GameMode extends BaseMode {
             snakeGame.start();
         }
 
+
+        changeIrrelevantKeysVisibility(View.INVISIBLE);
+    }
+
+    private void changeIrrelevantKeysVisibility(int visible) {
+        ViewGroup keysGroup=(ViewGroup)phone.getViewById(R.id.KeysGroup);
+        int childCount = keysGroup.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+
+            View v = keysGroup.getChildAt(i);
+            if (v instanceof FunnyButton) {
+                FunnyButton funnyButton = (FunnyButton) v;
+                if (funnyButton.getKeyMode() != FunnyButton.KeyMode.System) {
+                    String number = funnyButton.getNumbersText();
+                    switch (number) {
+                        case "2":
+                        case "8":
+                        case "4":
+                        case "6":
+                            break;
+                        default:
+                            funnyButton.setVisibility(visible);
+                    }//switch
+                }
+            }//instance of
+
+        }
     }
 
 
@@ -74,6 +104,8 @@ public class GameMode extends BaseMode {
             snakeGame.save();
             snakeGame.interrupt();
         }
+        phone.getDisplay().setDraw_grid(false);
+        changeIrrelevantKeysVisibility(View.VISIBLE);
         //reactivate delay
         phone.activateDelay();
     }
@@ -109,7 +141,8 @@ public class GameMode extends BaseMode {
         public boolean gameRun;
         private int snakeLength;
         private short[] snakePos;
-        private KeyPress last;
+
+        private Direction last;
         private short fruit;
         private FunnySurface map;
         private Random random;
@@ -147,7 +180,7 @@ public class GameMode extends BaseMode {
             s = this.mode.getState(FRUIT);
             if (s != null) fruit = (short) s;
             snakePos = (short[]) this.mode.getState(SNAKE);
-            last = (KeyPress) this.mode.getState(LAST_KEY);
+            last = (Direction) this.mode.getState(LAST_KEY);
 
             map = new FunnySurface(display.getSurfaceWidth(), display.getSurfaceHeight());
 
@@ -176,9 +209,24 @@ public class GameMode extends BaseMode {
                     time = System.currentTimeMillis();
                     if (events.peek() != null) {
                         KeyPress key = events.poll();
-                        boolean reverse = last == KeyPress.RIGHT && key == KeyPress.LEFT || last == KeyPress.LEFT && key == KeyPress.RIGHT
-                                || last == KeyPress.DOWN && key == KeyPress.UP || last == KeyPress.UP && key == KeyPress.DOWN;
-                        if (!reverse) last = key;
+                        boolean reverse = last == Direction.RIGHT && key == KeyPress.LEFT || last == Direction.LEFT && key == KeyPress.RIGHT
+                                || last == Direction.DOWN && key == KeyPress.UP || last == Direction.UP && key == KeyPress.DOWN;
+                        if (!reverse) {
+                            switch(key) {
+                                case RIGHT:
+                                    last=Direction.RIGHT;
+                                    break;
+                                case LEFT:
+                                    last=Direction.LEFT;
+                                    break;
+                                case UP:
+                                    last=Direction.UP;
+                                    break;
+                                case DOWN:
+                                    last=Direction.DOWN;
+                                    break;
+                            }
+                        }
                     }
                     //move snake
                     moveSnake();
@@ -208,7 +256,9 @@ public class GameMode extends BaseMode {
                 }//timer
 
             }//run game
-            Log.d("game", "exited");
+            if(BuildConfig.DEBUG) {
+                Log.d("game", "exited");
+            }
             this.mode.putState(LAST_KEY, last);
             this.mode.putState(LEN, snakeLength);
             this.mode.putState(SNAKE, snakePos);
@@ -219,7 +269,7 @@ public class GameMode extends BaseMode {
         private void initGame() {
             map = null;
             map = new FunnySurface(display.getSurfaceWidth(), display.getSurfaceHeight());
-            last = KeyPress.RIGHT;
+            last = Direction.RIGHT;
             initSnake();
             mapSnakeOnMap();
             generateFruit();
@@ -353,6 +403,7 @@ public class GameMode extends BaseMode {
             gameRun = false;
         }
 
-        public enum KeyPress {UP, DOWN, RIGHT, LEFT}
+        public enum KeyPress { RIGHT, LEFT, UP,DOWN}
+        public enum Direction {RIGHT, LEFT, UP,DOWN}
     }
 }

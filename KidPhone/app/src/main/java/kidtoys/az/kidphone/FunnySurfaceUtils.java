@@ -259,12 +259,11 @@ public class FunnySurfaceUtils {
             new Line(1, 6, 3, 6),
             new Line(3,6,4,5 ),
             new Line(4,5,4,1 ),
-            new Line(3, 5, 5, 7));
+            new Line(3, 5, 4, 6));
 
     private final static List<Primitive> FigL = Arrays.<Primitive>asList(
             new Line(0, 0, 0, 6),
-            new Line(0, 6, 4, 4),
-            new Line(4, 4, 2, 6)
+            new Line(0, 6, 4, 6)
     );
 
     private final static List<Primitive> FigM = Arrays.<Primitive>asList(
@@ -564,13 +563,13 @@ public class FunnySurfaceUtils {
 
 
     private final static List<Primitive> FigCorrect = Arrays.<Primitive>asList(
-            new Line(0, 3, 3, 6),
-            new Line(3, 6, 9, 0)  );
+            new Line(-2, 3, 1, 6),
+            new Line(1, 6, 7, 0)  );
 
     private final static List<Primitive> FigInCorrect = Arrays.<Primitive>asList(
-            new Line(0, 0, 6, 6),
-            new PointObj(6, 6),
-            new Line(6, 0, 0, 6));
+            new Line(-2, 0, 4, 6),
+            new PointObj(-2, 6),
+            new Line(4, 0, -2, 6));
 
     private static final HashMap<Character, List<Primitive>> number_letters = new HashMap<Character, List<Primitive>>() {{
         put('A', FigA);

@@ -20,6 +20,6 @@ public interface FunnyDisplayBase {
     int getSurfaceHeight();
 
     void attachAnimation(BaseAnimation baseAnimation);
-
+    void setDraw_grid(boolean draw_grid);
     void postRender();
 }
