@@ -4,6 +4,7 @@ package kidtoys.az.kidphone;
 import android.graphics.Point;
 import android.renderscript.Matrix3f;
 
+import java.util.Arrays;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -11,7 +12,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * Created by abdurrauf on 3/5/16.
  * This class will be used as main block for drawings
  */
-public class FunnySurface  {
+public class FunnySurface {
 
 
     public interface CallbackDraw {
@@ -214,14 +215,20 @@ public class FunnySurface  {
         drawWidth = remain > drawWidth ? drawWidth : remain;
         remain = this.height - y;
         drawHeight = remain > drawHeight ? drawHeight : remain;
-
+        byte[] copy;
+        if (this == surface) {
+            copy = Arrays.copyOf(surface.mem, surface.mem.length);
+        } else {
+            copy = surface.mem;
+        }
         for (int j = 0; j < drawHeight; j++) {
             for (int i = 0; i < drawWidth; i++) {
                 int ind = (y + j) * width + x + i;
                 int surfInd = (j + offsetSurfY) * surface.width + offsetSurfX + i;
-                this.mem[ind] = surface.mem[surfInd];
+                this.mem[ind] = copy[surfInd];
             }
         }
+
 
     }
 
@@ -244,6 +251,22 @@ public class FunnySurface  {
     public void clear() {
         for (int i = 0; i < mem.length; i++) {
             mem[i] = 0;
+        }
+    }
+
+    public void clear(int x, int y, int w, int h) {
+        if (x < 0) x = 0;
+        if (y < 0) y = 0;
+        int remain = this.width - x;
+        w = remain > w ? w : remain;
+        remain = this.height - y;
+        h = remain > h ? h : remain;
+
+        for (int j = 0; j < h; j++) {
+            for (int i = 0; i < w; i++) {
+                int ind = (y + j) * width + x + i;
+                this.mem[ind] = 0;
+            }
         }
     }
 
@@ -399,7 +422,7 @@ public class FunnySurface  {
                 if (x1 >= 0 && x1 < width && y0 >= 0 && y0 < height) {
                     mem[y0 * width + x1] = c;
                     if (clbk != null && !clbk.renderStep()) {
-                        return ;
+                        return;
                     }
                 }
                 //(x0, y0); /* II. Quadrant */
@@ -437,35 +460,35 @@ public class FunnySurface  {
             } while (x0 <= x1);
             while (y0 - y1 <= b) { /* to early stop of flat ellipses a=1 */
                 //(x0 - 1, y0); /* -> finish tip of ellipse */
-                if (x0 -1>= 0 && x0-1 < width && y0 >= 0 && y0 < height) {
-                    mem[y0 * width + x0-1] = c;
+                if (x0 - 1 >= 0 && x0 - 1 < width && y0 >= 0 && y0 < height) {
+                    mem[y0 * width + x0 - 1] = c;
                     if (clbk != null && !clbk.renderStep()) {
                         return;
                     }
                 }
                 //(x1 + 1, y0++);
-                if (x1 +1>= 0 && x1+1 < width && y0 >= 0 && y0 < height) {
-                    mem[y0 * width + x1+1] = c;
+                if (x1 + 1 >= 0 && x1 + 1 < width && y0 >= 0 && y0 < height) {
+                    mem[y0 * width + x1 + 1] = c;
                     if (clbk != null && !clbk.renderStep()) {
                         return;
                     }
                 }
-                y0+=1;
+                y0 += 1;
                 //(x0 - 1, y1);
-                if (x0 -1>= 0 && x0-1 < width && y1 >= 0 && y1 < height) {
-                    mem[y1 * width + x0-1] = c;
+                if (x0 - 1 >= 0 && x0 - 1 < width && y1 >= 0 && y1 < height) {
+                    mem[y1 * width + x0 - 1] = c;
                     if (clbk != null && !clbk.renderStep()) {
                         return;
                     }
                 }
                 //(x1 + 1, y1--);
-                if (x1 +1>= 0 && x1+1 < width && y1 >= 0 && y1 < height) {
-                    mem[y1 * width + x1+1] = c;
+                if (x1 + 1 >= 0 && x1 + 1 < width && y1 >= 0 && y1 < height) {
+                    mem[y1 * width + x1 + 1] = c;
                     if (clbk != null && !clbk.renderStep()) {
                         return;
                     }
                 }
-                y1-=1;
+                y1 -= 1;
             }
         }
     }

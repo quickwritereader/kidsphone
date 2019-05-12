@@ -37,12 +37,14 @@ public class SoundPlayer {
         }
         mediaPlayer = MediaPlayer.create(context, fileId);
         mediaPlayer.start();
-        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                if (callback != null) callback.soundPlayFinished();
-            }
-        });
+        if(callback!=null) {
+            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    if (callback != null) callback.soundPlayFinished();
+                }
+            });
+        }
     }
 
     public void StopMp3() {
@@ -69,8 +71,8 @@ public class SoundPlayer {
         return this.PlayMp3(R.raw.open_speech);
     }
 
-    public int playPhoneCloseMode() {
-        return this.PlayMp3(R.raw.az_close);
+    public void playPhoneCloseMode(final SoundCallBack callback) {
+         this.PlayMp3(R.raw.az_close,callback);
     }
 
     /*play*/
@@ -366,45 +368,44 @@ public class SoundPlayer {
      *
      * @param keypad
      */
-    public int playKeypadTones(char keypad) {
+    public void playKeypadTones(char keypad, final SoundCallBack callback) {
         switch (keypad) {
             case '0':
-                return this.PlayMp3(R.raw.keypad_0);
+                  this.PlayMp3( R.raw.keypad_0,callback);
+                  break;
             case '1':
-                return this.PlayMp3(R.raw.keypad_1);
+                 this.PlayMp3(R.raw.keypad_1,callback);
+                break;
             case '2':
-                return this.PlayMp3(R.raw.keypad_2);
+                 this.PlayMp3(R.raw.keypad_2,callback);
+                break;
             case '3':
-                return this.PlayMp3(R.raw.keypad_3);
+                 this.PlayMp3(R.raw.keypad_3,callback);
+                break;
             case '4':
-                return this.PlayMp3(R.raw.keypad_4);
+                 this.PlayMp3(R.raw.keypad_4,callback);
+                break;
             case '5':
-                return this.PlayMp3(R.raw.keypad_5);
+                 this.PlayMp3(R.raw.keypad_5,callback);
+                break;
             case '6':
-                return  this.PlayMp3(R.raw.keypad_6);
+                  this.PlayMp3(R.raw.keypad_6,callback);
+                break;
             case '7':
-                return  this.PlayMp3(R.raw.keypad_7);
+                  this.PlayMp3(R.raw.keypad_7,callback);
+                break;
             case '8':
-                return  this.PlayMp3(R.raw.keypad_8);
+                  this.PlayMp3(R.raw.keypad_8,callback);
+                break;
             case '9':
-                return  this.PlayMp3(R.raw.keypad_9);
+                  this.PlayMp3(R.raw.keypad_9,callback);
+                break;
             default:
-                return 0;
         }
     }
 
 
 
-    public void playCall(final int soundId, final SoundCallBack callback) {
-        this.PlayMp3(R.raw.dial_tone);
-        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener(){
-            @Override
-            public void onCompletion(MediaPlayer player) {
-                PlayMp3(soundId, callback);
-            }
-        });
-
-    }
 
 
     public SoundPool getPool() {

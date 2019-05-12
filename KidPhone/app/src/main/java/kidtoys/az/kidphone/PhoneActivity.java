@@ -174,12 +174,13 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
         if (mode != null && mode instanceof GameMode) {
             mode.onRefresh();
         }
+        handler.activateDelay();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        /*handler.deActivateDelay();*/
+        handler.deActivateDelay();
         if (mode != null) mode.onSave();
     }
 
@@ -196,16 +197,21 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
     @Override
     public void onBackPressed() {
         handler.deActivateDelay();
-        this.soundPlayer.playPhoneCloseMode();
+        this.soundPlayer.playPhoneCloseMode(new SoundCallBack() {
+            @Override
+            public void soundPlayFinished() {
+                PhoneActivity.this.finish();
+            }
+        });
         started = 0;
-        super.onBackPressed();
+       // super.onBackPressed();
     }
 
     /**
      * set On Click Listeners of keys buttons
      */
     private void setListenersForKeys() {
-        ViewGroup group = (ViewGroup) findViewById(R.id.KeysGroup);
+        ViewGroup group = findViewById(R.id.KeysGroup);
         int childCount = group.getChildCount();
         for (int i = 0; i < childCount; i++) {
             View v = group.getChildAt(i);
@@ -241,7 +247,7 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
                     break;
                 case R.id.buttonYes:
                     if (mode != null && mode instanceof CallMode) {
-                        mode.onRefresh();
+                        mode.onClick((FunnyButton) v);
                     } else {
                         if (mode != null) mode.onSave();
                         mode = null;
