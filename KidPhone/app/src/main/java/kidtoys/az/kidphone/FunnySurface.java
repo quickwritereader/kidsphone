@@ -184,6 +184,20 @@ public class FunnySurface {
     }
 
     /**
+     * Clear Dot data into surface
+     *
+     * @param x
+     * @param y
+     * @param color
+     * @param type
+     */
+    public void clearDot(int x, int y) {
+        if (x >= 0 && x < width && y >= 0 && y < height) {
+            mem[y * width + x] = 0;
+        }
+    }
+
+    /**
      * Blt surface on the surface
      *
      * @param surface
@@ -226,6 +240,55 @@ public class FunnySurface {
                 int ind = (y + j) * width + x + i;
                 int surfInd = (j + offsetSurfY) * surface.width + offsetSurfX + i;
                 this.mem[ind] = copy[surfInd];
+            }
+        }
+
+
+    }
+
+    /**
+     * Blt surface on the surface
+     *
+     * @param surface
+     * @param x
+     * @param y
+     */
+    public void putSurfaceOverlay(FunnySurface surface, int x, int y) {
+
+        //find copyable areas
+        //if above surface area
+        if (x > this.width) return;
+        if (y > this.height) return;
+        int offsetSurfX = 0;
+        int offsetSurfY = 0;
+        int drawWidth = surface.width;
+        int drawHeight = surface.height;
+        if (x < 0) {
+            offsetSurfX = -x;
+            drawWidth = drawWidth - offsetSurfX;
+        }
+        if (y < 0) {
+            offsetSurfY = -y;
+            drawHeight = drawHeight - offsetSurfY;
+        }
+        //lets blt naive way
+        if (x < 0) x = 0;
+        if (y < 0) y = 0;
+        int remain = this.width - x;
+        drawWidth = remain > drawWidth ? drawWidth : remain;
+        remain = this.height - y;
+        drawHeight = remain > drawHeight ? drawHeight : remain;
+        byte[] copy;
+        if (this == surface) {
+            copy = Arrays.copyOf(surface.mem, surface.mem.length);
+        } else {
+            copy = surface.mem;
+        }
+        for (int j = 0; j < drawHeight; j++) {
+            for (int i = 0; i < drawWidth; i++) {
+                int ind = (y + j) * width + x + i;
+                int surfInd = (j + offsetSurfY) * surface.width + offsetSurfX + i;
+                if(copy[surfInd]!=0)  this.mem[ind] = copy[surfInd];
             }
         }
 

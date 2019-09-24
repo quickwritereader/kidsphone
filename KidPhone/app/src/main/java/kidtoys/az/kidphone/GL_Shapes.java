@@ -783,7 +783,7 @@ public class GL_Shapes {
                         "vec2 grid = abs(fract(ppos) )  ;"+
                         "float line = min(grid.x, grid.y);" +
 
-                       " gl_FragColor = vec4(  min(line, 0.12)* v_Color.xyz, 1.0);"+
+                       " gl_FragColor = vec4(  min(line, 0.2)* v_Color.xyz, 1.0);"+
 
                         "}";
         private static final int COORDS_PER_VERTEX = 2;

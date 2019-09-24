@@ -129,6 +129,7 @@ public class GameMode extends BaseMode {
         public static final String LAST_KEY = "lastKey";
         public static final int CYCLE_TIME_MS = 150;
         public static final int DEAD_TIME_MS = 1800;
+        static final int wx=(FunnySurfaceUtils.standardCharWidth +1)*FunnySurfaceUtils.scaleX;
         public final FunnyDisplayBase display;
         public final ArrayBlockingQueue<KeyPress> events = new ArrayBlockingQueue<>(5);
         private final GameMode mode;
@@ -145,6 +146,7 @@ public class GameMode extends BaseMode {
         private Direction last;
         private short fruit;
         private FunnySurface map;
+        private FunnySurface panel;
         private Random random;
         public Snake(GameMode mode) {
             this.display = mode.phone.getDisplay();
@@ -183,7 +185,7 @@ public class GameMode extends BaseMode {
             last = (Direction) this.mode.getState(LAST_KEY);
 
             map = new FunnySurface(display.getSurfaceWidth(), display.getSurfaceHeight());
-
+            panel = new FunnySurface(display.getSurfaceWidth(), display.getSurfaceHeight());
             random = new Random();
             random.setSeed(System.currentTimeMillis());
             if (snakePos == null || last == null) {
@@ -239,6 +241,7 @@ public class GameMode extends BaseMode {
                     }
 
                     //map data on map
+                    drawScore();
                     mapSnakeOnMap();
                     mapFruitOnMap();
                     //display
@@ -269,13 +272,30 @@ public class GameMode extends BaseMode {
         private void initGame() {
             map = null;
             map = new FunnySurface(display.getSurfaceWidth(), display.getSurfaceHeight());
+            panel = new FunnySurface(display.getSurfaceWidth(), display.getSurfaceHeight());
             last = Direction.RIGHT;
             initSnake();
+            drawScore();
             mapSnakeOnMap();
             generateFruit();
             mapFruitOnMap();
         }
 
+
+        private void   drawScore(){
+            int score= snakeLength-3;
+            String nn = String.valueOf(score);
+            panel.clear();
+            int minx= nn.length();
+            minx=minx>4?4:minx;
+            for(int i=0;i<minx;i++){
+                FunnySurfaceUtils.drawChar(panel,  i * wx+wx/2 , panel.getHeight()/2,
+                        nn.charAt(i) ,
+                         FunnySurface.DotColor.Magenta,
+                        FunnySurface.DotType.Hexagon, true);
+            }
+
+        }
         private void mapSnakeOnMapFull() {
             if (snakeLength < 3) return;
             if (snakePos[snakeLength] != 0xFFFF) {
@@ -293,8 +313,7 @@ public class GameMode extends BaseMode {
         private void mapSnakeOnMap() {
             //clear reduced tail
             if (snakePos[snakeLength] != 0xFFFF) {
-                map.putDot(getX(snakePos[snakeLength]), getY(snakePos[snakeLength]), FunnySurface.DotColor.Black,
-                        FunnySurface.DotType.None);
+                map.clearDot(getX(snakePos[snakeLength]), getY(snakePos[snakeLength]));
             }
             map.putDot(getX(snakePos[0]), getY(snakePos[0]), snakeColor, snakeHead);
             map.putDot(getX(snakePos[1]), getY(snakePos[1]), snakeColor, snakeBody);
@@ -352,7 +371,8 @@ public class GameMode extends BaseMode {
 
         private void display() {
             if (gameRun) {
-                display.copyToSurface(map);
+                panel.putSurfaceOverlay(map,0,0);
+                display.copyToSurface(panel);
                 display.postRender();
             }
         }
