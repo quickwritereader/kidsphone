@@ -386,8 +386,11 @@ public class FunnyButton extends View {
     protected void onSizeChanged(int w, int h, int oldW, int oldH) {
         super.onSizeChanged(w, h, oldW, oldH);
         rectF.set(getPaddingLeft(), getPaddingTop(), getWidth() - getPaddingRight(), getHeight() - getPaddingBottom());
-        invalidate();
         hasChanges = true;
+        hasFigureChange=true;
+
+        invalidate();
+
     }
 
     @Override

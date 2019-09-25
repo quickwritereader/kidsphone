@@ -28,6 +28,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:orientation="horizontal"
+            android:id="@+id/PhoneLayout"
             app:layout_columnSpan="3"
             app:layout_columnWeight="1"
             app:layout_rowWeight="1">

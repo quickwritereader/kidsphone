@@ -69,12 +69,14 @@ public class GameMode extends BaseMode {
         }
 
 
-        changeIrrelevantKeysVisibility(View.INVISIBLE);
+        changeIrrelevantKeysVisibility(View.GONE);
     }
 
     private void changeIrrelevantKeysVisibility(int visible) {
         ViewGroup keysGroup=(ViewGroup)phone.getViewById(R.id.KeysGroup);
         int childCount = keysGroup.getChildCount();
+        View  vv =phone.getViewById(R.id.PhoneLayout);
+        vv.setVisibility(visible);
         for (int i = 0; i < childCount; i++) {
 
             View v = keysGroup.getChildAt(i);
@@ -93,8 +95,8 @@ public class GameMode extends BaseMode {
                     }//switch
                 }
             }//instance of
-
         }
+
     }
 
 
@@ -291,7 +293,7 @@ public class GameMode extends BaseMode {
             for(int i=0;i<minx;i++){
                 FunnySurfaceUtils.drawChar(panel,  i * wx+wx/2 , panel.getHeight()/2,
                         nn.charAt(i) ,
-                         FunnySurface.DotColor.Magenta,
+                         FunnySurface.DotColor.Blue,
                         FunnySurface.DotType.Hexagon, true);
             }
 
