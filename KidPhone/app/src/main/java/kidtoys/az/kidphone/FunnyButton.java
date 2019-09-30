@@ -51,7 +51,7 @@ public class FunnyButton extends View {
     private InnerShapeType innerShape;
     private OuterShapeType outerShape;
     private OuterShapeDirection outerShapeDirection ;
-    private Drawable picture=null;
+    private Drawable picture;
     private KeyMode bMode;
 
     public FunnyButton(Context context, AttributeSet attrs) {

@@ -32,7 +32,7 @@ public class FunnyDisplay_GL extends GLSurfaceView implements FunnyDisplayBase, 
     private final float[] placenMatrix = new float[16];
     int surfaceWidth = 20 * FunnySurfaceUtils.scaleX;
     int surfaceHeight = 16 * FunnySurfaceUtils.scaleY;
-    private boolean draw_grid=false;
+    private boolean draw_grid=true;
     private float[] transform = new float[16];
     private WeakReference<BaseAnimation> attachedAnim;
     private FunnySurface mainSurface;

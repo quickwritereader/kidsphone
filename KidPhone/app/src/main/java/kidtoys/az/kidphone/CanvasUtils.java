@@ -132,7 +132,6 @@ public class CanvasUtils {
         if (brx > width / 4) brx = width / 4;
         if (bry > height / 4) bry = height / 4;
         float bwidthMinusCorners = (width - (2 * brx));
-        //noinspection UnusedAssignment
         float bheightMinusCorners = (height - (2 * bry));
         float widthMinusCorners = (width - (2 * rx));
         float heightMinusCorners = (height - (2 * ry));

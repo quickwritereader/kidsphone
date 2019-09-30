@@ -20,8 +20,6 @@ public class FunnyDisplay extends View  implements FunnyDisplayBase{
     private final Paint paintBack = new Paint();
     int surfaceWidth = 20;
     int surfaceHeight = 16;
-    private int width = -1;
-    private int height = -1;
     //private Paint innerLight;
     private Paint[] realColors;
     private Paint[] centerColors;
@@ -174,7 +172,7 @@ public class FunnyDisplay extends View  implements FunnyDisplayBase{
     }
 
     private synchronized void init() {
-        FunnySurface.DotColor dotColors[] = FunnySurface.DotColor.values();
+        FunnySurface.DotColor[] dotColors = FunnySurface.DotColor.values();
 //        innerLight = new Paint();
 //        innerLight.setColor(Color.WHITE);
 //        innerLight.setAntiAlias(true);
@@ -206,7 +204,7 @@ public class FunnyDisplay extends View  implements FunnyDisplayBase{
         mainSurface=null;
         backSurface=null;
         mainSurface = new FunnySurface(surfaceWidth, surfaceHeight);
-        backSurface = new FunnySurface(surfaceWidth, surfaceHeight); ;
+        backSurface = new FunnySurface(surfaceWidth, surfaceHeight);
 
         bitmapCache = new LruCache<Integer, Bitmap>(12) {
 
@@ -224,7 +222,9 @@ public class FunnyDisplay extends View  implements FunnyDisplayBase{
     }
 
     private void initPath(int width, int height) {
-        if (this.width != width || this.height != height) {
+        int width1 = -1;
+        int height1 = -1;
+        if (width1 != width || height1 != height) {
             diameter = (width - 40) / mainSurface.getWidth();
             float rx=width/surfaceWidth;
             float ry=height/surfaceHeight;

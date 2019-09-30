@@ -109,12 +109,12 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
         button.setOnClickListener(this);
         button = findViewById(R.id.quizMode);
         button.setOnClickListener(this);
-        ViewGroup group = (ViewGroup) findViewById(R.id.layout);
+        ViewGroup group = findViewById(R.id.layout);
         if (group != null) {
             addDisplay(group);
         }
 
-        keysGroup = (ViewGroup) findViewById(R.id.KeysGroup);
+        keysGroup = findViewById(R.id.KeysGroup);
         handler = new UiHandler(this);
         localSpeaker = new SpeakerAnimation(display);
         callAnimation = new CallAnimation(display);

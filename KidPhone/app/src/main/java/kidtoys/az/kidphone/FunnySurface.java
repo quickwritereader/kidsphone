@@ -26,7 +26,7 @@ public class FunnySurface {
     private final static int maxTypeSupport = supportedTypes.length;
     private final int width;
     private final int height;
-    private byte[] mem = null;
+    private byte[] mem;
 
 
     private final Lock locker = new ReentrantLock();
@@ -120,7 +120,7 @@ public class FunnySurface {
         if (x >= 0 && x < width && y >= 0 && y < height) {
             byte a = mem[y * width + x];
             int index = a & 0xF;
-            if (index >= 0 && index < DotColor.values().length) {
+            if (index < DotColor.values().length) {
                 return supportedColors[index];
             }
 
@@ -188,8 +188,6 @@ public class FunnySurface {
      *
      * @param x
      * @param y
-     * @param color
-     * @param type
      */
     public void clearDot(int x, int y) {
         if (x >= 0 && x < width && y >= 0 && y < height) {

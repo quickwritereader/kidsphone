@@ -150,11 +150,11 @@ public class GL_Shapes {
 
         private static final int COLOR_COMPONENT_COUNT = 3;
         private static final int STRIDE = (COORDS_PER_VERTEX + COLOR_COMPONENT_COUNT) * 4;
-        private float VERTEX_COORDINATES[] = {
-                -1f, 1f,1f,1f,1f,   // top left r g b
-                -1f, -1f,1f,1f,1f,   // bottom left
-                1f, -1f,1f,1f,1f,   // bottom right
-                1f, 1f,1f,1f,1f   // top right
+        private float[] VERTEX_COORDINATES = {
+                -1f, 1f, 1f, 1f, 1f,   // top left r g b
+                -1f, -1f, 1f, 1f, 1f,   // bottom left
+                1f, -1f, 1f, 1f, 1f,   // bottom right
+                1f, 1f, 1f, 1f, 1f   // top right
         };
         private FloatBuffer vertexBuffer;
         private int positionHandle;
@@ -250,11 +250,11 @@ public class GL_Shapes {
 
         private static final int COLOR_COMPONENT_COUNT = 3;
         private static final int STRIDE = (COORDS_PER_VERTEX + COLOR_COMPONENT_COUNT) * 4;
-        private float VERTEX_COORDINATES[] = {
-                -0.95f, 0.95f,1f,1f,1f,   // top left r g b
-                -1f, -0.95f,1f,1f,1f,   // bottom left
-                0.95f, -0.95f,1f,1f,1f,   // bottom right
-                0.95f, 0.95f,1f,1f,1f   // top right
+        private float[] VERTEX_COORDINATES = {
+                -0.95f, 0.95f, 1f, 1f, 1f,   // top left r g b
+                -1f, -0.95f, 1f, 1f, 1f,   // bottom left
+                0.95f, -0.95f, 1f, 1f, 1f,   // bottom right
+                0.95f, 0.95f, 1f, 1f, 1f   // top right
         };
         private FloatBuffer vertexBuffer;
         private int positionHandle;
@@ -350,11 +350,11 @@ public class GL_Shapes {
 
         private static final int COLOR_COMPONENT_COUNT = 3;
         private static final int STRIDE = (COORDS_PER_VERTEX + COLOR_COMPONENT_COUNT) * 4;
-        private float VERTEX_COORDINATES[] = {
-                1f, 0f,1f,1f,1f,
-                0f, -1f,1f,1f,1f,
-                -1f, 0f,1f,1f,1f,
-                0f, 1f,1f,1f,1f
+        private float[] VERTEX_COORDINATES = {
+                1f, 0f, 1f, 1f, 1f,
+                0f, -1f, 1f, 1f, 1f,
+                -1f, 0f, 1f, 1f, 1f,
+                0f, 1f, 1f, 1f, 1f
         };
         private FloatBuffer vertexBuffer;
         private int positionHandle;
@@ -446,7 +446,7 @@ public class GL_Shapes {
 
         private static final int COLOR_COMPONENT_COUNT = 3;
         private static final int STRIDE = (COORDS_PER_VERTEX + COLOR_COMPONENT_COUNT) * 4;
-        private float VERTEX_COORDINATES[] ;
+        private float[] VERTEX_COORDINATES;
         private FloatBuffer vertexBuffer;
         private int positionHandle;
         private int vPMatrixHandle;
@@ -566,11 +566,11 @@ public class GL_Shapes {
 
         private static final int COLOR_COMPONENT_COUNT = 3;
         private static final int STRIDE = (COORDS_PER_VERTEX + COLOR_COMPONENT_COUNT) * 4;
-        private float VERTEX_COORDINATES[] = {
-                -1f, 1f,1f,1f,1f,   // top left r g b
-                -1f, -1f,1f,1f,1f,   // bottom left
-                1f, -1f,1f,1f,1f,   // bottom right
-                1f, 1f,1f,1f,1f   // top right
+        private float[] VERTEX_COORDINATES = {
+                -1f, 1f, 1f, 1f, 1f,   // top left r g b
+                -1f, -1f, 1f, 1f, 1f,   // bottom left
+                1f, -1f, 1f, 1f, 1f,   // bottom right
+                1f, 1f, 1f, 1f, 1f   // top right
         };
         private FloatBuffer vertexBuffer;
         private int positionHandle;
@@ -661,7 +661,7 @@ public class GL_Shapes {
 
         private static final int COLOR_COMPONENT_COUNT = 3;
         private static final int STRIDE = (COORDS_PER_VERTEX + COLOR_COMPONENT_COUNT) * 4;
-        private float VERTEX_COORDINATES[] ;
+        private float[] VERTEX_COORDINATES;
         private FloatBuffer vertexBuffer;
         private int positionHandle;
         private int vPMatrixHandle;
@@ -791,11 +791,11 @@ public class GL_Shapes {
         private static final String U_TILE_XY ="u_tileXY" ;
         private static final int COLOR_COMPONENT_COUNT = 3;
         private static final int STRIDE = (COORDS_PER_VERTEX + COLOR_COMPONENT_COUNT) * 4;
-        private float VERTEX_COORDINATES[] = {
-                -1f, 1f,1f,1f,1f,   // top left r g b
-                -1f, -1f,1f,1f,1f,   // bottom left
-                1f, -1f,1f,1f,1f,   // bottom right
-                1f, 1f,1f,1f,1f   // top right
+        private float[] VERTEX_COORDINATES = {
+                -1f, 1f, 1f, 1f, 1f,   // top left r g b
+                -1f, -1f, 1f, 1f, 1f,   // bottom left
+                1f, -1f, 1f, 1f, 1f,   // bottom right
+                1f, 1f, 1f, 1f, 1f   // top right
         };
         private float  [] vecXY ={40f,32f};
         private FloatBuffer vertexBuffer;

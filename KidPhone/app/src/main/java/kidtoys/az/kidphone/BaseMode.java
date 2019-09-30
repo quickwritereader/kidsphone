@@ -16,7 +16,7 @@ public abstract class BaseMode  {
     /**
      * Phone interface
      */
-    protected Phone phone=null;
+    protected Phone phone;
 
     public BaseMode(Phone phone) throws Exception {
         if(phone==null) {

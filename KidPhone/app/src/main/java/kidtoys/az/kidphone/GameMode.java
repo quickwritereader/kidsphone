@@ -16,7 +16,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 public class GameMode extends BaseMode {
 
     private Snake snakeGame = null;
-    private SoundPool pool = null;
+    private SoundPool pool;
 
 
     public GameMode(Phone phone) throws Exception {
@@ -55,7 +55,7 @@ public class GameMode extends BaseMode {
         //deactivate delay
         phone.getDisplay().attachAnimation(null);
         phone.deActivateDelay();
-        phone.getDisplay().setDraw_grid(true);
+        //phone.getDisplay().setDraw_grid(true);
         phone.changeKeys(FunnyButton.KeyMode.Numbers);
         if (snakeGame != null) {
             if (snakeGame.isStopped()) {
@@ -106,7 +106,7 @@ public class GameMode extends BaseMode {
             snakeGame.save();
             snakeGame.interrupt();
         }
-        phone.getDisplay().setDraw_grid(false);
+        //phone.getDisplay().setDraw_grid(false);
         changeIrrelevantKeysVisibility(View.VISIBLE);
         //reactivate delay
         phone.activateDelay();
@@ -300,10 +300,8 @@ public class GameMode extends BaseMode {
         }
         private void mapSnakeOnMapFull() {
             if (snakeLength < 3) return;
-            if (snakePos[snakeLength] != 0xFFFF) {
-                map.putDot(getX(snakePos[snakeLength]), getY(snakePos[snakeLength]), FunnySurface.DotColor.Black,
-                        FunnySurface.DotType.None);
-            }
+            map.putDot(getX(snakePos[snakeLength]), getY(snakePos[snakeLength]), FunnySurface.DotColor.Black,
+                    FunnySurface.DotType.None);
             map.putDot(getX(snakePos[0]), getY(snakePos[0]), snakeColor, snakeHead);
             for (int i = 1; i < snakeLength; i++) {
                 map.putDot(getX(snakePos[i]), getY(snakePos[i]), snakeColor, snakeBody);
@@ -314,9 +312,7 @@ public class GameMode extends BaseMode {
 
         private void mapSnakeOnMap() {
             //clear reduced tail
-            if (snakePos[snakeLength] != 0xFFFF) {
-                map.clearDot(getX(snakePos[snakeLength]), getY(snakePos[snakeLength]));
-            }
+            map.clearDot(getX(snakePos[snakeLength]), getY(snakePos[snakeLength]));
             map.putDot(getX(snakePos[0]), getY(snakePos[0]), snakeColor, snakeHead);
             map.putDot(getX(snakePos[1]), getY(snakePos[1]), snakeColor, snakeBody);
             map.putDot(getX(snakePos[snakeLength - 1]), getY(snakePos[snakeLength - 1]), snakeColor, snakeTail);

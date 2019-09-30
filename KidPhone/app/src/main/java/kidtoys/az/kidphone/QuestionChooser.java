@@ -99,7 +99,7 @@ public class QuestionChooser implements Comparator<QuestionChooser.Question> {
                 questions.add(x);
             }
             q=questions.poll();
-            q.totalQuestion++;
+            if(q!=null) q.totalQuestion++;
 
         }
 

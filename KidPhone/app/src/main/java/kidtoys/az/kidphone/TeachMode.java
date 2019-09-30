@@ -12,9 +12,9 @@ public class TeachMode extends BaseMode implements  SoundCallBack{
     private int pressedTimes = 0;
     private SoundPlayer soundPlayer;
     private FunnyDisplayBase display;
-    private  FunnyButton modeButton=null;
+    private  FunnyButton modeButton;
     private boolean playSound=true;
-    private  LetterAnimation letterAnimation=null;
+    private  LetterAnimation letterAnimation;
     boolean drawLetterFigureAnime =false;
     public boolean isPlaySound() {
         return playSound;

@@ -100,7 +100,7 @@ public class CallMode extends BaseMode implements SoundCallBack {
         int w=(FunnySurfaceUtils.standardCharWidth +1)*FunnySurfaceUtils.scaleX;
 
         if(dialedNumber.length()>3){
-            dialedNumber=dialedNumber.substring(dialedNumber.length()-3,dialedNumber.length());
+            dialedNumber=dialedNumber.substring(dialedNumber.length()-3);
             //shift left previous ones
             surface.putSurface(surface,  -w  , 0);
             surface.clear( 2 * w ,0,surface.getWidth(),surface.getHeight());

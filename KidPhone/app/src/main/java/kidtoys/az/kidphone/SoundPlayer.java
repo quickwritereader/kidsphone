@@ -41,7 +41,7 @@ public class SoundPlayer {
             mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
-                    if (callback != null) callback.soundPlayFinished();
+                    callback.soundPlayFinished();
                 }
             });
         }

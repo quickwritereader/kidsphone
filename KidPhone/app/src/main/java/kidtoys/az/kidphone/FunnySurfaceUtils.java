@@ -2,6 +2,7 @@ package kidtoys.az.kidphone;
 
 import android.renderscript.Matrix3f;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class FunnySurfaceUtils {
     }
 
     public static class Line extends Primitive {
-        public int ix[]=new int[4];
+        public int[] ix = new int[4];
 
         public Line(int x, int y, int x2, int y2) {
             this.ix[0] = x;
@@ -81,7 +82,7 @@ public class FunnySurfaceUtils {
 
     public static class Ellipse extends  Primitive{
 
-        public int ix[]=new int[4];
+        public int[] ix = new int[4];
 
         public Ellipse(int x, int y, int x2, int y2) {
             this.ix[0] = x;
@@ -489,8 +490,8 @@ public class FunnySurfaceUtils {
             new Line(4, 1, 3, 0),
             new Line(3, 0, 1, 0));
 
-    private final static List<Primitive> FigCircle = Arrays.<Primitive>asList(
-            new Ellipse(0,0,13,13)
+    private final static List<Primitive> FigCircle = Collections.<Primitive>singletonList(
+            new Ellipse(0, 0, 13, 13)
     );
 
 
@@ -530,8 +531,8 @@ public class FunnySurfaceUtils {
             new Line(9, 12, 5, 12),
             new Line(5, 12, 0, 7)
     );
-    private final static List<Primitive> FigEllipse = Arrays.<Primitive>asList(
-            new Ellipse(0,2,14,11));
+    private final static List<Primitive> FigEllipse = Collections.<Primitive>singletonList(
+            new Ellipse(0, 2, 14, 11));
     private final static List<Primitive> FigHeart = Arrays.<Primitive>asList(
             new Line(7, 5, 9, 3),
             new Line(9, 3, 10, 3),
@@ -566,7 +567,7 @@ public class FunnySurfaceUtils {
             new Line(-2, 3, 1, 6),
             new Line(1, 6, 7, 0)  );
 
-    private final static List<Primitive> FigInCorrect = Arrays.<Primitive>asList(
+    private final static List<Primitive> FigInCorrect = Arrays.asList(
             new Line(-2, 0, 4, 6),
             new PointObj(-2, 6),
             new Line(4, 0, -2, 6));
