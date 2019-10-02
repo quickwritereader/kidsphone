@@ -172,4 +172,13 @@ public class GL_Helper {
         }
     }
 
+
+
+    public static void setColorFromRGB(float r,float g,float b, FloatBuffer setArr, int start_index) {
+
+                setArr.put(start_index, r);
+                setArr.put(start_index + 1, g);
+                setArr.put(start_index + 2, b);
+    }
+
 }

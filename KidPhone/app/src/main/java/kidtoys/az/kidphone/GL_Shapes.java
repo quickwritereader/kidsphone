@@ -822,6 +822,16 @@ public class GL_Shapes {
             vertexBuffer.position(0);
 
         }
+
+        public void setColorRgb(int r ,int g, int b){
+            float rr=r/255.f;
+            float gg=g/255.f;
+            float bb=b/255.f;
+            GL_Helper.setColorFromRGB(rr,gg,bb, vertexBuffer, COORDS_PER_VERTEX);
+            GL_Helper.setColorFromRGB(rr,gg,bb, vertexBuffer, COORDS_PER_VERTEX + 5);
+            GL_Helper.setColorFromRGB(rr,gg,bb, vertexBuffer, COORDS_PER_VERTEX + 10);
+        }
+
         public void setColor(FunnySurface.DotColor color) {
             GL_Helper.setColorFromDotColor(color, vertexBuffer, COORDS_PER_VERTEX);
             GL_Helper.setColorFromDotColor(color, vertexBuffer, COORDS_PER_VERTEX + 5);
