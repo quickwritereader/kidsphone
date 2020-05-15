@@ -7,7 +7,7 @@ package kidtoys.az.kidphone;
 public class LetterAnimation extends BaseAnimation implements FunnySurface.CallbackDraw {
 
 
-    public static final int RENDER_TIME_MS = 100;
+    public static final int RENDER_TIME_MS = 25;
     private char Letter = ' ';
     private boolean isLetter = true;
     private FunnyButton.InnerShapeType innerShapeType = null;
