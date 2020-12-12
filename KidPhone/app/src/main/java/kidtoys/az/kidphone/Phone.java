@@ -2,6 +2,7 @@ package kidtoys.az.kidphone;
 
 import android.os.Handler;
 import android.view.View;
+import android.view.ViewGroup;
 
 /**
  * interface for accessing phone functions
@@ -17,6 +18,8 @@ public interface Phone {
     Handler getHandler();
 
     View getViewById(int id);
+
+    ViewGroup getKeysGroup();
 
     void activateDelay();
 

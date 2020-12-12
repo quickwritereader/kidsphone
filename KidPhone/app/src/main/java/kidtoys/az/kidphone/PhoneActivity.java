@@ -34,6 +34,11 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
     }
 
     @Override
+    public ViewGroup getKeysGroup() {
+        return keysGroup;
+    }
+
+    @Override
     public void activateDelay() {
         handler.activateDelay();
     }
@@ -300,6 +305,8 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
         }
         lastKeyMode = newMode;
     }
+
+
 
     @Override
     public FunnyDisplayBase getDisplay() {

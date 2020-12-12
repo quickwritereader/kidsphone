@@ -15,7 +15,6 @@ import java.util.PriorityQueue;
 public class QuestionChooser implements Comparator<QuestionChooser.Question> {
 
 
-
     @Override
     public int compare(Question question, Question t1) {
         float percentageCorrect1=0;
@@ -31,13 +30,15 @@ public class QuestionChooser implements Comparator<QuestionChooser.Question> {
     }
 
     public static class Question{
-        public int questionSoundId;
-        public int questionId;
+        public FunnyButton.KeyMode questionModeId;
+        public Object questionAsk;
+        public int questionAnswer;
         public int totalQuestion;
         public int correctAnswers;
-        public Question (int soundId,int questionId){
-            this.questionSoundId=soundId;
-            this.questionId=questionId;
+        public Question (FunnyButton.KeyMode qsMode,Object ask, int answer){
+            this.questionModeId =qsMode;
+            this.questionAnswer=answer;
+            this.questionAsk=ask;
         }
     }
 

@@ -1,81 +1,64 @@
 package kidtoys.az.kidphone;
 
+import android.view.View;
+import android.view.ViewGroup;
+
+import static kidtoys.az.kidphone.FunnyButton.KeyMode.Figures;
+import static kidtoys.az.kidphone.FunnyButton.KeyMode.Letters;
+import static kidtoys.az.kidphone.FunnyButton.KeyMode.Numbers;
+
 /**
  * Question mode
  */
 public class QuestionMode extends BaseMode implements  SoundCallBack{
 
-    private QuestionChooser quizGiver;
-    private static String letters="ABCÇDEƏFGĞHIİJKQLMNOÖPRSŞTUÜVYXZ";
-    private static String numbers="0123456789";
-    private int [] corrects={R.raw.az_correct_1,R.raw.az_correct_2,R.raw.az_correct_3};
-    private int [] wrongs={R.raw.az_wrong_1,R.raw.az_wrong_2,R.raw.az_wrong_3};
+    private final QuestionChooser quizGiver;
+    private final int [] corrects={R.raw.az_correct_1,R.raw.az_correct_2,R.raw.az_correct_3};
+    private final int [] wrongs={R.raw.az_wrong_1,R.raw.az_wrong_2,R.raw.az_wrong_3};
     private int correctCount=0;
     private int wrongCount=0;
 
     public QuestionMode (Phone phone) throws Exception{
         super(phone);
         quizGiver=new QuestionChooser();
-        for (int i=0;i<letters.length();i++){
-            quizGiver.addQuestion(new QuestionChooser.Question(R.raw.az_question_alphabet,i));
+        ViewGroup keysGroup = phone.getKeysGroup();
+        int childCount = keysGroup.getChildCount();
+        for (int i = 0; i < childCount; i++) {                                               
+            View v = keysGroup.getChildAt(i);
+            if (v instanceof FunnyButton) {
+                FunnyButton funnyButton = (FunnyButton) keysGroup.getChildAt(i);
+                if (funnyButton.getKeyMode() != FunnyButton.KeyMode.System) {
+                     //prepate question
+                    //answer will be itsnumber
+                    String number = funnyButton.getNumbersText();
+                    int answer = Integer.parseInt(number);
+                    String letters = funnyButton.getLettersText();
+                    for (int j=0;j<letters.length();j++) {
+                        quizGiver.addQuestion(new QuestionChooser.Question(Letters, letters.charAt(j),answer));
+                    }
+                    if(number.length()>0) quizGiver.addQuestion(new QuestionChooser.Question(Numbers, number.charAt(0),answer));
+                    quizGiver.addQuestion(new QuestionChooser.Question(Figures,funnyButton.getInnerShape().ordinal(),answer));
+                }
+            }
         }
-        for (int i=0;i<numbers.length();i++){
-            quizGiver.addQuestion(new QuestionChooser.Question(R.raw.az_question_number,i));
-        }
-        //first and last 4 skipped
-        for (int i=1;i<FunnyButton.InnerShapeType.values().length-4;i++){
-            quizGiver.addQuestion(new QuestionChooser.Question(R.raw.az_question_figure,i));
-        }
+
         askNew();
-        FunnyDisplayBase dispBase=phone.getDisplay();
     }
 
     @Override
     public void onClick(FunnyButton funnyButton) {
         QuestionChooser.Question x=quizGiver.getCurrentQuestion();
-       if(x!=null){
-           boolean found=false;
-           switch(x.questionSoundId){
-               case R.raw.az_question_alphabet: {
-                   if(funnyButton.getKeyMode()==FunnyButton.KeyMode.Letters){
-                       char letter=letters.charAt(x.questionId);
-                       if (letter=='Ə') letter='ə';
-                       String buttonLetter=funnyButton.getLettersText();
-                       if(  buttonLetter.indexOf(letter) >=0){
-                           found=true;
-                       }
-                   }
-               }
-               break;
-               case R.raw.az_question_number: {
-                   if(funnyButton.getKeyMode()==FunnyButton.KeyMode.Numbers){
-                       char number=numbers.charAt(x.questionId);
-                       String buttonLetter=funnyButton.getNumbersText();
-                       if(  buttonLetter.indexOf(number) >=0){
-                           found=true;
-                       }
-                   }
-               }
-               break;
-               case R.raw.az_question_figure:{
-                   if(funnyButton.getKeyMode()==FunnyButton.KeyMode.Figures){
-                       FunnyButton.InnerShapeType figure=FunnyButton.InnerShapeType.values()[x.questionId];
-                        if(figure==funnyButton.getInnerShape()){
-                            found=true;
-                        }
-                   }
-               }
-               break;
-           }
-           int id;
+        int id;
+       if(x!=null && funnyButton.getKeyMode()!= FunnyButton.KeyMode.System){
+           int currentAnswer = Integer.parseInt(funnyButton.getNumbersText());
+           boolean found= (x.questionAnswer == currentAnswer);
 
            FunnySurface surface=phone.getDisplay().getSurface();
            surface.clear();
            if(found){
                if(correctCount>=corrects.length)correctCount=0;
-                 id=corrects[correctCount++];
+               id=corrects[correctCount++];
                FunnySurfaceUtils.drawChar(surface,surface.getWidth() / 2, surface.getHeight() / 2,'$', FunnySurface.DotColor.Green, FunnySurface.DotType.Romb,true);
-
                quizGiver.markCorrectlyFound();
            }else{
                if(wrongCount>=wrongs.length)wrongCount=0;
@@ -130,22 +113,16 @@ public class QuestionMode extends BaseMode implements  SoundCallBack{
 
     private void askNew() {
         QuestionChooser.Question x=quizGiver.getNewQuestion();
-        switch(x.questionSoundId){
-            case R.raw.az_question_alphabet: {
-                phone.changeKeys(FunnyButton.KeyMode.Letters);
-                phone.getAudio().PlayMp3(x.questionSoundId,this);
-
-            }
+        phone.changeKeys(x.questionModeId);
+        switch(x.questionModeId){
+            case Letters:
+                phone.getAudio().PlayMp3(R.raw.az_question_alphabet,this);
                 break;
-            case R.raw.az_question_number: {
-                phone.changeKeys(FunnyButton.KeyMode.Numbers);
-                phone.getAudio().PlayMp3(x.questionSoundId,this);
-            }
+            case Numbers:
+                phone.getAudio().PlayMp3(R.raw.az_question_number,this);
                 break;
-            case R.raw.az_question_figure:{
-                phone.changeKeys(FunnyButton.KeyMode.Figures);
-                phone.getAudio().PlayMp3(x.questionSoundId,this);
-            }
+            case Figures:
+                phone.getAudio().PlayMp3(R.raw.az_question_figure,this);
                 break;
         }
         phone.startSpeaker();
@@ -163,17 +140,14 @@ public class QuestionMode extends BaseMode implements  SoundCallBack{
         QuestionChooser.Question x=quizGiver.getCurrentQuestion();
         phone.stopSpeaker();
         if(x!=null){
-            switch(x.questionSoundId){
-                case R.raw.az_question_alphabet: {
-                    play(letters.charAt(x.questionId));
+            switch(x.questionModeId){
+                case Letters:
+                case Numbers: {
+                    play((char)x.questionAsk);
                 }
                 break;
-                case R.raw.az_question_number: {
-                    play(numbers.charAt(x.questionId));
-                }
-                break;
-                case R.raw.az_question_figure:{
-                    play_figure(FunnyButton.InnerShapeType.values()[x.questionId]);
+                case Figures:{
+                    play_figure(FunnyButton.InnerShapeType.values()[(int)x.questionAsk]);
                 }
                 break;
             }
