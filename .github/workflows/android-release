@@ -1,0 +1,58 @@
+name: android-release
+
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - 'v*'
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up JDK 1.8
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
+    - name: Change wrapper permissions
+      run: chmod +x ./KidPhone/gradlew
+    - name: Build with Gradle
+      run: ./KidPhone/gradlew build
+  test:
+    name: Run Unit Tests
+    runs-on: ubuntu-18.04
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: set up JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - name: Change wrapper permissions
+        run: chmod +x ./KidPhone/gradlew
+      - name: Unit tests
+        run: cd ./KidPhone/ && ./gradlew test --stacktrace 
+  apk:
+    name: Generate Debug APK
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-18.04
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: set up JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - name: Change wrapper permissions
+        run: chmod +x ./KidPhone/gradlew
+      - name: Build debug APK
+        run: cd ./KidPhone/ && ./gradlew assembleDebug --stacktrace
+      - name: Releasing using Hub
+        uses: ShaunLWM/action-release-debugapk@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+          APP_FOLDER: ./KidPhone/app
+          RELEASE_TITLE: Build
