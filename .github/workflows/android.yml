@@ -37,24 +37,3 @@ jobs:
         run: chmod +x ./KidPhone/gradlew
       - name: Unit tests
         run: cd ./KidPhone/ && ./gradlew test --stacktrace 
-
-  apk:
-    name: Generate Debug APK
-    runs-on: ubuntu-18.04
-
-    steps:
-      - uses: actions/checkout@v1
-      - name: set up JDK 1.8
-        uses: actions/setup-java@v1
-        with:
-          java-version: 1.8
-      - name: Change wrapper permissions
-        run: chmod +x ./KidPhone/gradlew
-      - name: Build debug APK
-        run: cd ./KidPhone/ && ./gradlew assembleDebug --stacktrace
-      - name: Releasing using Hub
-        uses: ShaunLWM/action-release-debugapk@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
-          APP_FOLDER: ./KidPhone/app
-          RELEASE_TITLE: New Build
