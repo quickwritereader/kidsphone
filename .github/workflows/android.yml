@@ -54,8 +54,9 @@ jobs:
         run: chmod +x ./KidPhone/gradlew
       - name: Build debug APK
         run: cd ./KidPhone/ && ./gradlew assembleDebug --stacktrace
-      - name: Upload APK
-        uses: actions/upload-artifact@v1
-        with:
-          name: app
-          path: ../build/app-debug.apk
+      - name: Releasing using Hub
+        uses: ShaunLWM/action-release-debugapk@master
+        env:
+        GITHUB_TOKEN: ${{ secrets.TOKEN }}
+        APP_FOLDER: build
+        RELEASE_TITLE: New Build
