@@ -36,7 +36,7 @@ jobs:
       - name: Change wrapper permissions
         run: chmod +x ./KidPhone/gradlew
       - name: Unit tests
-        run: ./KidPhone/gradlew test --stacktrace --info
+        run: cd ./KidPhone/ && ./gradlew test --stacktrace 
 
   apk:
     name: Generate Debug APK
@@ -51,7 +51,7 @@ jobs:
       - name: Change wrapper permissions
         run: chmod +x ./KidPhone/gradlew
       - name: Build debug APK
-        run: ./KidPhone/gradlew assembleDebug --stacktrace
+        run: cd ./KidPhone/ && ./gradlew assembleDebug --stacktrace
       - name: Upload APK
         uses: actions/upload-artifact@v1
         with:
