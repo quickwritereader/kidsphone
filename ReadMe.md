@@ -2,10 +2,10 @@
 
  
 
-Version : 1.0  
+Version : 1.3  
 Picture of the toy Program: 
 
-<img src="https://github.com/quickwritereader/kidsphone/blob/master/screen1.png?raw=true)" alt="phone" width="40%" />
+<img src="https://github.com/quickwritereader/kidsphone/blob/master/screen1.jpg?raw=true)" alt="phone" width="40%" />
  
 [![Android-master Actions Status](https://github.com/quickwritereader/kidsphone/workflows/android-master/badge.svg)](https://github.com/quickwritereader/kidsphone/actions)
 ## Development 
@@ -24,8 +24,6 @@ Picture of the toy Program:
   - Quiz Mode
   - Phone Emergency calls
   - Game mode (classic Snake)
-
-
 
 
 #### Notes
