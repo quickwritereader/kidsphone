@@ -779,11 +779,11 @@ public class GL_Shapes {
                         "uniform vec2 u_tileXY;"+
                         "varying highp vec4 pos;"+
                         "void main() {" +
-                        "vec2 ppos=pos.xy*vec2(0.5,0.5)*u_tileXY;"+
+                        "vec2 ppos=pos.xy*vec2(0.25,0.25)*u_tileXY;"+
                         "vec2 grid = abs(fract(ppos) )  ;"+
                         "float line = min(grid.x, grid.y);" +
 
-                       " gl_FragColor = vec4(  min(line, 0.2)* v_Color.xyz, 1.0);"+
+                       " gl_FragColor = vec4(  min(line, 0.55)* v_Color.xyz, 1.0);"+
 
                         "}";
         private static final int COORDS_PER_VERTEX = 2;
@@ -830,6 +830,16 @@ public class GL_Shapes {
             GL_Helper.setColorFromRGB(rr,gg,bb, vertexBuffer, COORDS_PER_VERTEX);
             GL_Helper.setColorFromRGB(rr,gg,bb, vertexBuffer, COORDS_PER_VERTEX + 5);
             GL_Helper.setColorFromRGB(rr,gg,bb, vertexBuffer, COORDS_PER_VERTEX + 10);
+        }
+
+        public void setColorRgbAll(int r ,int g, int b){
+            float rr=r/255.f;
+            float gg=g/255.f;
+            float bb=b/255.f;
+            GL_Helper.setColorFromRGB(rr,gg,bb, vertexBuffer, COORDS_PER_VERTEX);
+            GL_Helper.setColorFromRGB(rr,gg,bb, vertexBuffer, COORDS_PER_VERTEX + 5);
+            GL_Helper.setColorFromRGB(rr,gg,bb, vertexBuffer, COORDS_PER_VERTEX + 10);
+            GL_Helper.setColorFromRGB(rr,gg,bb, vertexBuffer, COORDS_PER_VERTEX + 15);
         }
 
         public void setColor(FunnySurface.DotColor color) {

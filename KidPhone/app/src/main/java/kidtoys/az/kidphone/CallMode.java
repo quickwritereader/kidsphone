@@ -23,8 +23,9 @@ public class CallMode extends BaseMode implements SoundCallBack {
     private int dial_audio_id;
     private boolean enableCallbacks;
 
-    public enum LAST_TYPE {NONE,SUCCESS_CALL,ANSWER,ABORT,DIAL}
-    public LAST_TYPE last_type=LAST_TYPE.NONE;
+    public enum LAST_TYPE {NONE, SUCCESS_CALL, ANSWER, ABORT, DIAL}
+
+    public LAST_TYPE last_type = LAST_TYPE.NONE;
 
     public int[] getCallSoundArray(int index) {
         switch (index) {
@@ -51,7 +52,7 @@ public class CallMode extends BaseMode implements SoundCallBack {
 
     public CallMode(Phone phone) throws Exception {
         super(phone);
-        FunnyDisplayBase display=phone.getDisplay();
+        FunnyDisplayBase display = phone.getDisplay();
         surface = new FunnySurface(display.getSurfaceWidth(), display.getSurfaceHeight());
         callAnimation = new CallAnimation(display);
         callNoAnimation = new CallNoButtonAnim(display);
@@ -61,23 +62,22 @@ public class CallMode extends BaseMode implements SoundCallBack {
     private boolean handleKeys = true;
 
 
-
     @Override
     public void onClick(FunnyButton funnyButton) {
         if (funnyButton.getId() == R.id.buttonNo) {
             if (isNoActive) {
                 isNoActive = false;
                 isNoPressed = true;
-                handleKeys=false;
+                handleKeys = false;
                 phone.stopSpeaker(true);
-                last_type=LAST_TYPE.ABORT;
+                last_type = LAST_TYPE.ABORT;
                 callNoAnimation.start();
-                audio.PlayMp3(R.raw.busy_signal,this);
+                audio.PlayMp3(R.raw.busy_signal, this);
                 return;
             } else {
                 readyToCall();
             }
-        }else if(funnyButton.getId()==R.id.buttonYes){
+        } else if (funnyButton.getId() == R.id.buttonYes) {
             call();
         }
         if (funnyButton.getKeyMode() == FunnyButton.KeyMode.Numbers) {
@@ -85,9 +85,9 @@ public class CallMode extends BaseMode implements SoundCallBack {
             if (number.length() > 0 && handleKeys) {
                 phone.stopSpeaker();
                 isNoActive = false;
-                char num=number.charAt(0);
-                last_type=LAST_TYPE.DIAL;
-                audio.playKeypadTones(num,this);
+                char num = number.charAt(0);
+                last_type = LAST_TYPE.DIAL;
+                audio.playKeypadTones(num, this);
 
                 adjust_draw(num);
             }
@@ -97,16 +97,15 @@ public class CallMode extends BaseMode implements SoundCallBack {
 
     private void adjust_draw(char number) {
         dialedNumber = dialedNumber + number;
-        int w=(FunnySurfaceUtils.standardCharWidth +1)*FunnySurfaceUtils.scaleX;
+        int w = (FunnySurfaceUtils.standardCharWidth + 1) * FunnySurfaceUtils.scaleX;
 
-        if(dialedNumber.length()>3){
-            dialedNumber=dialedNumber.substring(dialedNumber.length()-3);
+        if (dialedNumber.length() > 3) {
+            dialedNumber = dialedNumber.substring(dialedNumber.length() - 3);
             //shift left previous ones
-            surface.putSurface(surface,  -w  , 0);
-            surface.clear( 2 * w ,0,surface.getWidth(),surface.getHeight());
+            surface.putSurface(surface, -w, 0);
+            surface.clear(2 * w, 0, surface.getWidth(), surface.getHeight());
 
-        }
-        else if (dialedNumber.length() == 1) {
+        } else if (dialedNumber.length() == 1) {
             surface.clear();
         }
         if (dialedNumber == null || dialedNumber.length() < 1) return;
@@ -115,18 +114,18 @@ public class CallMode extends BaseMode implements SoundCallBack {
         //exclude white and black
 
         int colorRandom = (int) (Math.random() * (FunnySurface.getMaxColorSupport() - 2)) + 1;
-        int i=dialedNumber.length()-1;
-        FunnySurfaceUtils.drawChar(surface,  i * w+w/2 , surface.getHeight()/2, number,
+        int i = dialedNumber.length() - 1;
+        FunnySurfaceUtils.drawChar(surface, i * w + w / 2, surface.getHeight() / 2, number,
                 FunnySurface.supportedColors[colorRandom],
                 FunnySurface.supportedTypes[figureRandom], true);
         int length = dialedNumber.length() * w;
-        FunnySurface displaySurface=phone.getDisplay().getSurface();
+        FunnySurface displaySurface = phone.getDisplay().getSurface();
         try {
             displaySurface.lock();
             displaySurface.clear();
 
-            displaySurface.putSurface(surface, (int)(Math.ceil((surface.getWidth()-length)/2.f)), 0);
-        }finally {
+            displaySurface.putSurface(surface, (int) (Math.ceil((surface.getWidth() - length) / 2.f)), 0);
+        } finally {
             displaySurface.unlock();
         }
         phone.getDisplay().render();
@@ -134,11 +133,12 @@ public class CallMode extends BaseMode implements SoundCallBack {
 
     @Override
     public void onRefresh() {
-        enableCallbacks=true;
-       readyToCall();
+        super.onRefresh();
+        enableCallbacks = true;
+        readyToCall();
     }
 
-    public void readyToCall(){
+    public void readyToCall() {
         audio = phone.getAudio();
         isNoActive = false;
         handleKeys = true;
@@ -159,16 +159,13 @@ public class CallMode extends BaseMode implements SoundCallBack {
     @Override
     public void onSave() {
         //change delay to standard
-        enableCallbacks=false;
-        phone.deActivateDelay();
-        phone.activateDelay();
-        phone.stopSpeaker();
+        super.onSave();
+        enableCallbacks = false;
         callAnimation.stop(true);
         callNoAnimation.stop(true);
-        audio.StopMp3();
     }
 
-    public void call(){
+    public void call() {
         if (dialedNumber.length() >= 3) {
             int index;
             switch (dialedNumber) {
@@ -200,25 +197,26 @@ public class CallMode extends BaseMode implements SoundCallBack {
             isNoPressed = false;
             callAnimation.start();
             handleKeys = false;
-            last_type=LAST_TYPE.SUCCESS_CALL;
+            last_type = LAST_TYPE.SUCCESS_CALL;
             audio.PlayMp3(R.raw.dial_tone, this);
 
             dialedNumber = "";
         }
     }
+
     @Override
     public void soundPlayFinished() {
-        if(!enableCallbacks) return;
-        switch (last_type){
+        if (!enableCallbacks) return;
+        switch (last_type) {
             case NONE:
                 break;
             case SUCCESS_CALL:
                 callAnimation.stop(true);
                 if (!isNoPressed) {
-                      phone.startSpeaker();
-                      last_type=LAST_TYPE.ANSWER;
-                      audio.PlayMp3(dial_audio_id, this);
-                     }
+                    phone.startSpeaker();
+                    last_type = LAST_TYPE.ANSWER;
+                    audio.PlayMp3(dial_audio_id, this);
+                }
                 break;
             case ABORT:
                 callNoAnimation.stop(false);

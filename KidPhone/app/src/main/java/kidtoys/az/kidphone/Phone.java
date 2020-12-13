@@ -41,4 +41,5 @@ public interface Phone {
 
     void stopSpeaker(boolean force) ;
 
+    void activateDelay(long timeDelay);
 }

@@ -163,11 +163,16 @@ public class GL_Helper {
                 setArr.put(start_index + 1, 0x45 / 255f);
                 setArr.put(start_index + 2, 0);
                 break;
-            case Magenta:
-                setArr.put(start_index, 1f);
+            case Black:
+                setArr.put(start_index, 0);
                 setArr.put(start_index + 1, 0);
-                setArr.put(start_index + 2, 1f);
+                setArr.put(start_index + 2, 0);
                 break;
+//            case Magenta:
+//                setArr.put(start_index, 1f);
+//                setArr.put(start_index + 1, 0);
+//                setArr.put(start_index + 2, 1f);
+//                break;
             default:
         }
     }

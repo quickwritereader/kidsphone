@@ -1,6 +1,7 @@
 package kidtoys.az.kidphone;
 
 import android.renderscript.Matrix3f;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -15,15 +16,34 @@ import static kidtoys.az.kidphone.FunnyButton.InnerShapeType.*;
 public class FunnySurfaceUtils {
 
 
-    public static final int scaleX=2;
-    public static final int scaleY=2 ;
+    public static final int scaleX = 4;
+    public static final int scaleY = 4;
     public static final int standardCharWidth = 5;
     public static final int standardCharHeight = 7;
     public static final int standardFigWidth = 15;
     public static final int standardFigHeight = 15;
-    public abstract static class Primitive {
+
+    public static abstract class Primitive {
+        protected int pW = 4;
+        protected int pH = 2;
 
         public abstract void draw(FunnySurface surface, FunnySurface.CallbackDraw callbackDraw, FunnySurface.DotColor color, FunnySurface.DotType dot_type, Matrix3f transform);
+
+        public int getpW() {
+            return pW;
+        }
+
+        public void setpW(int pW) {
+            this.pW = pW > 0 ? pW : 1;
+        }
+
+        public int getpH() {
+            return pH;
+        }
+
+        public void setpH(int pH) {
+            this.pH = pH > 0 ? pH : 1;
+        }
     }
 
     public static class Line extends Primitive {
@@ -37,18 +57,18 @@ public class FunnySurfaceUtils {
         }
 
         public void draw(FunnySurface surface, FunnySurface.CallbackDraw callbackDraw, FunnySurface.DotColor color, FunnySurface.DotType dot_type, Matrix3f transform) {
-            if(transform!=null){
-                float [] trans=transform.getArray();
-                int x00=Math.round( trans[0]*ix[0] +trans[3]*ix[1]+trans[6]);
-                int x10=Math.round( trans[1]*ix[0] +trans[4]*ix[1]+ trans[7] );
+            if (transform != null) {
+                float[] trans = transform.getArray();
+                int x00 = Math.round(trans[0] * ix[0] + trans[3] * ix[1] + trans[6]);
+                int x10 = Math.round(trans[1] * ix[0] + trans[4] * ix[1] + trans[7]);
 
-                int x01=Math.round( trans[0]*ix[2] +trans[3]*ix[3]+trans[6]);
-                int x11=Math.round( trans[1]*ix[2] +trans[4]*ix[3]+trans[7]);
-                surface.drawLine(x00, x10, x01, x11, color, dot_type, callbackDraw);
+                int x01 = Math.round(trans[0] * ix[2] + trans[3] * ix[3] + trans[6]);
+                int x11 = Math.round(trans[1] * ix[2] + trans[4] * ix[3] + trans[7]);
+                surface.drawLine(x00, x10, x01, x11, pW, pH, color, dot_type, callbackDraw);
 
-            }else {
+            } else {
 
-                surface.drawLine(ix[0], ix[1], ix[2], ix[3], color, dot_type, callbackDraw);
+                surface.drawLine(ix[0], ix[1], ix[2], ix[3], pW, pH, color, dot_type, callbackDraw);
             }
         }
 
@@ -62,25 +82,27 @@ public class FunnySurfaceUtils {
 
             this.x = x;
             this.y = y;
+            this.pW = 4;
+            this.pH = 4;
         }
 
         public void draw(FunnySurface surface, FunnySurface.CallbackDraw callbackDraw, FunnySurface.DotColor color, FunnySurface.DotType dot_type, Matrix3f transform) {
-            if(transform!=null){
-                float [] trans=transform.getArray();
-                int x00=Math.round( trans[0]*x +trans[3]*y+trans[6]);
-                int x10=Math.round( trans[1]*x +trans[4]*y+ trans[7] );
-                surface.putDot(x00, x10,   color, dot_type, callbackDraw);
+            if (transform != null) {
+                float[] trans = transform.getArray();
+                int x00 = Math.round(trans[0] * x + trans[3] * y + trans[6]);
+                int x10 = Math.round(trans[1] * x + trans[4] * y + trans[7]);
+                surface.putDot(x00, x10, this.pW, pH, color, dot_type, callbackDraw);
 
-            }else {
+            } else {
 
-                surface.putDot(x,y, color, dot_type, callbackDraw);
+                surface.putDot(x, y, pW, pH, color, dot_type, callbackDraw);
             }
         }
 
     }
 
 
-    public static class Ellipse extends  Primitive{
+    public static class Ellipse extends Primitive {
 
         public int[] ix = new int[4];
 
@@ -89,26 +111,27 @@ public class FunnySurfaceUtils {
             this.ix[1] = y;
             this.ix[2] = x2;
             this.ix[3] = y2;
+            pW = 3;
+            pH = 3;
         }
+
         @Override
         public void draw(FunnySurface surface, FunnySurface.CallbackDraw callbackDraw, FunnySurface.DotColor color, FunnySurface.DotType dot_type, Matrix3f transform) {
-            if(transform!=null){
-                float [] trans=transform.getArray();
-                int x0=Math.round( trans[0]*ix[0] +trans[3]*ix[1]+trans[6]);
-                int y0=Math.round( trans[1]*ix[0] +trans[4]*ix[1]+ trans[7] );
+            if (transform != null) {
+                float[] trans = transform.getArray();
+                int x0 = Math.round(trans[0] * ix[0] + trans[3] * ix[1] + trans[6]);
+                int y0 = Math.round(trans[1] * ix[0] + trans[4] * ix[1] + trans[7]);
 
-                int x1=Math.round( trans[0]*ix[2] +trans[3]*ix[3]+trans[6]);
-                int y1=Math.round( trans[1]*ix[2] +trans[4]*ix[3]+trans[7]);
-                surface.drawEllipse(x0, y0,  x1, y1
-                        , color, dot_type, callbackDraw);
+                int x1 = Math.round(trans[0] * ix[2] + trans[3] * ix[3] + trans[6]);
+                int y1 = Math.round(trans[1] * ix[2] + trans[4] * ix[3] + trans[7]);
+                surface.drawEllipse(x0, y0, x1, y1, pW, pH, color, dot_type, callbackDraw);
 
-            }else {
+            } else {
 
-                surface.drawEllipse(ix[0], ix[1], ix[2], ix[3], color, dot_type, callbackDraw);
+                surface.drawEllipse(ix[0], ix[1], ix[2], ix[3], pW, pH, color, dot_type, callbackDraw);
             }
         }
     }
-
 
 
     /* Letters and Numbers */
@@ -121,12 +144,12 @@ public class FunnySurfaceUtils {
 
     private final static List<Primitive> FigB = Arrays.<Primitive>asList(
             new Line(0, 0, 0, 6),
-            new Line(0,0,1 ,0),
+            new Line(0, 0, 1, 0),
             new Line(1, 0, 3, 0),
-            new Line( 3, 0,4,1),
+            new Line(3, 0, 4, 1),
             new Line(4, 1, 4, 2),
             new Line(4, 2, 3, 3),
-            new Line(4, 2,3,3),
+            new Line(4, 2, 3, 3),
             new Line(3, 3, 0, 3),
             new Line(3, 3, 4, 4),
             new Line(4, 4, 4, 5),
@@ -134,23 +157,23 @@ public class FunnySurfaceUtils {
             new Line(3, 6, 0, 6));
 
     private final static List<Primitive> FigC = Arrays.<Primitive>asList(
-            new Line(4, 1,3,0),
+            new Line(4, 1, 3, 0),
             new Line(3, 0, 1, 0),
             new Line(1, 0, 0, 1),
             new Line(0, 1, 0, 5),
-            new Line(0, 5,1,6),
+            new Line(0, 5, 1, 6),
             new Line(1, 6, 3, 6),
-            new Line(3,6,4,5 ));
+            new Line(3, 6, 4, 5));
 
     private final static List<Primitive> FigCH = Arrays.<Primitive>asList(
-            new Line(4, 1,3,0),
+            new Line(4, 1, 3, 0),
             new Line(3, 0, 1, 0),
             new Line(1, 0, 0, 1),
             new Line(0, 1, 0, 5),
-            new Line(0, 5,1,6),
+            new Line(0, 5, 1, 6),
             new Line(1, 6, 3, 6),
-            new Line(3,6,4,5 ),
-            new Line(2, 5,2,7) );
+            new Line(3, 6, 4, 5),
+            new Line(2, 5, 2, 7));
 
     private final static List<Primitive> FigD = Arrays.<Primitive>asList(
             new Line(0, 0, 0, 6),
@@ -183,32 +206,32 @@ public class FunnySurfaceUtils {
             new Line(4, 0, 1, 0),
             new Line(1, 0, 0, 1),
             new Line(0, 1, 0, 4),
-            new Line(0,4,1, 5),
-            new Line(1,5,2, 6),
+            new Line(0, 4, 1, 5),
+            new Line(1, 5, 2, 6),
             new Line(2, 6, 4, 6),
-            new Line(4,6,4,5),
+            new Line(4, 6, 4, 5),
             new Line(4, 5, 4, 4),
-            new Line(4,4,4,3),
+            new Line(4, 4, 4, 3),
             new Line(4, 3, 3, 3));
 
     private final static List<Primitive> FigF = Arrays.<Primitive>asList(
             new Line(0, 0, 0, 6),
             new Line(0, 0, 4, 0),
-             new Line(0, 3, 3, 3));
+            new Line(0, 3, 3, 3));
 
     private final static List<Primitive> FigGH = Arrays.<Primitive>asList(
             new Line(4, 0, 1, 0),
             new Line(1, 0, 0, 1),
             new Line(0, 1, 0, 4),
-            new Line(0,4,1, 5),
-            new Line(1,5,2, 6),
+            new Line(0, 4, 1, 5),
+            new Line(1, 5, 2, 6),
             new Line(2, 6, 4, 6),
-            new Line(4,6,4,5),
+            new Line(4, 6, 4, 5),
             new Line(4, 5, 4, 4),
-            new Line(4,4,4,3),
+            new Line(4, 4, 4, 3),
             new Line(4, 3, 3, 3),
-            new Line(1, -2,2,-1),
-            new Line(2, -1,3, -2));
+            new Line(1, -2, 2, -1),
+            new Line(2, -1, 3, -2));
 
     private final static List<Primitive> FigH = Arrays.<Primitive>asList(
             new Line(0, 0, 0, 6),
@@ -217,8 +240,8 @@ public class FunnySurfaceUtils {
 
     private final static List<Primitive> FigX = Arrays.<Primitive>asList(
             new Line(0, 0, 0, 1),
-            new Line(0, 1,4,5),
-            new Line(4, 5,4,6),
+            new Line(0, 1, 4, 5),
+            new Line(4, 5, 4, 6),
             new Line(4, 0, 4, 1),
             new Line(4, 1, 0, 5),
             new Line(0, 5, 0, 6)
@@ -252,14 +275,14 @@ public class FunnySurfaceUtils {
 
     private final static List<Primitive> FigQ = Arrays.<Primitive>asList(
 
-            new Line(4, 1,3,0),
+            new Line(4, 1, 3, 0),
             new Line(3, 0, 1, 0),
             new Line(1, 0, 0, 1),
             new Line(0, 1, 0, 5),
-            new Line(0, 5,1,6),
+            new Line(0, 5, 1, 6),
             new Line(1, 6, 3, 6),
-            new Line(3,6,4,5 ),
-            new Line(4,5,4,1 ),
+            new Line(3, 6, 4, 5),
+            new Line(4, 5, 4, 1),
             new Line(3, 5, 4, 6));
 
     private final static List<Primitive> FigL = Arrays.<Primitive>asList(
@@ -280,24 +303,24 @@ public class FunnySurfaceUtils {
             new Line(4, 5, 4, 0));
 
     private final static List<Primitive> FigO = Arrays.<Primitive>asList(
-            new Line(4, 1,3,0),
+            new Line(4, 1, 3, 0),
             new Line(3, 0, 1, 0),
             new Line(1, 0, 0, 1),
             new Line(0, 1, 0, 5),
-            new Line(0, 5,1,6),
+            new Line(0, 5, 1, 6),
             new Line(1, 6, 3, 6),
-            new Line(3,6,4,5 ),
-            new Line(4,5,4,1 ));
+            new Line(3, 6, 4, 5),
+            new Line(4, 5, 4, 1));
 
     private final static List<Primitive> FigOO = Arrays.asList(
-            new Line(4, 1,3,0),
+            new Line(4, 1, 3, 0),
             new Line(3, 0, 1, 0),
             new Line(1, 0, 0, 1),
             new Line(0, 1, 0, 5),
-            new Line(0, 5,1,6),
+            new Line(0, 5, 1, 6),
             new Line(1, 6, 3, 6),
-            new Line(3,6,4,5 ),
-            new Line(4,5,4,1 ),
+            new Line(3, 6, 4, 5),
+            new Line(4, 5, 4, 1),
             new PointObj(1, -1),
             new PointObj(3, -1));
 
@@ -306,7 +329,7 @@ public class FunnySurfaceUtils {
             new Line(0, 0, 3, 0),
             new Line(3, 0, 4, 1),
             new Line(4, 1, 4, 2),
-            new Line(  4, 2,3,3),
+            new Line(4, 2, 3, 3),
             new Line(3, 3, 0, 3));
 
     private final static List<Primitive> FigR = Arrays.<Primitive>asList(
@@ -314,7 +337,7 @@ public class FunnySurfaceUtils {
             new Line(0, 0, 3, 0),
             new Line(3, 0, 4, 1),
             new Line(4, 1, 4, 2),
-            new Line(  4, 2,3,3),
+            new Line(4, 2, 3, 3),
             new Line(3, 3, 0, 3),
             new Line(1, 3, 4, 6));
 
@@ -385,7 +408,7 @@ public class FunnySurfaceUtils {
             new Line(0, 6, 4, 6));
 
     private final static List<Primitive> Fig1 = Arrays.<Primitive>asList(
-            new Line(1, 1,2,0),
+            new Line(1, 1, 2, 0),
             new Line(2, 0, 2, 6),
             new Line(1, 6, 3, 6));
 
@@ -406,7 +429,7 @@ public class FunnySurfaceUtils {
             new Line(4, 1, 4, 2),
             new Line(4, 2, 3, 3),
             new Line(3, 3, 2, 3),
-            new Line(3,3,4, 4 ),
+            new Line(3, 3, 4, 4),
             new Line(4, 4, 4, 5),
             new Line(4, 5, 3, 6),
             new Line(3, 6, 2, 6),
@@ -414,12 +437,12 @@ public class FunnySurfaceUtils {
             new Line(1, 6, 0, 5),
             new Line(2, 0, 3, 0),
             new Line(3, 0, 4, 1),
-            new Line(4, 1, 4, 2)  );
+            new Line(4, 1, 4, 2));
 
     private final static List<Primitive> Fig4 = Arrays.<Primitive>asList(
             new Line(0, 0, 0, 3),
             new Line(0, 3, 4, 3),
-            new Line(3, 0, 3, 6) );
+            new Line(3, 0, 3, 6));
     private final static List<Primitive> Fig5 = Arrays.<Primitive>asList(
             new Line(0, 0, 0, 3),
             new Line(0, 3, 1, 2),
@@ -433,11 +456,11 @@ public class FunnySurfaceUtils {
 
     private final static List<Primitive> Fig6 = Arrays.<Primitive>asList(
             new Line(3, 0, 1, 0),
-            new Line(  1, 0,0,1),
+            new Line(1, 0, 0, 1),
             new Line(0, 1, 0, 5),
-            new Line( 0, 5,1,6),
+            new Line(0, 5, 1, 6),
             new Line(1, 6, 3, 6),
-            new Line( 3, 6,4,5),
+            new Line(3, 6, 4, 5),
             new Line(4, 5, 4, 4),
             new Line(4, 4, 3, 3),
             new Line(3, 3, 1, 3),
@@ -455,7 +478,7 @@ public class FunnySurfaceUtils {
             new Line(0, 2, 0, 1),
             new Line(0, 1, 1, 0),
             new Line(1, 0, 3, 0),
-            new Line( 3, 0,4,1),
+            new Line(3, 0, 4, 1),
             new Line(4, 1, 4, 2),
             new Line(4, 2, 3, 3),
             new Line(3, 3, 1, 3),
@@ -466,14 +489,14 @@ public class FunnySurfaceUtils {
             new Line(3, 6, 4, 5),
             new Line(4, 5, 4, 4),
             new Line(4, 4, 3, 3)
-            );
+    );
 
     private final static List<Primitive> Fig9 = Arrays.<Primitive>asList(
             new Line(4, 1, 3, 0),
             new Line(3, 0, 1, 0),
-            new Line( 1, 0,0,1),
+            new Line(1, 0, 0, 1),
             new Line(0, 1, 0, 2),
-            new Line(  0, 2,1,3),
+            new Line(0, 2, 1, 3),
             new Line(1, 3, 3, 3),
             new Line(3, 3, 4, 2),
             new Line(4, 1, 4, 5),
@@ -481,9 +504,9 @@ public class FunnySurfaceUtils {
             new Line(3, 6, 1, 6));
 
     private final static List<Primitive> Fig0 = Arrays.<Primitive>asList(
-            new Line(  1, 0,0,1),
+            new Line(1, 0, 0, 1),
             new Line(0, 1, 0, 5),
-            new Line(  0, 5,1,6),
+            new Line(0, 5, 1, 6),
             new Line(1, 6, 3, 6),
             new Line(3, 6, 4, 5),
             new Line(4, 5, 4, 1),
@@ -557,20 +580,21 @@ public class FunnySurfaceUtils {
     );
 
     private static List<Primitive> FigTrapes = Arrays.<Primitive>asList(
-      new Line(0, 3, 0, 12),
+            new Line(0, 3, 0, 12),
             new Line(0, 12, 14, 12),
             new Line(14, 12, 5, 3),
             new Line(5, 3, 0, 3));
 
 
     private final static List<Primitive> FigCorrect = Arrays.<Primitive>asList(
-            new Line(-2, 3, 1, 6),
-            new Line(1, 6, 7, 0)  );
+            new Line(3, 7, 6, 10),
+            new Line(6, 10, 12, 4));
 
-    private final static List<Primitive> FigInCorrect = Arrays.asList(
-            new Line(-2, 0, 4, 6),
-            new PointObj(-2, 6),
-            new Line(4, 0, -2, 6));
+    private final static List<Primitive> FigInCorrect = Arrays.<Primitive>asList(
+            new Line(7, 7, 3, 3),
+            new Line(7, 7, 11, 3),
+            new Line(7, 7, 3, 11),
+            new Line(7, 7, 11, 11));
 
     private static final HashMap<Character, List<Primitive>> number_letters = new HashMap<Character, List<Primitive>>() {{
         put('A', FigA);
@@ -615,8 +639,6 @@ public class FunnySurfaceUtils {
         put('7', Fig7);
         put('8', Fig8);
         put('9', Fig9);
-        put('$', FigCorrect);
-        put('!',FigInCorrect);
     }};
 
 
@@ -634,23 +656,20 @@ public class FunnySurfaceUtils {
     }};
 
 
-
-
-
     public static void drawFigure(FunnySurface surface, int x, int y, FunnyButton.InnerShapeType innerShapeType, FunnySurface.DotColor color, FunnySurface.DotType figure, boolean center) {
         drawFigure(surface, x, y, innerShapeType, color, figure, center, null);
     }
 
     public static void drawFigure(FunnySurface surface, int x, int y, FunnyButton.InnerShapeType innerShapeType, FunnySurface.DotColor color, FunnySurface.DotType figure, boolean center, FunnySurface.CallbackDraw clbk) {
 
-        if (center){
-            x = x - scaleX * standardFigWidth / 2;
-            y= y- scaleY * standardFigHeight /2;
+        Matrix3f matrix3f = new Matrix3f();
+        if (center) {
+            matrix3f.translate(x  , y );
+        }else{
+            matrix3f.translate(x + scaleX * standardFigWidth / 2, y + scaleY * standardFigHeight / 2);
         }
-        Matrix3f matrix3f=new Matrix3f();
-        matrix3f.translate(x+scaleX * standardFigWidth / 2, y+scaleY * standardFigHeight /2);
-        matrix3f.scale(scaleX,scaleY);
-        matrix3f.translate(-standardFigWidth / 2 ,-standardFigHeight /2  );
+        matrix3f.scale(scaleX, scaleY);
+        matrix3f.translate(-standardFigWidth / 2, -standardFigHeight / 2);
         List<Primitive> obj = shapes.get(innerShapeType);
         if (obj != null) {
             for (Primitive prim : obj) {
@@ -677,16 +696,14 @@ public class FunnySurfaceUtils {
      * @param figure
      */
     public static void drawChar(FunnySurface surface, int x, int y, char Letter, FunnySurface.DotColor color, FunnySurface.DotType figure, boolean center, FunnySurface.CallbackDraw clbk) {
-
-
-        if (center){
-            x = x - scaleX * standardCharWidth / 2;
-            y= y- scaleY * standardCharHeight /2;
+        Matrix3f matrix3f = new Matrix3f();
+        if (center) {
+            matrix3f.translate(x  , y );
+        }else{
+            matrix3f.translate(x + scaleX * standardFigWidth / 2, y + scaleY * standardFigHeight / 2);
         }
-        Matrix3f matrix3f=new Matrix3f();
-        matrix3f.translate(x+scaleX * standardCharWidth / 2, y+scaleY * standardCharHeight /2);
-        matrix3f.scale(scaleX,scaleY);
-        matrix3f.translate(-standardCharWidth / 2 ,-standardCharHeight /2  );
+        matrix3f.scale(scaleX, scaleY);
+        matrix3f.translate(-standardCharWidth / 2, -standardCharHeight / 2);
         List<Primitive> obj = number_letters.get(Character.toUpperCase(Letter));
         if (obj != null) {
             for (Primitive prim : obj) {
@@ -695,4 +712,25 @@ public class FunnySurfaceUtils {
         }
 
     }
+
+
+
+    public static void drawSymbol(FunnySurface surface, int x, int y, boolean correct, FunnySurface.DotColor color, FunnySurface.DotType figure, boolean center) {
+        Matrix3f matrix3f = new Matrix3f();
+        if (center) {
+            matrix3f.translate(x  , y );
+        }else{
+            matrix3f.translate(x + scaleX * standardFigWidth / 2, y + scaleY * standardFigHeight / 2);
+        }
+        matrix3f.scale(scaleX, scaleY);
+        matrix3f.translate(-standardFigWidth / 2, -standardFigHeight / 2);
+        List<Primitive> obj = correct?FigCorrect:FigInCorrect;
+        if (obj != null) {
+            for (Primitive prim : obj) {
+                prim.draw(surface, null, color, figure, matrix3f);
+            }
+        }
+
+    }
+
 }

@@ -122,9 +122,9 @@ public class FunnyDisplay extends View  implements FunnyDisplayBase{
             case Orange:
                 res = Color.argb(255, 0xFF, 0x45, 0);
                 break;
-            case Magenta:
-                res = Color.argb(255, 0xFF, 0, 0xFF);
-                break;
+//            case Magenta:
+//                res = Color.argb(255, 0xFF, 0, 0xFF);
+//                break;
             default:
                 res = 0;
         }

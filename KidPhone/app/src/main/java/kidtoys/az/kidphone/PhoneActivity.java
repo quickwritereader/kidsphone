@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -89,6 +90,11 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
     }
 
     @Override
+    public void activateDelay(long timeDelay) {
+        handler.activateDelay(timeDelay);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -145,8 +151,7 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
     @Override
     protected void onStart() {
         super.onStart();
-        handler.deActivateDelay();
-        handler.activateDelay(UiHandler.TIME_DELAY);
+        Log.d(UiHandler.TAG,"OnStart");
         try {
             if (started == 0) {
                 started = 1;
@@ -173,19 +178,20 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
         }
     }
 
+
     @Override
     public void onResume() {
         super.onResume();
         if (mode != null && mode instanceof GameMode) {
             mode.onRefresh();
         }
-        handler.activateDelay();
+        Log.d(UiHandler.TAG,"OnResume");
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        handler.deActivateDelay();
+        Log.d(UiHandler.TAG,"OnPause");
         if (mode != null) mode.onSave();
     }
 
@@ -193,7 +199,6 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if ((keyCode == KeyEvent.KEYCODE_HOME)) {
             if (mode != null) mode.onSave();
-            handler.deActivateDelay();
             started = 0;
         }
         return super.onKeyDown(keyCode, event);
@@ -201,7 +206,7 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
 
     @Override
     public void onBackPressed() {
-        handler.deActivateDelay();
+        if (mode != null) mode.onSave();
         this.soundPlayer.playPhoneCloseMode(new SoundCallBack() {
             @Override
             public void soundPlayFinished() {

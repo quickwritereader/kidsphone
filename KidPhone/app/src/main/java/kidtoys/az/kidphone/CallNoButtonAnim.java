@@ -5,6 +5,9 @@ import android.renderscript.Matrix3f;
 import java.util.Arrays;
 import java.util.List;
 
+import static kidtoys.az.kidphone.FunnySurfaceUtils.scaleX;
+import static kidtoys.az.kidphone.FunnySurfaceUtils.scaleY;
+
 /**
  * Created by ramil on 24.07.2016.
  */
@@ -43,13 +46,17 @@ public class CallNoButtonAnim extends BaseAnimation {
                bottomLineX=0;
            }
             Matrix3f matrix3f=new Matrix3f();
-            matrix3f.translate(surface.getWidth()/2-6+topLineX,topLineY);
+            matrix3f.translate(surface.getWidth()/2-5+topLineX,topLineY);
+            matrix3f.scale( scaleX,  scaleY);
+            matrix3f.translate(-5,0);
             for (FunnySurfaceUtils.Primitive prim : RejectLines) {
                 prim.draw(surface, null, FunnySurface.DotColor.Red, FunnySurface.DotType.Square, matrix3f);
             }
 
             matrix3f.load(initM);
-            matrix3f.translate(surface.getWidth()/2-6+bottomLineX,bottomLineY);
+            matrix3f.translate(surface.getWidth()/2-5+bottomLineX,bottomLineY);
+            matrix3f.scale( scaleX,  scaleY);
+            matrix3f.translate(-5,0);
             for (FunnySurfaceUtils.Primitive prim : RejectLines) {
                 prim.draw(surface, null, FunnySurface.DotColor.Red, FunnySurface.DotType.Square, matrix3f);
             }

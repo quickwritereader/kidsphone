@@ -224,6 +224,7 @@ public class TeachMode extends BaseMode implements  SoundCallBack{
     }
 
     public   void onRefresh(){
+        super.onRefresh();
         lastPressed="";
         pressedTimes=0;
         phone.stopSpeaker();
@@ -237,11 +238,10 @@ public class TeachMode extends BaseMode implements  SoundCallBack{
     }
 
     public   void onSave(){
+        super.onSave();
         putState(STATE,keysMode);
         drawLetterFigureAnime =false;
         changeModeButton(false);
-        phone.stopSpeaker();
-        phone.getAudio().StopMp3();
         if(letterAnimation!=null){
             letterAnimation.stop(true);
         }

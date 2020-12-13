@@ -15,6 +15,11 @@ import java.util.concurrent.locks.ReentrantLock;
 public class FunnySurface {
 
 
+    private int pW = 4;
+    private int pH = 2;
+
+
+
     public interface CallbackDraw {
         boolean renderStep();
     }
@@ -169,6 +174,29 @@ public class FunnySurface {
         }
     }
 
+    public void putDot(int x, int y, int pWidth, int pHeight, byte val) {
+        int startX = x - pWidth / 2;
+        int startY = y - pHeight / 2;
+        for (int localX = startX; localX < startX + pWidth; localX++) {
+            for (int localY = startY; localY < startY + pHeight; localY++) {
+                if (localX >= 0 && localX < width && localY >= 0 && localY < height) {
+                    mem[localY * width + localX] = val;
+                }
+            }
+        }
+    }
+
+    public void putDot(int x, int y, int pWidth, int pHeight, DotColor color, DotType type, CallbackDraw clbk) {
+        putDot(x, y, pWidth, pHeight, (byte) (color.ordinal() | (type.ordinal() << 4)));
+        if (clbk != null) {
+            clbk.renderStep();
+        }
+    }
+
+    public void putDot(int x, int y, int pWidth, int pHeight, DotColor color, DotType type) {
+        putDot(x, y, pWidth, pHeight, (byte) (color.ordinal() | (type.ordinal() << 4)));
+    }
+
     /**
      * Put Dot data into surface
      *
@@ -193,6 +221,10 @@ public class FunnySurface {
         if (x >= 0 && x < width && y >= 0 && y < height) {
             mem[y * width + x] = 0;
         }
+    }
+
+    public void clearDot(int x, int y, int pWidth, int pHeight) {
+        putDot(x, y, pWidth, pHeight, (byte) 0);
     }
 
     /**
@@ -286,7 +318,7 @@ public class FunnySurface {
             for (int i = 0; i < drawWidth; i++) {
                 int ind = (y + j) * width + x + i;
                 int surfInd = (j + offsetSurfY) * surface.width + offsetSurfX + i;
-                if(copy[surfInd]!=0)  this.mem[ind] = copy[surfInd];
+                if (copy[surfInd] != 0) this.mem[ind] = copy[surfInd];
             }
         }
 
@@ -342,25 +374,23 @@ public class FunnySurface {
         }
     }
 
-    public Point drawLine(int x1, int y1, int x2, int y2, DotColor color, DotType type) {
-        return drawLine(x1, y1, x2, y2, color, type, null);
-    }
-
-
     /**
-     * Draw line  {@see https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm}
+     *  Draw line  {@see https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm}
      * for Octants  Bresenham's algorithm
      * http://rosettacode.org/wiki/Bitmap/Bresenham%27s_line_algorithm
      * for vertical,horizontal and diagonal simple algorithm
-     *
      * @param x1
      * @param y1
      * @param x2
      * @param y2
+     * @param pW
+     * @param pH
      * @param color
      * @param type
+     * @param clbk
+     * @return
      */
-    public Point drawLine(int x1, int y1, int x2, int y2, DotColor color, DotType type, CallbackDraw clbk) {
+    public Point drawLine(int x1, int y1, int x2, int y2, int pW, int pH, DotColor color, DotType type, CallbackDraw clbk) {
         int deltaX = Math.abs(x2 - x1);
         int deltaY = Math.abs(y2 - y1);
         int y = y1;
@@ -373,12 +403,10 @@ public class FunnySurface {
             //horizontal
             int sign = y2 > y1 ? 1 : -1;
             for (; y != y2 + sign; y += sign) {
-                if (x >= 0 && x < width && y >= 0 && y < height) {
-                    mem[y * width + x] = c;
-                    if (clbk != null) {
-                        if (!clbk.renderStep()) {
-                            return endp;
-                        }
+                putDot(x, y, pW, pH, c);
+                if (clbk != null) {
+                    if (!clbk.renderStep()) {
+                        return endp;
                     }
                 }
             }
@@ -387,11 +415,9 @@ public class FunnySurface {
             //vertical
             int sign = x2 > x1 ? 1 : -1;
             for (; x != x2 + sign; x += sign) {
-                if (x >= 0 && x < width && y >= 0 && y < height) {
-                    mem[y * width + x] = c;
-                    if (clbk != null && !clbk.renderStep()) {
-                        return endp;
-                    }
+                putDot(x, y, pW, pH, c);
+                if (clbk != null && !clbk.renderStep()) {
+                    return endp;
                 }
             }
         } else if (deltaX == deltaY) {
@@ -399,11 +425,9 @@ public class FunnySurface {
             int signX = x2 > x1 ? 1 : -1;
             int signY = y2 > y1 ? 1 : -1;
             for (; y != y2 + signY; y += signY, x += signX) {
-                if (x >= 0 && x < width && y >= 0 && y < height) {
-                    mem[y * width + x] = c;
-                    if (clbk != null && !clbk.renderStep()) {
-                        return endp;
-                    }
+                putDot(x, y, pW, pH, c);
+                if (clbk != null && !clbk.renderStep()) {
+                    return endp;
                 }
             }
         } else {
@@ -418,11 +442,9 @@ public class FunnySurface {
 
             if (deltaY <= deltaX) {
                 for (; ; ) {
-                    if (x1 >= 0 && x1 < width && y1 >= 0 && y1 < height) {
-                        mem[y1 * width + x1] = c;
-                        if (clbk != null && !clbk.renderStep()) {
-                            return endp;
-                        }
+                    putDot(x1, y1, pW, pH, c);
+                    if (clbk != null && !clbk.renderStep()) {
+                        return endp;
                     }
                     if (x1 == x2)
                         break;
@@ -436,11 +458,9 @@ public class FunnySurface {
             } else {
                 for (; ; ) {
                     //plot(g, x1, y1);
-                    if (x1 >= 0 && x1 < width && y1 >= 0 && y1 < height) {
-                        mem[y1 * width + x1] = c;
-                        if (clbk != null && !clbk.renderStep()) {
-                            return endp;
-                        }
+                    putDot(x1, y1, pW, pH, c);
+                    if (clbk != null && !clbk.renderStep()) {
+                        return endp;
                     }
                     if (y1 == y2)
                         break;
@@ -456,8 +476,15 @@ public class FunnySurface {
         return endp;
     }
 
+    public Point drawLine(int x1, int y1, int x2, int y2, DotColor color, DotType type, CallbackDraw clbk) {
+      return drawLine(x1,y1,x2,y2,this.pW,this.pH,color,type,clbk);
+    }
 
-    public void drawEllipse(int x0, int y0, int x1, int y1, DotColor color, DotType type, CallbackDraw clbk) {
+    public Point drawLine(int x1, int y1, int x2, int y2, DotColor color, DotType type) {
+        return drawLine(x1, y1, x2, y2,this.pW,this.pH, color, type, null);
+    }
+
+    public void drawEllipse(int x0, int y0, int x1, int y1, int pW, int pH, DotColor color, DotType type, CallbackDraw clbk) {
 
         { /* rectangular parameter enclosing the ellipse */
             int a = Math.abs(x1 - x0);
@@ -480,32 +507,28 @@ public class FunnySurface {
             b1 = 8 * b * b;
             do {
                 //(x1, y0); /* I. Quadrant */
-                if (x1 >= 0 && x1 < width && y0 >= 0 && y0 < height) {
-                    mem[y0 * width + x1] = c;
-                    if (clbk != null && !clbk.renderStep()) {
-                        return;
-                    }
+
+                putDot(x1, y0, pW, pH, c);
+                if (clbk != null && !clbk.renderStep()) {
+                    return;
                 }
                 //(x0, y0); /* II. Quadrant */
-                if (x0 >= 0 && x0 < width && y0 >= 0 && y0 < height) {
-                    mem[y0 * width + x0] = c;
-                    if (clbk != null && !clbk.renderStep()) {
-                        return;
-                    }
+                //mem[y0 * width + x0] = c;
+                putDot(x0, y0, pW, pH, c);
+                if (clbk != null && !clbk.renderStep()) {
+                    return;
                 }
                 //(x0, y1); /* III. Quadrant */
-                if (x0 >= 0 && x0 < width && y1 >= 0 && y1 < height) {
-                    mem[y1 * width + x0] = c;
-                    if (clbk != null && !clbk.renderStep()) {
-                        return;
-                    }
+                //  mem[y1 * width + x0] = c;
+                putDot(x0, y1, pW, pH, c);
+                if (clbk != null && !clbk.renderStep()) {
+                    return;
                 }
                 //(x1, y1); /* IV. Quadrant */
-                if (x1 >= 0 && x1 < width && y1 >= 0 && y1 < height) {
-                    mem[y1 * width + x1] = c;
-                    if (clbk != null && !clbk.renderStep()) {
-                        return;
-                    }
+                //mem[y1 * width + x1] = c;
+                putDot(x1, y1, pW, pH, c);
+                if (clbk != null && !clbk.renderStep()) {
+                    return;
                 }
                 e2 = 2 * err;
                 if (e2 <= dy) {
@@ -521,37 +544,37 @@ public class FunnySurface {
             } while (x0 <= x1);
             while (y0 - y1 <= b) { /* to early stop of flat ellipses a=1 */
                 //(x0 - 1, y0); /* -> finish tip of ellipse */
-                if (x0 - 1 >= 0 && x0 - 1 < width && y0 >= 0 && y0 < height) {
-                    mem[y0 * width + x0 - 1] = c;
-                    if (clbk != null && !clbk.renderStep()) {
-                        return;
-                    }
+                //mem[y0 * width + x0 - 1] = c;
+                putDot(x0 - 1, y0, pW, pH, c);
+                if (clbk != null && !clbk.renderStep()) {
+                    return;
                 }
                 //(x1 + 1, y0++);
-                if (x1 + 1 >= 0 && x1 + 1 < width && y0 >= 0 && y0 < height) {
-                    mem[y0 * width + x1 + 1] = c;
-                    if (clbk != null && !clbk.renderStep()) {
-                        return;
-                    }
+                // mem[y0 * width + x1 + 1] = c;
+                putDot(x1 + 1, y0, pW, pH, c);
+                if (clbk != null && !clbk.renderStep()) {
+                    return;
                 }
                 y0 += 1;
                 //(x0 - 1, y1);
-                if (x0 - 1 >= 0 && x0 - 1 < width && y1 >= 0 && y1 < height) {
-                    mem[y1 * width + x0 - 1] = c;
-                    if (clbk != null && !clbk.renderStep()) {
-                        return;
-                    }
+                //mem[y1 * width + x0 - 1] = c;
+                putDot(x0 - 1, y1, pW, pH, c);
+                if (clbk != null && !clbk.renderStep()) {
+                    return;
                 }
                 //(x1 + 1, y1--);
-                if (x1 + 1 >= 0 && x1 + 1 < width && y1 >= 0 && y1 < height) {
-                    mem[y1 * width + x1 + 1] = c;
-                    if (clbk != null && !clbk.renderStep()) {
-                        return;
-                    }
+                // mem[y1 * width + x1 + 1] = c;
+                putDot(x1 + 1, y1, pW, pH, c);
+                if (clbk != null && !clbk.renderStep()) {
+                    return;
                 }
                 y1 -= 1;
             }
         }
+    }
+
+    public void drawEllipse(int x0, int y0, int x1, int y1, DotColor color, DotType type, CallbackDraw clbk) {
+        drawEllipse(x0, y0, x1, y1, this.pW, this.pH, color, type, clbk);
     }
 
 
@@ -596,7 +619,7 @@ public class FunnySurface {
      * used to determine color of dot
      */
     public enum DotColor {
-        White, Red, Blue, Green, Yellow, Orange, Pink, Magenta, Black
+        Black, Red, Blue, Green, Yellow, Orange, Pink,  White
     }
 
 

@@ -1,5 +1,6 @@
 package kidtoys.az.kidphone;
 
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -12,6 +13,7 @@ import static kidtoys.az.kidphone.FunnyButton.KeyMode.Numbers;
  */
 public class QuestionMode extends BaseMode implements  SoundCallBack{
 
+    private static final String TAG = "QuestionMode" ;
     private final QuestionChooser quizGiver;
     private final int [] corrects={R.raw.az_correct_1,R.raw.az_correct_2,R.raw.az_correct_3};
     private final int [] wrongs={R.raw.az_wrong_1,R.raw.az_wrong_2,R.raw.az_wrong_3};
@@ -58,12 +60,12 @@ public class QuestionMode extends BaseMode implements  SoundCallBack{
            if(found){
                if(correctCount>=corrects.length)correctCount=0;
                id=corrects[correctCount++];
-               FunnySurfaceUtils.drawChar(surface,surface.getWidth() / 2, surface.getHeight() / 2,'$', FunnySurface.DotColor.Green, FunnySurface.DotType.Romb,true);
+               FunnySurfaceUtils.drawSymbol(surface,surface.getWidth() / 2, surface.getHeight() / 2,found, FunnySurface.DotColor.Green, FunnySurface.DotType.Hexagon,true);
                quizGiver.markCorrectlyFound();
            }else{
                if(wrongCount>=wrongs.length)wrongCount=0;
                id=wrongs[wrongCount++];
-               FunnySurfaceUtils.drawChar(surface,surface.getWidth() / 2, surface.getHeight() / 2,'!', FunnySurface.DotColor.Red, FunnySurface.DotType.Star, true);
+               FunnySurfaceUtils.drawSymbol(surface,surface.getWidth() / 2, surface.getHeight() / 2,found, FunnySurface.DotColor.Red, FunnySurface.DotType.Hexagon, true);
                quizGiver.markWronglyFound();
            }
            phone.getDisplay().render();
@@ -79,7 +81,8 @@ public class QuestionMode extends BaseMode implements  SoundCallBack{
 
 
     @Override
-    public   void onRefresh(){
+    public void onRefresh(){
+        super.onRefresh();
         quizGiver.markSkipped();
         askNew();
     }
@@ -102,6 +105,7 @@ public class QuestionMode extends BaseMode implements  SoundCallBack{
 
 
     private void play(char l) {
+        //Log.d(TAG,"play and draw");
         FunnyDisplayBase display=phone.getDisplay();
         if(display!=null  ) {
             display.getSurface().drawChar(l);
@@ -130,15 +134,14 @@ public class QuestionMode extends BaseMode implements  SoundCallBack{
 
     @Override
     public void onSave(){
-        phone.stopSpeaker();
-        phone.getAudio().StopMp3();
+        super.onSave();
 
     }
 
     @Override
     public void soundPlayFinished() {
+        phone.stopSpeaker(true);
         QuestionChooser.Question x=quizGiver.getCurrentQuestion();
-        phone.stopSpeaker();
         if(x!=null){
             switch(x.questionModeId){
                 case Letters:

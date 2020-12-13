@@ -22,6 +22,8 @@ public abstract class BaseMode  {
         if(phone==null) {
             throw new Exception("Phone should not be null");
         }
+
+        phone.activateDelay(UiHandler.TIME_DELAY);
         this.phone=phone;
 
     }
@@ -35,12 +37,22 @@ public abstract class BaseMode  {
     /**
      * It will be called when Mode key pressed
      */
-    public abstract void onRefresh();
+    public void onRefresh(){
+        if(phone!=null) {
+            phone.activateDelay(UiHandler.TIME_DELAY);
+        }
+    }
 
     /**
      * Event for saving states of Mode
      */
-    public abstract void onSave();
+    public void onSave(){
+        if(phone!=null) {
+            phone.deActivateDelay();
+            phone.stopSpeaker();
+            phone.getAudio().StopMp3();
+        }
+    }
 
 
     /**

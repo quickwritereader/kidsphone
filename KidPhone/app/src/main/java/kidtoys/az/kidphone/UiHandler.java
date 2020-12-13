@@ -13,7 +13,7 @@ import java.lang.ref.WeakReference;
 public class UiHandler extends Handler implements SoundCallBack {
 
     public static final long TIME_DELAY = 10000;
-    private static final String TAG = "UiHandler";
+    public static final String TAG = "UiHandler";
     /**
      * DELAy_MSG will be used to constantly inform about inactivity
      */
@@ -34,12 +34,12 @@ public class UiHandler extends Handler implements SoundCallBack {
     @Override
     public void soundPlayFinished() {
         if (reSendMsg != null) {
-            Log.d(TAG,"audio soundPlayFinished. resend delay");
+            //Log.d(TAG,"audio soundPlayFinished. resend delay");
             PhoneActivity phone = phoneRef.get();
             if (phone != null) {
               phone.stopSpeaker(false);
             }
-            sendMsg(reSendMsg, timeDelay);
+            if(active) sendMsg(reSendMsg, timeDelay);
         }
     }
 
@@ -56,7 +56,7 @@ public class UiHandler extends Handler implements SoundCallBack {
      */
     public synchronized  void refreshActiveTime() {
             userActivity=System.currentTimeMillis();
-            Log.d(TAG,"current active time "+userActivity);
+            //Log.d(TAG,"current active time "+userActivity);
     }
 
     /**
@@ -72,22 +72,26 @@ public class UiHandler extends Handler implements SoundCallBack {
      * Activate delay message
      */
     public void activateDelay() {
+        //(TAG, "activateDelay 0");
         activateDelay(UiHandler.TIME_DELAY);
     }
 
     public synchronized void activateDelay(long delay) {
         if (!this.active) {
-            Log.d(TAG, "activateDelay");
+            //Log.d(TAG, "activateDelay 1");
             timeDelay = TIME_DELAY;
             sendStandardDelay(delay);
             userActivity = System.currentTimeMillis();
         }
+//        for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {
+//            Log.d(TAG,"act: "+ ste.toString());
+//        }
     }
 
     public synchronized void activateDelay(DelayObject object, long delay) {
         if (!this.active) {
             timeDelay = delay;
-            Log.d(TAG, "activateDelay");
+            //Log.d(TAG, "activateDelay");
             this.active = true;
             Message msg = Message.obtain();
             msg.what = UiHandler.DELAY_MSG;
@@ -106,7 +110,7 @@ public class UiHandler extends Handler implements SoundCallBack {
     public synchronized void deActivateDelay() {
         active = false;
         removeMessages(UiHandler.DELAY_MSG);
-        Log.d(TAG, "deActivateDelay");
+        //Log.d(TAG, "deActivateDelay");
     }
 
     @Override
@@ -133,7 +137,7 @@ public class UiHandler extends Handler implements SoundCallBack {
                             //if ret=0 it means it reached end
                             //so we will say only this without resending message
                             reSendMsg=null;
-                            Log.d(TAG, "say this and end delay packet");
+                            //Log.d(TAG, "say this and end delay packet");
                             int duration=phone.getAudio().PlayMp3(sound);
                             phone.startSpeaker(duration,true);
                         }else {
@@ -144,10 +148,10 @@ public class UiHandler extends Handler implements SoundCallBack {
                 } else {
                     new_delay = timeDelay - difference;
                     //send again
-                    sendMsg(reSendMsg, new_delay);
+                    if(active) sendMsg(reSendMsg, new_delay);
                     reSendMsg = null;//nullify
                 }
-                Log.d(TAG, " dif:" + difference + " delay: " + new_delay);
+                //Log.d(TAG, " dif:" + difference + " delay: " + new_delay);
 
             }
         }//if delay

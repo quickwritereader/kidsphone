@@ -149,11 +149,11 @@ public class FunnyDisplay_GL extends GLSurfaceView implements FunnyDisplayBase, 
     }
 
     public void clear() {
-        mainSurface.lock();
+        backSurface.lock();
         try {
-            mainSurface.clear();
+            backSurface.clear();
         } finally {
-            mainSurface.unlock();
+            backSurface.unlock();
         }
         render();
     }
@@ -180,7 +180,7 @@ public class FunnyDisplay_GL extends GLSurfaceView implements FunnyDisplayBase, 
         mHeart = new GL_Shapes.Heart();
         mStar = new GL_Shapes.Star(8);
         mGrid =new GL_Shapes.GridDot();
-        mGrid.setColorRgb( 0x00,0x14,0xad);
+        mGrid.setColorRgbAll( 0x00,0x10,0x5d);
         mGrid.setGrid(mainSurface.getWidth(),mainSurface.getHeight());
         // Set the background frame color
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);

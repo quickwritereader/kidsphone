@@ -1,5 +1,7 @@
 package kidtoys.az.kidphone;
 
+import android.util.Log;
+
 /**
  * Created by abdurrauf on 7/10/16.
  */
@@ -59,6 +61,7 @@ public abstract class BaseAnimation {
 
     private static class AnimThread extends  Thread implements RenderCallback
     {
+        private static final String TAG = "AnimThread";
         private int duration=-1;
         private final FunnyDisplayBase display;
         private FunnySurface surface;
@@ -107,6 +110,7 @@ public abstract class BaseAnimation {
             long startTime=System.currentTimeMillis();
             boolean forced=false;
             if(restoreOld){
+                //Log.d(TAG,"draw previous");
                 this.prevSurface=null;
                 this.prevSurface=display.getSurfaceSnapshot();
             }
@@ -133,19 +137,25 @@ public abstract class BaseAnimation {
             }
             if(!forced & !immediate){
                 if(restoreOld){
+                    //Log.d(TAG,"restore old");
                     display.copyToSurface(prevSurface);
                     display.postRender();
                 }else{
-                    draw();
+                    //Log.d(TAG,"clear 0");
+                    display.clear();
+                    display.postRender();
                 }
 
             }
+            //else{
+                //Log.d(TAG,"force end");
+            //}
 
         }
 
         private void draw() {
+            //Log.d(TAG,"draw");
             if(isAnimRun()) display.copyToSurface(surface );
-            else display.clear();
             display.postRender();
         }
 
