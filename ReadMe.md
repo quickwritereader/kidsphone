@@ -12,7 +12,7 @@ Picture of the toy Program:
 
 * Targeted Platform: Android  
 * Programming Language:  Java 
-* Graphics: Android Canvas Drawing
+* Graphics: Android Canvas Drawing, Open GLES
 
 ## Theme 
 
