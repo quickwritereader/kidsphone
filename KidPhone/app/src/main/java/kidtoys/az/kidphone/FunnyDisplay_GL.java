@@ -1,12 +1,15 @@
 package kidtoys.az.kidphone;
 
 import android.content.Context;
+import android.graphics.ColorSpace;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.util.AttributeSet;
+import android.util.Log;
 
 import java.lang.ref.WeakReference;
+import java.util.Arrays;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -14,6 +17,9 @@ import javax.microedition.khronos.opengles.GL10;
 import kidtoys.az.kidphone.FunnySurface.DotType;
 
 import static android.opengl.GLES20.glClearColor;
+import static android.opengl.GLES20.glCullFace;
+import static android.opengl.GLES20.glEnable;
+import static android.opengl.Matrix.frustumM;
 import static android.opengl.Matrix.orthoM;
 import static kidtoys.az.kidphone.FunnySurface.DotType.None;
 import static kidtoys.az.kidphone.GL_Shapes.Circle;
@@ -29,11 +35,10 @@ import static kidtoys.az.kidphone.GL_Shapes.Triangle;
 public class FunnyDisplay_GL extends GLSurfaceView implements FunnyDisplayBase, GLSurfaceView.Renderer {
 
     private final float[] projectionMatrix = new float[16];
-    private final float[] placenMatrix = new float[16];
-    int surfaceWidth = 20 * FunnySurfaceUtils.scaleX;
-    int surfaceHeight = 16 * FunnySurfaceUtils.scaleY;
+    public static final int surfaceWidth = 20 * FunnySurfaceUtils.scaleX;
+    public static final int surfaceHeight = 16 * FunnySurfaceUtils.scaleY;
     private boolean draw_grid=true;
-    private float[] transform = new float[16];
+    private float[] modelMatrix = new float[16];
     private WeakReference<BaseAnimation> attachedAnim;
     private FunnySurface mainSurface;
     private FunnySurface backSurface;
@@ -46,8 +51,10 @@ public class FunnyDisplay_GL extends GLSurfaceView implements FunnyDisplayBase, 
     private GL_Shapes.Poly mPentagon;
     private GL_Shapes.Poly mHexagon;
     private GL_Shapes.Heart mHeart;
-    private GL_Shapes.GridDot mGrid;
+    private GL_Shapes.GridDot2 mGrid;
     private GL_Shapes.Star mStar;
+    private float[] viewMatrix = new float[16];
+    private float[] m_v_pMatrix = new float[16];
 
 
     public void setDraw_grid(boolean draw_grid) {
@@ -179,8 +186,8 @@ public class FunnyDisplay_GL extends GLSurfaceView implements FunnyDisplayBase, 
         mHexagon=new GL_Shapes.Poly(6);
         mHeart = new GL_Shapes.Heart();
         mStar = new GL_Shapes.Star(8);
-        mGrid =new GL_Shapes.GridDot();
-        mGrid.setColorRgbAll( 0x00,0x10,0x5d);
+        mGrid =new GL_Shapes.GridDot2();
+        mGrid.setColorRgb( 0x00,0x10,0x5d);
         mGrid.setGrid(mainSurface.getWidth(),mainSurface.getHeight());
         // Set the background frame color
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -190,15 +197,14 @@ public class FunnyDisplay_GL extends GLSurfaceView implements FunnyDisplayBase, 
     public void onSurfaceChanged(GL10 gl10, int w, int h) {
         GLES20.glViewport(0, 0, w, h);
 
-        //final float aspectRatio = w > h ? (float) w / (float) h : (float) h / (float) w;
+        // enable face culling feature
+        glEnable(GL10.GL_CULL_FACE);
+        // specify which faces to not draw
+        glCullFace(GL10.GL_BACK);
+       // frustumM(projectionMatrix, 0, -1, 1, -1f, 1f, 3f, 10f);
+        orthoM(projectionMatrix, 0, -surfaceWidth/2.f, surfaceWidth/2.f,
+                -surfaceHeight/2.f, surfaceHeight/2.f, 0.1f, 10f);
 
-        orthoM(projectionMatrix, 0, -1, 1, -1f, 1f, -1f, 1f);
-
-        scaledW = (float) 1.0 / ((float) surfaceWidth);
-        scaledH = (float) 1.0 / ((float) surfaceHeight);
-        Matrix.setIdentityM(placenMatrix, 0);
-        Matrix.scaleM(placenMatrix, 0, scaledW, scaledH, 1);
-        Matrix.multiplyMM(placenMatrix, 0, projectionMatrix, 0, placenMatrix, 0);
     }
 
     @Override
@@ -212,68 +218,73 @@ public class FunnyDisplay_GL extends GLSurfaceView implements FunnyDisplayBase, 
         } finally {
             backSurface.unlock();
         }
-
+        Matrix.setIdentityM(viewMatrix, 0);
+        //Matrix.setLookAtM(viewMatrix, 0, 0f, 0f, 3f, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
         //draw
-        int mw = mainSurface.getWidth();
-        int mh = mainSurface.getHeight();
-        int mw_half = mw / 2;
-        int mh_half = mh / 2;
-        float scaledW2 = scaledW * 2;
-        float scaledH2 = scaledH * 2;
         if(draw_grid) {
-            Matrix.setIdentityM(transform, 0);
-            mGrid.draw(transform);
+            Matrix.setIdentityM(modelMatrix, 0);
+            Matrix.translateM(modelMatrix,0,modelMatrix,0,-surfaceWidth/2.f,surfaceHeight/2,-1f);
+            Matrix.scaleM(modelMatrix,0,surfaceWidth,surfaceHeight,1);
+            Matrix.multiplyMM(m_v_pMatrix, 0, projectionMatrix, 0, viewMatrix, 0);
+            Matrix.multiplyMM(m_v_pMatrix, 0, m_v_pMatrix, 0, modelMatrix, 0);
+            mGrid.draw(m_v_pMatrix);
         }
-        for (int j = 0; j < mh; j++) {
-            for (int i = 0; i < mw; i++) {
+        for (int j = 0; j < surfaceHeight; j++) {
+            for (int i = 0; i < surfaceWidth; i++) {
 
                 DotType d = mainSurface.getDotType(i, j);
                 FunnySurface.DotColor c = mainSurface.getDotColor(i, j);
                 if (d != None) {
 
                     // scaledW   scaledH
-                    float left = (i - mw_half) * scaledW2 + scaledW;
-                    float top = (mh_half - j) * scaledH2 - scaledH;
-                    Matrix.setIdentityM(transform, 0);
-                    Matrix.translateM(transform, 0, transform, 0, left, top, 0);
-                    Matrix.multiplyMM(transform, 0, transform, 0, placenMatrix, 0);
+                    float left = (i - surfaceWidth/2.f) ;// + scaledW;
+                    float top = (surfaceHeight/2.f - j)  ;// - scaledH;
+                    Matrix.setIdentityM(modelMatrix, 0);
+                    Matrix.translateM(modelMatrix, 0, modelMatrix, 0, left, top, -1f);
+                    //scale object as its from -1 to 1 with width 2
+                    Matrix.scaleM(modelMatrix,0,0.5f,0.5f,1);
+//
+                    // Combine the projection and camera view matrices
+                    Matrix.multiplyMM(m_v_pMatrix, 0, projectionMatrix, 0, viewMatrix, 0);
+                    Matrix.multiplyMM(m_v_pMatrix, 0, m_v_pMatrix, 0, modelMatrix, 0);
                     // Draw triangle
+                    //Log.d("dot type", String.valueOf(d));
                     switch (d) {
                         case Circle:
                             mCircle.setColor(c);
-                            mCircle.draw(transform);
+                            mCircle.draw(m_v_pMatrix);
                             break;
                         case Square:
                             mRectangle.setColor(c);
-                            mRectangle.draw(transform);
+                            mRectangle.draw(m_v_pMatrix);
                             break;
                         case Triangle:
                             mTriangle.setColor(c);
-                            mTriangle.draw(transform);
+                            mTriangle.draw(m_v_pMatrix);
                             break;
                         case Romb:
                             mRomb.setColor(c);
-                            mRomb.draw(transform);
+                            mRomb.draw(m_v_pMatrix);
                             break;
                         case Hexagon:
                             mHexagon.setColor(c);
-                            mHexagon.draw(transform);
+                            mHexagon.draw(m_v_pMatrix);
                             break;
                         case Pentagon:
                             mPentagon.setColor(c);
-                            mPentagon.draw(transform);
+                            mPentagon.draw(m_v_pMatrix);
                             break;
                         case Heart:
                             mHeart.setColor(c);
-                            mHeart.draw(transform);
+                            mHeart.draw(m_v_pMatrix);
                             break;
                         case Star:
                             mStar.setColor(c);
-                            mStar.draw(transform);
+                            mStar.draw(m_v_pMatrix);
                             break;
                         default:
                             mPentagon.setColor(c);
-                            mPentagon.draw(transform);
+                            mPentagon.draw(m_v_pMatrix);
                     }
                 }
             }

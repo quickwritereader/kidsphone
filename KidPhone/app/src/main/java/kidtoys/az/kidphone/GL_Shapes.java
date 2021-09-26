@@ -30,7 +30,7 @@ public class GL_Shapes {
                         "attribute vec4 vPosition;" +
                         "attribute vec4 a_Color; varying vec4 v_Color;" +
                         "void main() {" +
-                        "v_Color = a_Color;" + 
+                        "v_Color = a_Color;" +
                         "  gl_Position = uMVPMatrix * vPosition;" +
                         "}";
         private final String fragmentShaderCode =
@@ -42,7 +42,7 @@ public class GL_Shapes {
         private final int mProgram;
         float[] tableVerticesWithTriangles = { // Order of coordinates: X, Y, Z,R, G, B
                 // Triangle Fan
-                0.0f, 1f, 0.0f, 0.5f, 0.5f, 1f,
+                0.0f, 1f, 0f, 0.5f, 0.5f, 1f,
                 -1f, -1f, 0.0f, 0.7f, 0.7f, 0.7f,
                 1f, -1f, 0.0f, 0.7f, 0.7f, 0.7f
         };
@@ -77,8 +77,11 @@ public class GL_Shapes {
         }
 
         public void setColor(FunnySurface.DotColor color) {
-            GL_Helper.setColorFromDotColor(color, vertexBuffer, COORDS_PER_VERTEX);
-            GL_Helper.setColorFromDotColor(color, vertexBuffer, COORDS_PER_VERTEX + 6);
+            for( int i=0;i<vertexCount;i++){
+                GL_Helper.setColorFromDotColor(color, vertexBuffer,
+                        COORDS_PER_VERTEX +  i*(COORDS_PER_VERTEX + COLOR_COMPONENT_COUNT));
+
+            }
         }
 
         public void draw(float[] mvpMatrix) {
@@ -145,16 +148,16 @@ public class GL_Shapes {
                         "float c= smoothstep(r+b,r-b,d);\n"+
                         "gl_FragColor =vec4(c * v_Color.xyz,1.0)  ;\n"+
                         "}";
-        private static final int COORDS_PER_VERTEX = 2;
+        private static final int COORDS_PER_VERTEX = 3;
         private int mProgram;
 
         private static final int COLOR_COMPONENT_COUNT = 3;
         private static final int STRIDE = (COORDS_PER_VERTEX + COLOR_COMPONENT_COUNT) * 4;
         private float[] VERTEX_COORDINATES = {
-                -1f, 1f, 1f, 1f, 1f,   // top left r g b
-                -1f, -1f, 1f, 1f, 1f,   // bottom left
-                1f, -1f, 1f, 1f, 1f,   // bottom right
-                1f, 1f, 1f, 1f, 1f   // top right
+                -1f, 1f, 0f, 1f, 1f, 1f,   // top left r g b
+                -1f, -1f,0f, 1f, 1f, 1f,   // bottom left
+                1f, -1f,0f, 1f, 1f, 1f,   // bottom right
+                1f, 1f, 0f,1f, 1f, 1f   // top right
         };
         private FloatBuffer vertexBuffer;
         private int positionHandle;
@@ -179,10 +182,13 @@ public class GL_Shapes {
             vertexBuffer.position(0);
 
         }
+
         public void setColor(FunnySurface.DotColor color) {
-            GL_Helper.setColorFromDotColor(color, vertexBuffer, COORDS_PER_VERTEX);
-            GL_Helper.setColorFromDotColor(color, vertexBuffer, COORDS_PER_VERTEX + 5);
-            GL_Helper.setColorFromDotColor(color, vertexBuffer, COORDS_PER_VERTEX + 15);
+            for( int i=0;i<vertexCount;i++){
+                GL_Helper.setColorFromDotColor(color, vertexBuffer,
+                        COORDS_PER_VERTEX +  i*(COORDS_PER_VERTEX + COLOR_COMPONENT_COUNT));
+
+            }
         }
 
         public void draw(float[] mvpMatrix) {
@@ -245,16 +251,16 @@ public class GL_Shapes {
                         "void main() {" +
                         "  gl_FragColor = v_Color ;" +
                         "}";
-        private static final int COORDS_PER_VERTEX = 2;
+        private static final int COORDS_PER_VERTEX = 3;
         private int mProgram;
 
         private static final int COLOR_COMPONENT_COUNT = 3;
         private static final int STRIDE = (COORDS_PER_VERTEX + COLOR_COMPONENT_COUNT) * 4;
         private float[] VERTEX_COORDINATES = {
-                -0.95f, 0.95f, 1f, 1f, 1f,   // top left r g b
-                -1f, -0.95f, 1f, 1f, 1f,   // bottom left
-                0.95f, -0.95f, 1f, 1f, 1f,   // bottom right
-                0.95f, 0.95f, 1f, 1f, 1f   // top right
+                -0.95f, 0.95f,0f, 1f, 1f, 1f,   // top left r g b
+                -1f, -0.95f,0f, 1f, 1f, 1f,   // bottom left
+                0.95f, -0.95f,0f, 1f, 1f, 1f,   // bottom right
+                0.95f, 0.95f, 0f, 1f, 1f, 1f   // top right
         };
         private FloatBuffer vertexBuffer;
         private int positionHandle;
@@ -280,9 +286,11 @@ public class GL_Shapes {
 
         }
         public void setColor(FunnySurface.DotColor color) {
-            GL_Helper.setColorFromDotColor(color, vertexBuffer, COORDS_PER_VERTEX);
-            GL_Helper.setColorFromDotColor(color, vertexBuffer, COORDS_PER_VERTEX + 5);
-            GL_Helper.setColorFromDotColor(color, vertexBuffer, COORDS_PER_VERTEX + 15);
+            for( int i=0;i<vertexCount;i++){
+                GL_Helper.setColorFromDotColor(color, vertexBuffer,
+                        COORDS_PER_VERTEX +  i*(COORDS_PER_VERTEX + COLOR_COMPONENT_COUNT));
+
+            }
         }
 
         public void draw(float[] mvpMatrix) {
@@ -345,16 +353,16 @@ public class GL_Shapes {
                         "void main() {" +
                         "  gl_FragColor = v_Color ;" +
                         "}";
-        private static final int COORDS_PER_VERTEX = 2;
+        private static final int COORDS_PER_VERTEX = 3;
         private int mProgram;
 
         private static final int COLOR_COMPONENT_COUNT = 3;
         private static final int STRIDE = (COORDS_PER_VERTEX + COLOR_COMPONENT_COUNT) * 4;
         private float[] VERTEX_COORDINATES = {
-                1f, 0f, 1f, 1f, 1f,
-                0f, -1f, 1f, 1f, 1f,
-                -1f, 0f, 1f, 1f, 1f,
-                0f, 1f, 1f, 1f, 1f
+                0f, 1f, 0f, 1f, 1f, 1f,
+                -1f, 0f, 0f, 1f, 1f, 1f,
+                0f, -1f, 0f, 1f, 1f, 1f,
+                1f, 0f, 0f, 1f, 1f, 1f
         };
         private FloatBuffer vertexBuffer;
         private int positionHandle;
@@ -380,9 +388,11 @@ public class GL_Shapes {
 
         }
         public void setColor(FunnySurface.DotColor color) {
-            GL_Helper.setColorFromDotColor(color, vertexBuffer, COORDS_PER_VERTEX);
-            GL_Helper.setColorFromDotColor(color, vertexBuffer, COORDS_PER_VERTEX + 5);
-            GL_Helper.setColorFromDotColor(color, vertexBuffer, COORDS_PER_VERTEX + 15);
+            for( int i=0;i<vertexCount;i++){
+                GL_Helper.setColorFromDotColor(color, vertexBuffer,
+                        COORDS_PER_VERTEX +  i*(COORDS_PER_VERTEX + COLOR_COMPONENT_COUNT));
+
+            }
         }
 
         public void draw(float[] mvpMatrix) {
@@ -441,7 +451,7 @@ public class GL_Shapes {
                         "void main() {" +
                         "  gl_FragColor = v_Color ;" +
                         "}";
-        private static final int COORDS_PER_VERTEX = 2;
+        private static final int COORDS_PER_VERTEX = 3;
         private int mProgram;
 
         private static final int COLOR_COMPONENT_COUNT = 3;
@@ -467,9 +477,10 @@ public class GL_Shapes {
                 int t=i*(COORDS_PER_VERTEX + COLOR_COMPONENT_COUNT);
                 VERTEX_COORDINATES[t]=(float) Math.cos(a * i + start);
                 VERTEX_COORDINATES[t+1]=(float) Math.sin(a * i + start) ;
-                VERTEX_COORDINATES[t+2]=1;
+                VERTEX_COORDINATES[t+2]= 0f ;
                 VERTEX_COORDINATES[t+3]=1;
                 VERTEX_COORDINATES[t+4]=1;
+                VERTEX_COORDINATES[t+5]=1;
             }
             int vertexShader = GL_Helper.compileVertexShader(vertexShaderCode);
             int fragmentShader = GL_Helper.compileFragmentShader(fragmentShaderCode);
@@ -487,9 +498,9 @@ public class GL_Shapes {
 
         }
         public void setColor(FunnySurface.DotColor color) {
-            for( int i=1;i<vertexCount;i++){
+            for( int i=0;i<vertexCount;i++){
                 GL_Helper.setColorFromDotColor(color, vertexBuffer,
-                        COORDS_PER_VERTEX +  (i-1)*(COORDS_PER_VERTEX + COLOR_COMPONENT_COUNT));
+                        COORDS_PER_VERTEX +  i*(COORDS_PER_VERTEX + COLOR_COMPONENT_COUNT));
 
             }
         }
@@ -561,16 +572,16 @@ public class GL_Shapes {
                         "float c= smoothstep(r+b,r-b,d);\n"+
                         "gl_FragColor =vec4(c * v_Color.xyz,1.0)  ;\n"+
                         "} ";
-        private static final int COORDS_PER_VERTEX = 2;
+        private static final int COORDS_PER_VERTEX = 3;
         private int mProgram;
 
         private static final int COLOR_COMPONENT_COUNT = 3;
         private static final int STRIDE = (COORDS_PER_VERTEX + COLOR_COMPONENT_COUNT) * 4;
         private float[] VERTEX_COORDINATES = {
-                -1f, 1f, 1f, 1f, 1f,   // top left r g b
-                -1f, -1f, 1f, 1f, 1f,   // bottom left
-                1f, -1f, 1f, 1f, 1f,   // bottom right
-                1f, 1f, 1f, 1f, 1f   // top right
+                -1f, 1f, 0f,1f, 1f, 1f,   // top left r g b
+                -1f, -1f,0f, 1f, 1f, 1f,   // bottom left
+                1f, -1f,0f, 1f, 1f, 1f,   // bottom right
+                1f, 1f, 0f, 1f, 1f, 1f   // top right
         };
         private FloatBuffer vertexBuffer;
         private int positionHandle;
@@ -596,9 +607,11 @@ public class GL_Shapes {
 
         }
         public void setColor(FunnySurface.DotColor color) {
-            GL_Helper.setColorFromDotColor(color, vertexBuffer, COORDS_PER_VERTEX);
-            GL_Helper.setColorFromDotColor(color, vertexBuffer, COORDS_PER_VERTEX + 5);
-            GL_Helper.setColorFromDotColor(color, vertexBuffer, COORDS_PER_VERTEX + 15);
+            for( int i=0;i<vertexCount;i++){
+                GL_Helper.setColorFromDotColor(color, vertexBuffer,
+                        COORDS_PER_VERTEX +  i*(COORDS_PER_VERTEX + COLOR_COMPONENT_COUNT));
+
+            }
         }
 
         public void draw(float[] mvpMatrix) {
@@ -656,7 +669,7 @@ public class GL_Shapes {
                         "void main() {" +
                         "  gl_FragColor = v_Color ;" +
                         "}";
-        private static final int COORDS_PER_VERTEX = 2;
+        private static final int COORDS_PER_VERTEX = 3;
         private int mProgram;
 
         private static final int COLOR_COMPONENT_COUNT = 3;
@@ -683,15 +696,16 @@ public class GL_Shapes {
                 VERTEX_COORDINATES[t]=(float) Math.cos(rot) * innerRadius;
                 VERTEX_COORDINATES[t+1]=(float) Math.sin(rot) * innerRadius;
                 VERTEX_COORDINATES[t+2]=1;
-                VERTEX_COORDINATES[t+3]=1;
+                VERTEX_COORDINATES[t+3]=0;
                 VERTEX_COORDINATES[t+4]=1;
+                VERTEX_COORDINATES[t+5]=1;
                 rot += step;
                 t=t+COORDS_PER_VERTEX + COLOR_COMPONENT_COUNT;
                 VERTEX_COORDINATES[t]=(float) Math.cos(rot) * outerRadius;
                 VERTEX_COORDINATES[t+1]=(float) Math.sin(rot) * outerRadius;
-                VERTEX_COORDINATES[t+2]=1;
-                VERTEX_COORDINATES[t+3]=1;
+                VERTEX_COORDINATES[t+3]=0;
                 VERTEX_COORDINATES[t+4]=1;
+                VERTEX_COORDINATES[t+5]=1;
                 rot += step;
                 t=t+COORDS_PER_VERTEX + COLOR_COMPONENT_COUNT;
             }
@@ -713,7 +727,7 @@ public class GL_Shapes {
         }
         public void setColor(FunnySurface.DotColor color) {
             int t=COORDS_PER_VERTEX;
-            for( int i=0;i<vertexCount;i+=2){
+            for( int i=0;i<vertexCount;i++){
                 GL_Helper.setColorFromDotColor(color, vertexBuffer,t);
                 t+=   (COORDS_PER_VERTEX + COLOR_COMPONENT_COUNT);
             }
@@ -755,8 +769,6 @@ public class GL_Shapes {
         }
 
     }
-
-
     public static class GridDot {
 
 
@@ -779,11 +791,11 @@ public class GL_Shapes {
                         "uniform vec2 u_tileXY;"+
                         "varying highp vec4 pos;"+
                         "void main() {" +
-                        "vec2 ppos=pos.xy*vec2(0.25,0.25)*u_tileXY;"+
+                        "vec2 ppos=pos.xy*vec2(0.5,0.5)*u_tileXY;"+
                         "vec2 grid = abs(fract(ppos) )  ;"+
                         "float line = min(grid.x, grid.y);" +
 
-                       " gl_FragColor = vec4(  min(line, 0.55)* v_Color.xyz, 1.0);"+
+                        " gl_FragColor = vec4(  min(line, 0.55)* v_Color.xyz, 1.0);"+
 
                         "}";
         private static final int COORDS_PER_VERTEX = 2;
@@ -797,7 +809,7 @@ public class GL_Shapes {
                 1f, -1f, 1f, 1f, 1f,   // bottom right
                 1f, 1f, 1f, 1f, 1f   // top right
         };
-        private float  [] vecXY ={40f,32f};
+        private float  [] vecXY ={FunnyDisplay_GL.surfaceWidth,FunnyDisplay_GL.surfaceHeight};
         private FloatBuffer vertexBuffer;
         private int positionHandle;
         private int vPMatrixHandle;
@@ -847,6 +859,159 @@ public class GL_Shapes {
             GL_Helper.setColorFromDotColor(color, vertexBuffer, COORDS_PER_VERTEX + 5);
             GL_Helper.setColorFromDotColor(color, vertexBuffer, COORDS_PER_VERTEX + 10);
             //GL_Helper.setColorFromDotColor(color, vertexBuffer, COORDS_PER_VERTEX + 15);
+        }
+
+        public void setGrid(int xCount,int yCount){
+            vecXY[0]=xCount;
+            vecXY[1]=yCount;
+        }
+
+        public void draw(float[] mvpMatrix) {
+//            glEnable(GL_BLEND);
+//            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            glUseProgram(mProgram);
+
+            // get handle to vertex vertex_shader's vPosition member
+            positionHandle = glGetAttribLocation(mProgram, V_POSITION);
+
+            // Enable a handle to the triangle vertices
+            glEnableVertexAttribArray(positionHandle);
+            vertexBuffer.position(0);
+            // Prepare the triangle coordinate data
+            glVertexAttribPointer(positionHandle, COORDS_PER_VERTEX,
+                    GL_FLOAT, false,
+                    STRIDE, vertexBuffer);
+
+            int aColorLocation = glGetAttribLocation(mProgram, A_COLOR);
+
+            vertexBuffer.position(COORDS_PER_VERTEX);
+            glVertexAttribPointer(aColorLocation, COLOR_COMPONENT_COUNT, GL_FLOAT, false, STRIDE, vertexBuffer);
+            glEnableVertexAttribArray(aColorLocation);
+            vPMatrixHandle = glGetUniformLocation(mProgram, U_MVP_MATRIX);
+
+            // Pass the projection and view transformation to the vertex_shader
+            glUniformMatrix4fv(vPMatrixHandle, 1, false, mvpMatrix, 0);
+
+            vecXYHandle = glGetUniformLocation(mProgram, U_TILE_XY);
+
+            //
+            glUniform2fv(vecXYHandle, 1, vecXY, 0);
+            // Draw the triangle
+            glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
+
+            // Disable vertex array
+            glDisableVertexAttribArray(positionHandle);
+
+            glDisableVertexAttribArray(aColorLocation);
+        }
+
+    }
+
+
+
+    public static class GridDot2 {
+
+
+        private static final String vertexShaderCode =
+
+                "uniform mat4 uMVPMatrix;" +
+                        "attribute vec4 vPosition;" +
+                        "// transformed position\n" +
+                        "varying highp vec4 pos;"+
+                        "attribute vec4 a_Color; varying vec4 v_Color;" +
+                        "void main() {" +
+                        "v_Color = a_Color;" +
+                        "  gl_Position = uMVPMatrix * vPosition;" +
+                        "pos=vPosition;"+
+                        "}";
+
+        private static final String fragmentShaderCode =
+                "precision mediump float;" +
+                        "varying vec4 v_Color;" +
+                        "uniform vec2 u_tileXY;"+
+                        "varying highp vec4 pos;"+
+                        "vec2 tile(vec2 _st, vec2 _zoom){\n" +
+                        "    _st *= _zoom;\n" +
+                        "    return fract(_st);\n" +
+                        "}" +
+                        "float box(vec2 _st, vec2 _size, float _smoothEdges){\n" +
+                        "    _size = vec2(0.5)-_size*0.5;\n" +
+                        "    vec2 aa = vec2(_smoothEdges*0.5);\n" +
+                        "    vec2 uv = smoothstep(_size,_size+aa,_st);\n" +
+                        "    uv *= smoothstep(_size,_size+aa,vec2(1.0)-_st);\n" +
+                        "    return uv.x*uv.y;\n" +
+                        "}"+
+                        "void main() {" +
+                        "vec2 st = tile(pos.xy, vec2(0.5,0.5) * u_tileXY)  ;"+
+                        //"float line = min(grid.x, grid.y);" +
+                        " gl_FragColor = vec4(  vec3(box(st,vec2(0.8),0.01))* v_Color.xyz, 1.0);"+
+
+                        "}";
+        private static final int COORDS_PER_VERTEX = 3;
+        private int mProgram;
+        private static final String U_TILE_XY ="u_tileXY" ;
+        private static final int COLOR_COMPONENT_COUNT = 3;
+        private static final int STRIDE = (COORDS_PER_VERTEX + COLOR_COMPONENT_COUNT) * 4;
+        private float[] VERTEX_COORDINATES = {
+                -1f, 1f, 0f,1f, 1f, 1f,   // top left r g b
+                -1f, -1f,0f, 1f, 1f, 1f,   // bottom left
+                1f, -1f,0f, 1f, 1f, 1f,   // bottom right
+                1f, 1f, 0f,1f, 1f, 1f   // top right
+        };
+        private float  [] vecXY ={FunnyDisplay_GL.surfaceWidth,FunnyDisplay_GL.surfaceHeight};
+        private FloatBuffer vertexBuffer;
+        private int positionHandle;
+        private int vPMatrixHandle;
+        private int vertexCount=4;
+        private int vecXYHandle;
+
+
+        public GridDot2() {
+
+            int vertexShader = GL_Helper.compileVertexShader(vertexShaderCode);
+            int fragmentShader = GL_Helper.compileFragmentShader(fragmentShaderCode);
+            mProgram = GL_Helper.linkProgram(vertexShader, fragmentShader);
+            if (BuildConfig.DEBUG) {
+                GL_Helper.validateProgram(mProgram);
+            }
+
+
+            ByteBuffer vertexByteBuffer = ByteBuffer.allocateDirect(VERTEX_COORDINATES.length * 4);
+            vertexByteBuffer.order(ByteOrder.nativeOrder());
+            vertexBuffer = vertexByteBuffer.asFloatBuffer();
+            vertexBuffer.put(VERTEX_COORDINATES);
+            vertexBuffer.position(0);
+
+        }
+
+        public void setColorRgb(int r ,int g, int b){
+            float rr=r/255.f;
+            float gg=g/255.f;
+            float bb=b/255.f;
+            int t=COORDS_PER_VERTEX;
+            GL_Helper.setColorFromRGB(rr,gg,bb, vertexBuffer, COORDS_PER_VERTEX);
+            GL_Helper.setColorFromRGB(rr,gg,bb, vertexBuffer, COORDS_PER_VERTEX +6);
+            GL_Helper.setColorFromRGB(rr,gg,bb, vertexBuffer, COORDS_PER_VERTEX + 12);
+            GL_Helper.setColorFromRGB(0,0,0, vertexBuffer, COORDS_PER_VERTEX + 18);
+        }
+
+        public void setColorRgbAll(int r ,int g, int b){
+            float rr=r/255.f;
+            float gg=g/255.f;
+            float bb=b/255.f;
+            int t=COORDS_PER_VERTEX;
+            for( int i=0;i<vertexCount;i+=1){
+                GL_Helper.setColorFromRGB(r,g, b, vertexBuffer,t);
+                t+=   (COORDS_PER_VERTEX + COLOR_COMPONENT_COUNT);
+            }
+        }
+
+        public void setColor(FunnySurface.DotColor color) {
+            int t=COORDS_PER_VERTEX;
+            for( int i=0;i<vertexCount-1;i+=1){
+                GL_Helper.setColorFromDotColor(color, vertexBuffer,t);
+                t+=   (COORDS_PER_VERTEX + COLOR_COMPONENT_COUNT);
+            }
         }
 
         public void setGrid(int xCount,int yCount){
