@@ -9,7 +9,7 @@ import java.io.Serializable;
 import java.util.Random;
 import java.util.concurrent.ArrayBlockingQueue;
 
-import kidtoys.az.kidphne.R;
+
 
 /**
  * Game mode for kids

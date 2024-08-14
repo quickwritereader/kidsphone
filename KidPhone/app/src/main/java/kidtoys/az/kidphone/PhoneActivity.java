@@ -17,7 +17,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 
-import kidtoys.az.kidphne.R;
+
 
 public class PhoneActivity extends AppCompatActivity implements Phone, View.OnClickListener {
 

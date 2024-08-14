@@ -1,6 +1,5 @@
 package kidtoys.az.kidphone;
 
-import kidtoys.az.kidphne.R;
 
 /**
  * on TeachMode kid will learn basics

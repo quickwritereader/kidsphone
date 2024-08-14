@@ -7,7 +7,7 @@ import static kidtoys.az.kidphone.FunnyButton.KeyMode.Figures;
 import static kidtoys.az.kidphone.FunnyButton.KeyMode.Letters;
 import static kidtoys.az.kidphone.FunnyButton.KeyMode.Numbers;
 
-import kidtoys.az.kidphne.R;
+
 
 /**
  * Question mode

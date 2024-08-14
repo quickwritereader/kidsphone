@@ -4,7 +4,7 @@ android {
     compileSdk 33
     buildToolsVersion '33.0.0'
 
-    namespace  'kidtoys.az.kidphne'
+    namespace  'kidtoys.az.kidphone'
 
     defaultConfig {
         applicationId "kidtoys.az.kidphone"

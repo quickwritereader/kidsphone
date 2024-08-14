@@ -6,7 +6,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
 
-import kidtoys.az.kidphne.R;
+
 
 /**
  * Created by ramil on 20.04.2016.

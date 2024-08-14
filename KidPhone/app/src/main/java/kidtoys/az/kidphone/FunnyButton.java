@@ -14,7 +14,7 @@ import android.view.View;
 
 import androidx.core.content.res.ResourcesCompat;
 
-import kidtoys.az.kidphne.R;
+
 
 
 /**

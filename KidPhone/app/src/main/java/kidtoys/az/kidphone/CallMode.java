@@ -1,6 +1,6 @@
 package kidtoys.az.kidphone;
 
-import kidtoys.az.kidphne.R;
+
 
 /**
  * Phone calls for kids
