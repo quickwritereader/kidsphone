@@ -1,6 +1,7 @@
 package kidtoys.az.kidphone;
 
 import android.os.Handler;
+import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -11,7 +12,7 @@ public interface Phone {
 
     void changeKeys(FunnyButton.KeyMode newMode);
 
-    FunnyDisplayBase getDisplay();
+    FunnyDisplayBase getFunnyDisplay();
 
     SoundPlayer getAudio();
 

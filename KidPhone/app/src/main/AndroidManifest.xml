@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="kidtoys.az.kidphone" >
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"  >
     <uses-feature android:glEsVersion="0x00020000" android:required="true" />
     <application
         android:allowBackup="true"
@@ -9,9 +8,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:fullBackupContent="@xml/backup_descriptor">
-        <activity android:name=".PhoneActivity"
+        <activity android:name="kidtoys.az.kidphone.PhoneActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
+            android:exported="true"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

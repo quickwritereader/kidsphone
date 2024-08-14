@@ -1,12 +1,13 @@
 package kidtoys.az.kidphone;
 
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
 import static kidtoys.az.kidphone.FunnyButton.KeyMode.Figures;
 import static kidtoys.az.kidphone.FunnyButton.KeyMode.Letters;
 import static kidtoys.az.kidphone.FunnyButton.KeyMode.Numbers;
+
+import kidtoys.az.kidphne.R;
 
 /**
  * Question mode
@@ -55,7 +56,7 @@ public class QuestionMode extends BaseMode implements  SoundCallBack{
            int currentAnswer = Integer.parseInt(funnyButton.getNumbersText());
            boolean found= (x.questionAnswer == currentAnswer);
 
-           FunnySurface surface=phone.getDisplay().getSurface();
+           FunnySurface surface=phone.getFunnyDisplay().getSurface();
            surface.clear();
            if(found){
                if(correctCount>=corrects.length)correctCount=0;
@@ -68,7 +69,7 @@ public class QuestionMode extends BaseMode implements  SoundCallBack{
                FunnySurfaceUtils.drawSymbol(surface,surface.getWidth() / 2, surface.getHeight() / 2,found, FunnySurface.DotColor.Red, FunnySurface.DotType.Hexagon, true);
                quizGiver.markWronglyFound();
            }
-           phone.getDisplay().render();
+           phone.getFunnyDisplay().render();
 
            if(id>=0){
                 phone.getAudio().PlayMp3(id,this);
@@ -96,7 +97,7 @@ public class QuestionMode extends BaseMode implements  SoundCallBack{
     }
 
     private void drawFigure(FunnyButton.InnerShapeType innerShapeType) {
-        FunnyDisplayBase display=phone.getDisplay();
+        FunnyDisplayBase display=phone.getFunnyDisplay();
         if(display!=null  ) {
            display.getSurface().drawFigure(innerShapeType);
            display.render();
@@ -106,7 +107,7 @@ public class QuestionMode extends BaseMode implements  SoundCallBack{
 
     private void play(char l) {
         //Log.d(TAG,"play and draw");
-        FunnyDisplayBase display=phone.getDisplay();
+        FunnyDisplayBase display=phone.getFunnyDisplay();
         if(display!=null  ) {
             display.getSurface().drawChar(l);
             display.render();

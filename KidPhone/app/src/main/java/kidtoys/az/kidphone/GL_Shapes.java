@@ -5,6 +5,9 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
 import static android.opengl.GLES20.*;
+
+import kidtoys.az.kidphne.BuildConfig;
+
 /**
  * Created by Abdelrauf on 5/2/2019.
  */

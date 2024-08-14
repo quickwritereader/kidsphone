@@ -1,5 +1,7 @@
 package kidtoys.az.kidphone;
 
+import kidtoys.az.kidphne.R;
+
 /**
  * Phone calls for kids
  */
@@ -52,7 +54,7 @@ public class CallMode extends BaseMode implements SoundCallBack {
 
     public CallMode(Phone phone) throws Exception {
         super(phone);
-        FunnyDisplayBase display = phone.getDisplay();
+        FunnyDisplayBase display = phone.getFunnyDisplay();
         surface = new FunnySurface(display.getSurfaceWidth(), display.getSurfaceHeight());
         callAnimation = new CallAnimation(display);
         callNoAnimation = new CallNoButtonAnim(display);
@@ -119,7 +121,7 @@ public class CallMode extends BaseMode implements SoundCallBack {
                 FunnySurface.supportedColors[colorRandom],
                 FunnySurface.supportedTypes[figureRandom], true);
         int length = dialedNumber.length() * w;
-        FunnySurface displaySurface = phone.getDisplay().getSurface();
+        FunnySurface displaySurface = phone.getFunnyDisplay().getSurface();
         try {
             displaySurface.lock();
             displaySurface.clear();
@@ -128,7 +130,7 @@ public class CallMode extends BaseMode implements SoundCallBack {
         } finally {
             displaySurface.unlock();
         }
-        phone.getDisplay().render();
+        phone.getFunnyDisplay().render();
     }
 
     @Override
@@ -150,7 +152,7 @@ public class CallMode extends BaseMode implements SoundCallBack {
         phone.activateDelay(new UiHandler.DelayObject(getCallSoundArray(0), callPositions[0]), 5000);
         phone.refreshActiveTime(duration);//forward user timing
         phone.changeKeys(FunnyButton.KeyMode.Numbers);
-        phone.getDisplay().clear();
+        phone.getFunnyDisplay().clear();
         lastDialedIndex = 0;
         dialedNumber = "";
     }

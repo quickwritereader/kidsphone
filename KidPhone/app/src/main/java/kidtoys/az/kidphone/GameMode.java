@@ -2,13 +2,14 @@ package kidtoys.az.kidphone;
 
 
 import android.media.SoundPool;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.io.Serializable;
 import java.util.Random;
 import java.util.concurrent.ArrayBlockingQueue;
+
+import kidtoys.az.kidphne.R;
 
 /**
  * Game mode for kids
@@ -53,7 +54,7 @@ public class GameMode extends BaseMode {
     @Override
     public void onRefresh() {
         //deactivate delay
-        phone.getDisplay().attachAnimation(null);
+        phone.getFunnyDisplay().attachAnimation(null);
         phone.deActivateDelay();
         //phone.getDisplay().setDraw_grid(true);
         phone.changeKeys(FunnyButton.KeyMode.Numbers);
@@ -154,7 +155,7 @@ public class GameMode extends BaseMode {
         private FunnySurface panel;
         private Random random;
         public Snake(GameMode mode) {
-            this.display = mode.phone.getDisplay();
+            this.display = mode.phone.getFunnyDisplay();
             this.mode = mode;
             this.stop = false;
         }
@@ -264,9 +265,9 @@ public class GameMode extends BaseMode {
                 }//timer
 
             }//run game
-            if(BuildConfig.DEBUG) {
-                Log.d("game", "exited");
-            }
+//            if(BuildConfig.DEBUG) {
+//                Log.d("game", "exited");
+//            }
             this.mode.putState(LAST_KEY, last);
             this.mode.putState(LEN, snakeLength);
             this.mode.putState(SNAKE, snakePos);

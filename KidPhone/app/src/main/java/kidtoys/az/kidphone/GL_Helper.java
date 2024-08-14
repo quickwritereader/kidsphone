@@ -31,6 +31,8 @@ import static android.opengl.GLES20.glLinkProgram;
 import static android.opengl.GLES20.glShaderSource;
 import static android.opengl.GLES20.glValidateProgram;
 
+import kidtoys.az.kidphne.BuildConfig;
+
 /**
  * Created by abdelrauf on 5/2/2019.
  */

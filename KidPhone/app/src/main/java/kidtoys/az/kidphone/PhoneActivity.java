@@ -6,14 +6,18 @@ import android.content.pm.ConfigurationInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+
+import kidtoys.az.kidphne.R;
 
 public class PhoneActivity extends AppCompatActivity implements Phone, View.OnClickListener {
 
@@ -313,10 +317,12 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
 
 
 
-    @Override
-    public FunnyDisplayBase getDisplay() {
+    public FunnyDisplayBase getFunnyDisplay() {
         return this.display;
     }
+
+
+
 
     @Override
     public SoundPlayer getAudio() {
@@ -326,6 +332,11 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
 
     public Handler getHandler() {
         return this.handler;
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+        super.onPointerCaptureChanged(hasCapture);
     }
 
 //    public void drawAny(){

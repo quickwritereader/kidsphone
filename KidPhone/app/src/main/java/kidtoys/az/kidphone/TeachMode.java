@@ -1,5 +1,7 @@
 package kidtoys.az.kidphone;
 
+import kidtoys.az.kidphne.R;
+
 /**
  * on TeachMode kid will learn basics
  */
@@ -28,7 +30,7 @@ public class TeachMode extends BaseMode implements  SoundCallBack{
         super(phone);
         this.playSound=playSound;
         this.soundPlayer=phone.getAudio();
-        this.display=phone.getDisplay();
+        this.display=phone.getFunnyDisplay();
         FunnyButton.KeyMode mode=(FunnyButton.KeyMode)  getState(STATE);
         if(mode!=null) keysMode=mode;
         modeButton= (FunnyButton) phone.getViewById(R.id.KeysMode);
@@ -39,7 +41,7 @@ public class TeachMode extends BaseMode implements  SoundCallBack{
     public TeachMode (Phone phone) throws Exception{
         super(phone);
         this.soundPlayer=phone.getAudio();
-        this.display=phone.getDisplay();
+        this.display=phone.getFunnyDisplay();
         FunnyButton.KeyMode mode=(FunnyButton.KeyMode)  getState(STATE);
         if(mode!=null) keysMode=mode;
         modeButton= (FunnyButton) phone.getViewById(R.id.KeysMode);
@@ -115,7 +117,7 @@ public class TeachMode extends BaseMode implements  SoundCallBack{
             letterAnimation.stop(true);
             letterAnimation.setLetter(l);
         }
-        FunnyDisplayBase display=phone.getDisplay();
+        FunnyDisplayBase display=phone.getFunnyDisplay();
         if(display!=null) {
             display.attachAnimation(null);
             drawChar(l);
@@ -128,14 +130,14 @@ public class TeachMode extends BaseMode implements  SoundCallBack{
 
     }
     private void drawFigure(FunnyButton.InnerShapeType innerShapeType) {
-        FunnyDisplayBase display=phone.getDisplay();
+        FunnyDisplayBase display=phone.getFunnyDisplay();
         if(display!=null  ) {
             display.getSurface().drawFigure(innerShapeType);
             display.render();
         }
     }
     private  void drawChar(char l){
-        FunnyDisplayBase display=phone.getDisplay();
+        FunnyDisplayBase display=phone.getFunnyDisplay();
         if(display!=null  ) {
             display.getSurface().drawChar(l);
             display.render();
