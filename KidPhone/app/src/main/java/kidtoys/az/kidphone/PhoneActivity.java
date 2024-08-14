@@ -6,16 +6,15 @@ import android.content.pm.ConfigurationInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Display;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 
 
@@ -211,12 +210,7 @@ public class PhoneActivity extends AppCompatActivity implements Phone, View.OnCl
     @Override
     public void onBackPressed() {
         if (mode != null) mode.onSave();
-        this.soundPlayer.playPhoneCloseMode(new SoundCallBack() {
-            @Override
-            public void soundPlayFinished() {
-                PhoneActivity.this.finish();
-            }
-        });
+        this.soundPlayer.playPhoneCloseMode(PhoneActivity.this::finish);
         started = 0;
        // super.onBackPressed();
     }

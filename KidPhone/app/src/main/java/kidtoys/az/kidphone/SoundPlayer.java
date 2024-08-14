@@ -40,12 +40,7 @@ public class SoundPlayer {
         mediaPlayer = MediaPlayer.create(context, fileId);
         mediaPlayer.start();
         if(callback!=null) {
-            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer mp) {
-                    callback.soundPlayFinished();
-                }
-            });
+            mediaPlayer.setOnCompletionListener(mp -> callback.soundPlayFinished());
         }
     }
 
